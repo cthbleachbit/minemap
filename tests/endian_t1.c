@@ -10,7 +10,6 @@ void test_16(int16_t payload) {
 	short_u *s1 = malloc(sizeof(short_u));
 	s1 -> little = payload;
 	set_short(nbt_s1, payload);
-	unsigned char *le = s1 -> payload;
 	unsigned char *be = nbt_s1 -> payload;
 	assert(be[0] == s1 -> payload[1]);
 	assert(be[1] == s1 -> payload[0]);
@@ -21,4 +20,6 @@ void test_16(int16_t payload) {
 int main() {
 	test_16(0x1234);
 	test_16(0x4854);
+	test_16(0xfbaa);
+	test_16(0xffff);
 }

@@ -59,7 +59,7 @@ nbt_int *init_int(char *name) {
 int32_t get_int(nbt_int *ptr) {
 	int_u *conv = protected_malloc(sizeof(int_u));
 	for (int i = 0; i < 4; i++) {
-		conv -> payload[1 - i] = ptr -> payload[i];
+		conv -> payload[3 - i] = ptr -> payload[i];
 	}
 	int32_t ret = conv -> little;
 	free(conv);
@@ -70,7 +70,7 @@ void set_int(nbt_int *ptr, int32_t payload) {
 	int_u *conv = protected_malloc(sizeof(int_u));
 	conv -> little = payload;
 	for (int i = 0; i < 4; i++) {
-		ptr -> payload[1 - i] = conv -> payload[i];
+		ptr -> payload[3 - i] = conv -> payload[i];
 	}
 	free(conv);
 }
