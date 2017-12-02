@@ -1,4 +1,5 @@
 # include <stddef.h>
+# include <stdint.h>
 
 # ifndef MM_NBT_H
 # define MM_NBT_H
@@ -32,13 +33,13 @@ nbt_byte *init_byte(char *name);
 
 nbt_short *init_short(char *name);
 // To do endian conversions here.
-short get_short(nbt_short *ptr);
-void set_short(nbt_short *ptr, short payload);
+int16_t get_short(nbt_short *ptr);
+void set_short(nbt_short *ptr, int16_t payload);
 
 nbt_int *init_int(char *name);
 // To do endian conversions here.
-int get_int(nbt_int *ptr);
-void set_int(nbt_int *ptr, short payload);
+int32_t get_int(nbt_int *ptr);
+void set_int(nbt_int *ptr, int32_t payload);
 
 nbt_byte_array *init_byte_array(char *name, size_t size);
 void free_byte_array(nbt_byte_array *ptr);
