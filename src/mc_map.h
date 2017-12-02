@@ -1,3 +1,5 @@
+# include "mc_nbt.h"
+
 # ifndef MM_MCMAP_H
 # define MM_MCMAP_H
 
