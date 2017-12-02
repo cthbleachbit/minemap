@@ -1,7 +1,7 @@
 # include <stdlib.h>
 # include <stdint.h>
 # include "mc_nbt.h"
-# include "endian.h"
+# include "mc_endian.h"
 # include "utils.h"
 
 /* Two functions for manipulating nbt byte type

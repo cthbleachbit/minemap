@@ -4,13 +4,13 @@
 # define MC_ENDIAN
 
 typedef union {
-	char payload[2];
-	int8_t little;
+	unsigned char payload[2];
+	int16_t little;
 } short_u;
 
 typedef union {
-	char payload[2];
-	int16_t little;
+	unsigned char payload[4];
+	int32_t little;
 } int_u;
 
 # endif

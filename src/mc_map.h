@@ -10,7 +10,7 @@ typedef struct {
 	nbt_short *height;
 	nbt_int *xCenter;
 	nbt_int *yCenter;
-	nbt_byte_arr *colors;
+	nbt_byte_array *colors;
 } mc_map;
 
 // Init map and nbt from parameter
