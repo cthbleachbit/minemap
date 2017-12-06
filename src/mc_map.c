@@ -24,4 +24,7 @@ mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC
 }
 
 // Convert to byte sequence
-char *output_raw(mc_map *);
+unsigned char *output_raw(mc_map *map) {
+	uint8_t *output = protected_calloc(1, sizeof(uint8_t));
+	return output;
+}

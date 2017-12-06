@@ -30,6 +30,7 @@ typedef struct {
 } nbt_byte_array;
 
 nbt_byte *init_byte(char *name);
+int8_t *generate_byte_nbt(nbt_byte *nbt);
 
 nbt_short *init_short(char *name);
 // To do endian conversions here.

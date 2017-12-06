@@ -17,6 +17,6 @@ typedef struct {
 mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC, int32_t yC);
 
 // Convert to byte sequence
-char *output_raw(mc_map *);
+unsigned char *output_raw(mc_map *);
 
 # endif

@@ -1,5 +1,7 @@
+# include <stdio.h>
 # include <stdlib.h>
 # include <stdint.h>
+# include <string.h>
 # include "mc_nbt.h"
 # include "mc_endian.h"
 # include "utils.h"
@@ -11,6 +13,20 @@ nbt_byte *init_byte(char *name) {
 	nbt_byte *nbt = protected_malloc(sizeof(nbt_byte));
 	nbt -> name = name;
 	return nbt;
+}
+
+/* Generate a nbt tag in byte array
+ * Size defined as follows
+ * 1 byte: type indicator
+ * 2 byte: length of name in unsigned integer
+ * X bytes: tag name
+ * 1 byte: payload
+ */
+int8_t *generate_byte_nbt(nbt_byte *nbt) {
+	int size = 3 + strlen(nbt -> name);
+	int8_t *output = protected_calloc(size, sizeof(int8_t));
+	output[0] = 0x01u;
+	// TODO
 }
 
 /* For short, or int16_t, java uses big endian, so we need to do conversion
@@ -36,12 +52,7 @@ int16_t get_short(nbt_short *ptr) {
 }
 
 void set_short(nbt_short *ptr, int16_t payload) {
-	short_u *conv = protected_malloc(sizeof(short_u));
-	conv -> little = payload;
-	for (int i = 0; i < 2; i++) {
-		ptr -> payload[1 - i] = conv -> payload[i];
-	}
-	free(conv);
+	fill_e_short(ptr -> payload, payload);
 }
 
 /* For int, or int32_t, java uses big endian, so we need to do conversion
@@ -67,12 +78,7 @@ int32_t get_int(nbt_int *ptr) {
 }
 
 void set_int(nbt_int *ptr, int32_t payload) {
-	int_u *conv = protected_malloc(sizeof(int_u));
-	conv -> little = payload;
-	for (int i = 0; i < 4; i++) {
-		ptr -> payload[3 - i] = conv -> payload[i];
-	}
-	free(conv);
+	fill_e_int(ptr -> payload, payload);
 }
 
 /* Simple self-contained byte array nbt
