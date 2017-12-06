@@ -29,7 +29,7 @@ nbt_byte *init_byte(char *name) {
 unsigned char *generate_byte_nbt(nbt_byte *nbt) {
 	int name_length = strlen(nbt -> name);
 	int size = 3 + name_length;
-	unsigned char *output = protected_calloc(size, sizeof(int8_t));
+	unsigned char *output = protected_calloc(size, sizeof(unsigned char));
 	output[0] = 0x01u;
 	fill_e_short(output + 1, name_length);
 	if(name_length) {
@@ -79,7 +79,7 @@ void set_short(nbt_short *ptr, int16_t payload) {
 unsigned char *generate_short_nbt(nbt_short *nbt) {
 	int name_length = strlen(nbt -> name);
 	int size = 4 + name_length;
-	unsigned char *output = protected_calloc(size, sizeof(int8_t));
+	unsigned char *output = protected_calloc(size, sizeof(unsigned char));
 	output[0] = 0x02u;
 	fill_e_short(output + 1, name_length);
 	if(name_length) {
@@ -115,6 +115,30 @@ void set_int(nbt_int *ptr, int32_t payload) {
 	fill_e_int(ptr -> payload, payload);
 }
 
+/* Generate a int type nbt tag in byte array
+ * Size defined as follows
+ * byte 0:
+       type indicator 0x03
+ * byte 1 -> 2:
+       length of name in unsigned integer
+ * byte 3 -> 2 + name length:
+ *     tag name
+ * byte 3 + name_length to 6 + name length:
+ *     payload
+ */
+unsigned char *generate_int_nbt(nbt_int *nbt) {
+	int name_length = strlen(nbt -> name);
+	int size = 6 + name_length;
+	unsigned char *output = protected_calloc(size, sizeof(unsigned char));
+	output[0] = 0x03u;
+	fill_e_short(output + 1, name_length);
+	if(name_length) {
+		memcpy(output + 3, nbt -> name, name_length);
+	}
+	memcpy(output + 3 + name_length, nbt -> payload, 4);
+	return output;
+}
+
 /* Simple self-contained byte array nbt
 
    init_byte_array: returns a pointer to initialized fixed size byte array
@@ -132,3 +156,32 @@ void free_byte_array(nbt_byte_array *ptr) {
 	free(ptr -> payload);
 	free(ptr);
 };
+
+/* Generate a byte array type nbt tag in byte array
+ * Size defined as follows
+ * byte 0:
+       type indicator 0x07
+ * byte 1 -> 2:
+       length of name in unsigned integer
+ * byte 3 -> 2 + name length:
+ *     tag name
+ * byte 3 + name_length to 6 + name length:
+ *     length of payload, big endian integer
+ * byte 7 + name length to 6 + name length + payload length:
+ *     payload
+ */
+unsigned char *generate_byte_array_nbt(nbt_byte_array *nbt) {
+	int name_length = strlen(nbt -> name);
+	int payload_length = (nbt -> size);
+	int size = 6 + name_length + payload_length;
+	unsigned char *output = protected_calloc(size, sizeof(unsigned char));
+	output[0] = 0x07u;
+	fill_e_short(output + 1, name_length);
+	if(name_length) {
+		memcpy(output + 3, nbt -> name, name_length);
+	}
+	fill_e_int(output + 3 + name_length, payload_length);
+	memcpy(output + 7 + name_length, nbt -> payload, payload_length);
+	return output;
+}
+

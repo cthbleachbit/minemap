@@ -44,7 +44,10 @@ nbt_int *init_int(char *name);
 // To do endian conversions here.
 int32_t get_int(nbt_int *ptr);
 void set_int(nbt_int *ptr, int32_t payload);
+unsigned char *generate_int_nbt(nbt_int *nbt);
 
 nbt_byte_array *init_byte_array(char *name, size_t size);
 void free_byte_array(nbt_byte_array *ptr);
+unsigned char *generate_byte_array_nbt(nbt_byte_array *nbt);
+
 # endif
