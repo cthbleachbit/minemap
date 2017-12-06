@@ -29,13 +29,16 @@ typedef struct {
 	unsigned char *payload;
 } nbt_byte_array;
 
+// Functions for byte nbt
 nbt_byte *init_byte(char *name);
-int8_t *generate_byte_nbt(nbt_byte *nbt);
+unsigned char *generate_byte_nbt(nbt_byte *nbt);
 
+// Functions for short nbt
 nbt_short *init_short(char *name);
 // To do endian conversions here.
 int16_t get_short(nbt_short *ptr);
 void set_short(nbt_short *ptr, int16_t payload);
+unsigned char *generate_short_nbt(nbt_short *nbt);
 
 nbt_int *init_int(char *name);
 // To do endian conversions here.

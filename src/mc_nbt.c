@@ -8,25 +8,35 @@
 
 /* Two functions for manipulating nbt byte type
    Just init is enough
- */
+ */	
 nbt_byte *init_byte(char *name) {
 	nbt_byte *nbt = protected_malloc(sizeof(nbt_byte));
 	nbt -> name = name;
 	return nbt;
 }
 
-/* Generate a nbt tag in byte array
+/* Generate a byte type nbt tag in byte array
  * Size defined as follows
- * 1 byte: type indicator
- * 2 byte: length of name in unsigned integer
- * X bytes: tag name
- * 1 byte: payload
+ * byte 0:
+       type indicator 0x01
+ * byte 1 to 2: 
+       length of name in unsigned integer
+ * byte 3 to 2 + name length:
+       tag name
+ * byte 3 + name_length:
+       payload
  */
-int8_t *generate_byte_nbt(nbt_byte *nbt) {
-	int size = 3 + strlen(nbt -> name);
-	int8_t *output = protected_calloc(size, sizeof(int8_t));
+unsigned char *generate_byte_nbt(nbt_byte *nbt) {
+	int name_length = strlen(nbt -> name);
+	int size = 3 + name_length;
+	unsigned char *output = protected_calloc(size, sizeof(int8_t));
 	output[0] = 0x01u;
-	// TODO
+	fill_e_short(output + 1, name_length);
+	if(name_length) {
+		memcpy(output + 3, nbt -> name, name_length);
+	}
+	output[3 + name_length] = nbt -> payload;
+	return output;
 }
 
 /* For short, or int16_t, java uses big endian, so we need to do conversion
@@ -53,6 +63,30 @@ int16_t get_short(nbt_short *ptr) {
 
 void set_short(nbt_short *ptr, int16_t payload) {
 	fill_e_short(ptr -> payload, payload);
+}
+
+/* Generate a short type nbt tag in byte array
+ * Size defined as follows
+ * byte 0:
+       type indicator 0x02
+ * byte 1 -> 2:
+       length of name in unsigned integer
+ * byte 3 -> 2 + name length:
+ *     tag name
+ * byte 3 + name_length to 4 + name length:
+ *     payload
+ */
+unsigned char *generate_short_nbt(nbt_short *nbt) {
+	int name_length = strlen(nbt -> name);
+	int size = 4 + name_length;
+	unsigned char *output = protected_calloc(size, sizeof(int8_t));
+	output[0] = 0x02u;
+	fill_e_short(output + 1, name_length);
+	if(name_length) {
+		memcpy(output + 3, nbt -> name, name_length);
+	}
+	memcpy(output + 3 + name_length, nbt -> payload, 2);
+	return output;
 }
 
 /* For int, or int32_t, java uses big endian, so we need to do conversion
