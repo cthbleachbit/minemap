@@ -1,12 +1,17 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 0)
 
-add_library(mc_nbt src/mc_nbt.c)
-add_library(mc_map src/mc_map.c)
-add_library(utils src/utils.c)
-set (EXTRA_LIBS ${EXTRA_LIBS} mc_nbt mc_map utils)
+set(warnings "-Wall -Wextra")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
-add_executable(minemap src/minemap.c)
-target_link_libraries(minemap  ${EXTRA_LIBS})
+add_executable(minemap src/minemap.c src/mc_nbt.c src/mc_map.c src/utils.c)
+install (TARGETS minemap DESTINATION bin)
+
+# Testing
+enable_testing()
+add_test(minemap_test minemap)
+add_subdirectory(tests)
+add_test(minemap_test minemap)
