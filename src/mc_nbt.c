@@ -84,7 +84,6 @@ size_t size_short_nbt(nbt_short *nbt) {
 
 void generate_short_nbt(unsigned char *output, nbt_short *nbt) {
 	int name_length = strlen(nbt -> name);
-	int size = 4 + name_length;
 	output[0] = 0x02u;
 	fill_e_short(output + 1, name_length);
 	if(name_length) {
@@ -137,7 +136,6 @@ size_t size_int_nbt(nbt_int *nbt) {
 
 void generate_int_nbt(unsigned char *output, nbt_int *nbt) {
 	int name_length = strlen(nbt -> name);
-	int size = 6 + name_length;
 	output[0] = 0x03u;
 	fill_e_short(output + 1, name_length);
 	if(name_length) {
@@ -185,7 +183,6 @@ size_t size_byte_array_nbt(nbt_byte_array *nbt) {
 void generate_byte_array_nbt(unsigned char *output, nbt_byte_array *nbt) {
 	int name_length = strlen(nbt -> name);
 	int payload_length = (nbt -> size);
-	int size = 6 + name_length + payload_length;
 	output[0] = 0x07u;
 	fill_e_short(output + 1, name_length);
 	if(name_length) {

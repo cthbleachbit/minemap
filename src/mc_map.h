@@ -13,7 +13,7 @@ static size_t map_header_size = 10;
 static unsigned char map_footer[] = {
 		0x00, 0x00};
 
-static size_t mao_footer_size = 2;
+static size_t map_footer_size = 2;
 
 typedef struct {
 	nbt_byte *scale;
@@ -29,6 +29,7 @@ typedef struct {
 mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC, int32_t yC);
 
 // Convert to byte sequence
-unsigned char *output_raw(mc_map *);
+size_t size_map_raw(mc_map *map);
+void generate_map_raw(unsigned char *output, mc_map *map);
 
 # endif
