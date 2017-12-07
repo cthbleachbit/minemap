@@ -3,6 +3,18 @@
 # ifndef MM_MCMAP_H
 # define MM_MCMAP_H
 
+static unsigned char map_header[] = {
+		0x0a, 0x00, 0x00, // root compound tag without name
+		// compound tag named data
+		0x0a, 0x00, 0x04, 0x64, 0x61, 0x74, 0x61};
+
+static size_t map_header_size = 10;
+
+static unsigned char map_footer[] = {
+		0x00, 0x00};
+
+static size_t mao_footer_size = 2;
+
 typedef struct {
 	nbt_byte *scale;
 	nbt_byte *dimension;

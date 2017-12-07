@@ -15,9 +15,12 @@ unsigned char short_reference[] =
 int main() {
 	nbt_short *nbt = init_short("height");
 	set_short(nbt, 0x80);
-	unsigned char *bin_nbt = generate_short_nbt(nbt);
+	unsigned char *bin_nbt = malloc(size_short_nbt(nbt));
+	generate_short_nbt(bin_nbt, nbt);
 	for (int i = 0; i < (signed int) sizeof(short_reference); i++) {
 		printf("%x\t%x\n", bin_nbt[i], short_reference[i]);
 	}
-	return memcmp(bin_nbt, short_reference, sizeof(short_reference));
+	assert(memcmp(bin_nbt, short_reference, sizeof(short_reference))==0);
+	free(bin_nbt);
+	return 0;
 }

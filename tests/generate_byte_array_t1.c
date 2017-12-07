@@ -18,9 +18,12 @@ unsigned char reference[] =
 int main() {
 	nbt_byte_array *nbt = init_byte_array("colors", 16);
 	memcpy(nbt -> payload, reference + 13, 16);
-	unsigned char *bin_nbt = generate_byte_array_nbt(nbt);
+	unsigned char *bin_nbt = malloc(size_byte_array_nbt(nbt));
+	generate_byte_array_nbt(bin_nbt, nbt);
 	for (int i = 0; i < (signed int) sizeof(reference); i++) {
 		printf("%x\t%x\n", bin_nbt[i], reference[i]);
 	}
-	return memcmp(bin_nbt, reference, sizeof(reference));
+	assert(memcmp(bin_nbt, reference, sizeof(reference))==0);
+	free(bin_nbt);
+	return 0;
 }

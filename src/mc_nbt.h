@@ -31,23 +31,27 @@ typedef struct {
 
 // Functions for byte nbt
 nbt_byte *init_byte(char *name);
-unsigned char *generate_byte_nbt(nbt_byte *nbt);
+size_t size_byte_nbt(nbt_byte *nbt);
+void generate_byte_nbt(unsigned char *output, nbt_byte *nbt);
 
 // Functions for short nbt
 nbt_short *init_short(char *name);
 // To do endian conversions here.
 int16_t get_short(nbt_short *ptr);
 void set_short(nbt_short *ptr, int16_t payload);
-unsigned char *generate_short_nbt(nbt_short *nbt);
+size_t size_short_nbt(nbt_short *nbt);
+void generate_short_nbt(unsigned char *output, nbt_short *nbt);
 
 nbt_int *init_int(char *name);
 // To do endian conversions here.
 int32_t get_int(nbt_int *ptr);
 void set_int(nbt_int *ptr, int32_t payload);
-unsigned char *generate_int_nbt(nbt_int *nbt);
+size_t size_int_nbt(nbt_int *nbt);
+void generate_int_nbt(unsigned char *output, nbt_int *nbt);
 
 nbt_byte_array *init_byte_array(char *name, size_t size);
 void free_byte_array(nbt_byte_array *ptr);
-unsigned char *generate_byte_array_nbt(nbt_byte_array *nbt);
+size_t size_byte_array_nbt(nbt_byte_array *nbt);
+void generate_byte_array_nbt(unsigned char *output, nbt_byte_array *nbt);
 
 # endif

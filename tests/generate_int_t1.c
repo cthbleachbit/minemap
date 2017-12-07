@@ -15,9 +15,12 @@ unsigned char int_reference[] =
 int main() {
 	nbt_int *nbt = init_int("xCenter");
 	set_int(nbt, 100000000);
-	unsigned char *bin_nbt = generate_int_nbt(nbt);
+	unsigned char *bin_nbt = malloc(size_int_nbt(nbt));
+	generate_int_nbt(bin_nbt, nbt);
 	for (int i = 0; i < (signed int) sizeof(int_reference); i++) {
 		printf("%x\t%x\n", bin_nbt[i], int_reference[i]);
 	}
-	return memcmp(bin_nbt, int_reference, sizeof(int_reference));
+	assert(memcmp(bin_nbt, int_reference, sizeof(int_reference))==0);
+	free(bin_nbt);
+	return 0;
 }
