@@ -35,6 +35,7 @@ size_t size_map_raw(mc_map *map) {
 	base += size_int_nbt(map -> xCenter);
 	base += size_int_nbt(map -> yCenter);
 	base += size_byte_array_nbt(map -> colors);
+	return base;
 }
 
 void output_raw(unsigned char *output, mc_map *map) {
