@@ -1,5 +1,6 @@
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include "utils.h"
 
 void die(const int ret, char *errmsg) {
@@ -21,4 +22,14 @@ void* protected_calloc(size_t num, size_t size) {
 		die(127, "Memory allocation failed. Aborting.\n");
 	}
 	return ptr;
+}
+
+FILE *protected_fopen(const char *pathname, const char *mode) {
+	FILE *ptr = fopen(pathname, mode);
+	if (ptr == NULL) {
+		fprintf(stderr, "File %s cannot be opened.", pathname);
+		exit(1);
+	} else {
+		return ptr;
+	}
 }
