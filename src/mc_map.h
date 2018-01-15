@@ -21,7 +21,7 @@ typedef struct {
 	nbt_short *width;
 	nbt_short *height;
 	nbt_int *xCenter;
-	nbt_int *yCenter;
+	nbt_int *zCenter;
 	nbt_byte_array *colors;
 } mc_map;
 

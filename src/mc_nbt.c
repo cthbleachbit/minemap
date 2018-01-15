@@ -27,7 +27,7 @@ nbt_byte *init_byte(char *name) {
        payload
  */
 size_t size_byte_nbt(nbt_byte *nbt) {
-	return 3 + strlen(nbt -> name);
+	return 4 + strlen(nbt -> name);
 };
 
 void generate_byte_nbt(unsigned char *output, nbt_byte *nbt) {
@@ -79,7 +79,7 @@ void set_short(nbt_short *ptr, int16_t payload) {
  */
 
 size_t size_short_nbt(nbt_short *nbt) {
-	return 4 + strlen(nbt -> name);
+	return 5 + strlen(nbt -> name);
 }
 
 void generate_short_nbt(unsigned char *output, nbt_short *nbt) {
@@ -131,7 +131,7 @@ void set_int(nbt_int *ptr, int32_t payload) {
  */
 
 size_t size_int_nbt(nbt_int *nbt) {
-	return 6 + strlen(nbt -> name);
+	return 7 + strlen(nbt -> name);
 }
 
 void generate_int_nbt(unsigned char *output, nbt_int *nbt) {
@@ -177,7 +177,7 @@ void free_byte_array(nbt_byte_array *ptr) {
  */
 
 size_t size_byte_array_nbt(nbt_byte_array *nbt) {
-	return 6 + strlen(nbt -> name) + nbt -> size;
+	return 7 + strlen(nbt -> name) + nbt -> size;
 }
 
 void generate_byte_array_nbt(unsigned char *output, nbt_byte_array *nbt) {
