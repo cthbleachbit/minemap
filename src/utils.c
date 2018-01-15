@@ -27,7 +27,7 @@ void* protected_calloc(size_t num, size_t size) {
 FILE *protected_fopen(const char *pathname, const char *mode) {
 	FILE *ptr = fopen(pathname, mode);
 	if (ptr == NULL) {
-		fprintf(stderr, "File %s cannot be opened.", pathname);
+		fprintf(stderr, "Error: File \"%s\" cannot be opened.\n", pathname);
 		exit(1);
 	} else {
 		return ptr;

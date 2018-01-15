@@ -3,34 +3,150 @@
 # include <unistd.h>
 # include <ImageMagick-7/MagickCore/MagickCore.h>
 
+# include "mc_map.h"
 # include "utils.h"
+
+char verbose = 0;
 
 int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf("minemap <palette.gif> <input image> <map_X.dat>\n");
-	printf("\tpalette.gif: colors in specific minecraft version\n");
-	printf("\tmap_X/dat: output in NBT format\n");
+	printf("minemap <options> -o <map_X.dat>\n");
+	printf("Options:\n");
+	printf("\t-p palette.gif  Required, colors in specific minecraft version\n");
+	printf("\t-i input        Required, image input\n");
+	printf("\t-d dithering    Optional, Dithering method, choose from:\n");
+	printf("\t\tno\n");
+	printf("\t\tfloydsteinberg\n");
+	printf("\t-v              Optional, toggle verbose output");
+	printf("\t\n");
+
+
+	printf("-o map_X.dat: output in NBT format\n");
 }
 
 int main(int argc, char **argv) {
-	if (argc != 4) {
-		usage();
-		return 0;
+	char *palette_path = NULL;
+	char *input_path = NULL;
+	char *dithering = "no";
+	char *output_path = NULL;
+	int i = 1;
+	while (i < argc) {
+		if (strcmp(argv[i], "-p") == 0) {
+			palette_path = argv[i+1];
+			i++;
+		} else if (strcmp(argv[i], "-i") == 0) {
+			input_path = argv[i+1];
+			i++;
+		} else if (strcmp(argv[i], "-d") == 0) {
+			dithering = argv[i+1];
+			if (!strcmp(dithering, "floydsteinberg") && !strcmp(dithering, "no")) {
+				fprintf(stderr, "Dithering method must be one of \"no\" and \"floydsteinberg\".");
+				exit(1);
+			}
+			i++;
+		} else if (strcmp(argv[i], "-o") == 0) {
+			output_path = argv[i+1];
+			i++;
+		} else if (strcmp(argv[i], "-v") == 0) {
+			verbose = 1;
+		}
+		i++;
 	}
+	
+	if ((!palette_path) || (!input_path) || (!output_path)) {
+		usage();
+		exit(1);
+	};
+	
 	// Init Magick Core
 	char *path = getcwd(path, 0);
 	MagickCoreGenesis(path, MagickTrue);
 	
-	ExceptionInfo *exception = malloc(sizeof(ExceptionInfo));
+	// Loading Image
+	ExceptionInfo *exception = AcquireExceptionInfo();
 	exception->signature = MagickCoreSignature;
 	ImageInfo *palette_im_f = CloneImageInfo(NULL);
-	palette_im_f->file = protected_fopen(argv[1], "r+b");
+	palette_im_f->file = protected_fopen(palette_path, "r+b");
 	ImageInfo *input_im_f = CloneImageInfo(NULL);
-	input_im_f->file = fopen(argv[2], "r+b");
+	input_im_f->file = fopen(input_path, "r+b");
 	Image *palette = ReadImage(palette_im_f, exception);
+	CatchException(exception);
 	
+	Image *input = ReadImage(input_im_f, exception);
+	CatchException(exception);
+	
+	// Scale input to 128x128
+	Image *output = ResizeImage(input, 128, 128, LanczosFilter, exception);
+	QuantizeInfo *quantize_info = CloneQuantizeInfo(NULL);
+	if (strcmp(dithering, "no") == 0) {
+		quantize_info->dither_method = NoDitherMethod;
+	} else {
+		quantize_info->dither_method = FloydSteinbergDitherMethod;
+	}
+	RemapImage(quantize_info, output, palette, exception);
+	DestroyQuantizeInfo(quantize_info);
+	
+	FILE *output_nbt = protected_fopen(output_path, "w+b");
+	
+	ImageInfo *dbg_img = CloneImageInfo(NULL);
+	dbg_img->file = fopen("/tmp/remapped.gif", "w+b");
+	strcpy(dbg_img->filename, "remapped.gif");
+	strcpy(dbg_img->magick, "gif");
+	WriteImage (dbg_img, output, exception);
+	
+	PixelInfo *orig_pix = protected_malloc(sizeof(PixelInfo));
+	PixelInfo *palette_pix = protected_malloc(sizeof(PixelInfo));
+	int palette_col = palette->columns;
+	int palette_row = palette->rows;
+	int palette_number = palette_col * palette_row;
+	mc_map *map = init_map(0, 1, 128, 128, 16777216, 16777216);
+	unsigned char *map_payload = map -> colors -> payload;
+	for (i = 0; i < 16384; i++) {
+		GetOneVirtualPixelInfo(output,
+		                       EdgeVirtualPixelMethod,
+		                       i % 128,
+		                       i / 128,
+		                       orig_pix,
+		                       exception);
+		if (verbose) {
+			fprintf(stderr, "Pixel at %i, %i:\n%f\t%f\t%f\t%f\n",
+			        i % 128, i / 128,
+			        orig_pix->red,
+			        orig_pix->green,
+			        orig_pix->blue,
+			        orig_pix->alpha);
+		}
+		for (int j = 0; j < palette_number; j++) {
+			GetOneVirtualPixelInfo(palette,
+			                       EdgeVirtualPixelMethod,
+			                       j % palette_col,
+			                       j / palette_col,
+			                       palette_pix,
+			                       exception);
+			if (orig_pix->red == palette_pix->red &&
+			    orig_pix->green == palette_pix->green &&
+			    orig_pix->blue == palette_pix->blue) {
+				map_payload[i] = j;
+				if (verbose) {
+					fprintf(stderr, "Matched color id %i\n", j);
+				}
+				break;
+			}
+		}
+	}
+	
+	int size_map = size_map_raw(map);
+	printf("Uncompressed map file size: %i bytes\n", size_map);
+	unsigned char *map_binary = protected_malloc(size_map);
+	generate_map_raw(map_binary, map);
+	fwrite(map_binary, 1, size_map, output_nbt);
+	fclose(output_nbt);
+	free(map_binary);
+	free(map_payload);
+	
+	DestroyExceptionInfo(exception);
 	MagickCoreTerminus();
 	free(path);
 	return 0;

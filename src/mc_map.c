@@ -38,7 +38,7 @@ size_t size_map_raw(mc_map *map) {
 	return base;
 }
 
-void output_raw(unsigned char *output, mc_map *map) {
+void generate_map_raw(unsigned char *output, mc_map *map) {
 	size_t index = 0;
 	memcpy(output, map_header, map_header_size);
 	index += map_header_size;
