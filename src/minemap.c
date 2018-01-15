@@ -1,6 +1,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
+# include <zlib.h>
 # include <ImageMagick-7/MagickCore/MagickCore.h>
 
 # include "mc_map.h"
@@ -88,13 +89,14 @@ int main(int argc, char **argv) {
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);
 	
-	FILE *output_nbt = protected_fopen(output_path, "w+b");
-	
+	/*
 	ImageInfo *dbg_img = CloneImageInfo(NULL);
 	dbg_img->file = fopen("/tmp/remapped.gif", "w+b");
 	strcpy(dbg_img->filename, "remapped.gif");
 	strcpy(dbg_img->magick, "gif");
 	WriteImage (dbg_img, output, exception);
+	DestroyImageInfo(dbg_img);
+	*/
 	
 	PixelInfo *orig_pix = protected_malloc(sizeof(PixelInfo));
 	PixelInfo *palette_pix = protected_malloc(sizeof(PixelInfo));
@@ -137,16 +139,26 @@ int main(int argc, char **argv) {
 		}
 	}
 	
+	// Close all Imagemagick handles
+	DestroyImage(palette);
+	DestroyImage(input);
+	DestroyImage(output);
+	DestroyImageInfo(palette_im_f);
+	DestroyImageInfo(input_im_f);
+	DestroyExceptionInfo(exception);
+	
+	// Generate map binary
 	int size_map = size_map_raw(map);
 	printf("Uncompressed map file size: %i bytes\n", size_map);
 	unsigned char *map_binary = protected_malloc(size_map);
 	generate_map_raw(map_binary, map);
-	fwrite(map_binary, 1, size_map, output_nbt);
-	fclose(output_nbt);
-	free(map_binary);
-	free(map_payload);
+	free_map(map);
 	
-	DestroyExceptionInfo(exception);
+	gzFile output_gz = gzopen(output_path, "wb");
+	gzwrite(output_gz, map_binary, size_map);
+	gzclose(output_gz);
+	free(map_binary);
+	
 	MagickCoreTerminus();
 	free(path);
 	return 0;

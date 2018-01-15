@@ -12,6 +12,11 @@ target_link_libraries(minemap ${IMAGEMAGICK_LIBRARIES})
 target_include_directories(minemap PUBLIC ${IMAGEMAGICK_INCLUDE_DIRS})
 target_compile_options(minemap PUBLIC ${IMAGEMAGICK_CFLAGS_OTHER})
 
+pkg_check_modules(ZLIB REQUIRED zlib)
+target_link_libraries(minemap ${ZLIB_LIBRARIES})
+target_include_directories(minemap PUBLIC ${ZLIB_INCLUDE_DIRS})
+target_compile_options(minemap PUBLIC ${ZLIB_CFLAGS_OTHER})
+
 set(warnings "-g -Wall -Wextra")
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")

@@ -25,6 +25,16 @@ mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC
 	return map;
 }
 
+void free_map(mc_map *map) {
+	free(map -> scale);
+	free(map -> dimension);
+	free(map -> width);
+	free(map -> height);
+	free(map -> xCenter);
+	free(map -> yCenter);
+	free_byte_array(map -> colors);
+}
+
 // Convert to byte sequence
 size_t size_map_raw(mc_map *map) {
 	size_t base = map_header_size + map_footer_size;

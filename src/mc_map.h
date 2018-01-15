@@ -27,6 +27,7 @@ typedef struct {
 
 // Init map and nbt from parameter
 mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC, int32_t yC);
+void free_map(mc_map *map);
 
 // Convert to byte sequence
 size_t size_map_raw(mc_map *map);
