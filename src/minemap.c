@@ -9,32 +9,31 @@
 
 char verbose = 0;
 char no_gz = 0;
+char floydsteinberg = 0;
 
 int main(int argc, char **argv);
 void usage();
 
 void usage() {
 	printf("minemap <options>\n");
-	printf("\t--no-gz\n");
-	printf("\t\tDo not gzip generated NBT file\n");
-	printf("\t-d, --dithering METHOD\n");
-	printf("\t\tOptional, Dithering method, choose from:\n");
-	printf("\t\tno, floydsteinberg\n");
-	printf("\t\tIf unspecified, default to no dithering.\n");
+	printf("\t-f, --floydsteinberg\n");
+	printf("\t\tOptional, turn on Floyd Steinberg dithering\n");
+	printf("\t\tDefault to no dithering.\n");
 	printf("\t-i, --input INPUT\n");
 	printf("\t\tRequired, image input\n");
+	printf("\t--no-gz\n");
+	printf("\t\tDo not gzip generated NBT file\n");
+	printf("\t-o, --output FILE\n");
+	printf("\t\tRequired, output file in NBT format\n");
 	printf("\t-p, --palette PALETTE.GIF\n");
 	printf("\t\tRequired, colors in specific minecraft version\n");
 	printf("\t-v, --verbose\n");
-	printf("\t\tOptional, toggle verbose output\n");
-	printf("\t-o, --output FILE\n");
-	printf("\t\toutput in NBT format\n");
+	printf("\t\tOptional, Turn on verbose output\n");
 }
 
 int main(int argc, char **argv) {
 	char *palette_path = NULL;
 	char *input_path = NULL;
-	char *dithering = "no";
 	char *output_path = NULL;
 	int i = 1;
 	while (i < argc) {
@@ -44,13 +43,8 @@ int main(int argc, char **argv) {
 		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			input_path = argv[i+1];
 			i++;
-		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
-			dithering = argv[i+1];
-			if (!strcmp(dithering, "floydsteinberg") && !strcmp(dithering, "no")) {
-				fprintf(stderr, "Dithering method must be one of \"no\" and \"floydsteinberg\".");
-				exit(1);
-			}
-			i++;
+		} else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--floydsteinberg") == 0) {
+			floydsteinberg = 1;
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			output_path = argv[i+1];
 			i++;
@@ -87,10 +81,10 @@ int main(int argc, char **argv) {
 	// Scale input to 128x128
 	Image *output = ResizeImage(input, 128, 128, LanczosFilter, exception);
 	QuantizeInfo *quantize_info = CloneQuantizeInfo(NULL);
-	if (strcmp(dithering, "no") == 0) {
-		quantize_info->dither_method = NoDitherMethod;
-	} else {
+	if (floydsteinberg) {
 		quantize_info->dither_method = FloydSteinbergDitherMethod;
+	} else {
+		quantize_info->dither_method = NoDitherMethod;
 	}
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);

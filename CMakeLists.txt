@@ -23,7 +23,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
 install (TARGETS minemap DESTINATION bin)
 
+# Resources
+add_subdirectory(misc)
+
 # Testing
 enable_testing()
-add_test(minemap_test minemap)
 add_subdirectory(tests)
