@@ -1,10 +1,16 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 0)
 
-set(basefiles src/mc_nbt.c src/mc_map.c src/utils.c src/mc_endian.c)
-add_executable(minemap src/minemap.c ${basefiles})
+set(basefiles
+    src/mc_nbt.c
+    src/mc_map.c
+    src/utils.c
+    src/mc_endian.c)
+add_executable(minemap
+               src/minemap.c
+               ${basefiles})
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(IMAGEMAGICK REQUIRED ImageMagick-7.Q16HDRI)
@@ -18,7 +24,7 @@ target_include_directories(minemap PUBLIC ${ZLIB_INCLUDE_DIRS})
 target_compile_options(minemap PUBLIC ${ZLIB_CFLAGS_OTHER})
 
 set(warnings "-g -Wall -Wextra")
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
 install (TARGETS minemap DESTINATION bin)
