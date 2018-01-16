@@ -61,7 +61,7 @@ void generate_map_raw(unsigned char *output, mc_map *map) {
 	generate_short_nbt(output + index, map -> width);
 	index += size_short_nbt(map -> width);
 	generate_short_nbt(output + index, map -> height);
-	index += size_short_nbt(map -> width);
+	index += size_short_nbt(map -> height);
 
 	generate_int_nbt(output + index, map -> xCenter);
 	index += size_int_nbt(map -> xCenter);
