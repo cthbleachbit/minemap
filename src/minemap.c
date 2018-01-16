@@ -8,23 +8,27 @@
 # include "utils.h"
 
 char verbose = 0;
+char no_gz = 0;
 
 int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf("minemap <options> -o <map_X.dat>\n");
-	printf("Options:\n");
-	printf("\t-p palette.gif  Required, colors in specific minecraft version\n");
-	printf("\t-i input        Required, image input\n");
-	printf("\t-d dithering    Optional, Dithering method, choose from:\n");
-	printf("\t\tno\n");
-	printf("\t\tfloydsteinberg\n");
-	printf("\t-v              Optional, toggle verbose output");
-	printf("\t\n");
-
-
-	printf("-o map_X.dat: output in NBT format\n");
+	printf("minemap <options>\n");
+	printf("\t--no-gz\n");
+	printf("\t\tDo not gzip generated NBT file\n");
+	printf("\t-d, --dithering METHOD\n");
+	printf("\t\tOptional, Dithering method, choose from:\n");
+	printf("\t\tno, floydsteinberg\n");
+	printf("\t\tIf unspecified, default to no dithering.\n");
+	printf("\t-i, --input INPUT\n");
+	printf("\t\tRequired, image input\n");
+	printf("\t-p, --palette PALETTE.GIF\n");
+	printf("\t\tRequired, colors in specific minecraft version\n");
+	printf("\t-v, --verbose\n");
+	printf("\t\tOptional, toggle verbose output\n");
+	printf("\t-o, --output FILE\n");
+	printf("\t\toutput in NBT format\n");
 }
 
 int main(int argc, char **argv) {
@@ -34,24 +38,26 @@ int main(int argc, char **argv) {
 	char *output_path = NULL;
 	int i = 1;
 	while (i < argc) {
-		if (strcmp(argv[i], "-p") == 0) {
+		if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--palette") == 0) {
 			palette_path = argv[i+1];
 			i++;
-		} else if (strcmp(argv[i], "-i") == 0) {
+		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			input_path = argv[i+1];
 			i++;
-		} else if (strcmp(argv[i], "-d") == 0) {
+		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			dithering = argv[i+1];
 			if (!strcmp(dithering, "floydsteinberg") && !strcmp(dithering, "no")) {
 				fprintf(stderr, "Dithering method must be one of \"no\" and \"floydsteinberg\".");
 				exit(1);
 			}
 			i++;
-		} else if (strcmp(argv[i], "-o") == 0) {
+		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			output_path = argv[i+1];
 			i++;
-		} else if (strcmp(argv[i], "-v") == 0) {
+		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
 			verbose = 1;
+		} else if (strcmp(argv[i], "--no-gz") == 0) {
+			no_gz = 1;
 		}
 		i++;
 	}
@@ -154,11 +160,17 @@ int main(int argc, char **argv) {
 	generate_map_raw(map_binary, map);
 	free_map(map);
 	
-	gzFile output_gz = gzopen(output_path, "wb");
-	gzwrite(output_gz, map_binary, size_map);
-	gzclose(output_gz);
-	free(map_binary);
+	if (no_gz) {
+		FILE *output_nbt = protected_fopen(output_path, "w+b");
+		fwrite(map_binary, 1, size_map, output_nbt);
+		fclose(output_nbt);
+	} else {
+		gzFile output_gz = gzopen(output_path, "wb");
+		gzwrite(output_gz, map_binary, size_map);
+		gzclose(output_gz);
+	}
 	
+	free(map_binary);
 	MagickCoreTerminus();
 	free(path);
 	return 0;
