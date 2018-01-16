@@ -5,7 +5,7 @@ target_compile_options(gen_color_map PUBLIC ${IMAGEMAGICK_CFLAGS_OTHER})
 
 add_custom_target(gen_palettes ALL
     DEPENDS gen_color_map
-    COMMAND make all
+    COMMAND make -f Makefile.palette all
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
