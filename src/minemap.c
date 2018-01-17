@@ -69,9 +69,9 @@ int main(int argc, char **argv) {
 	ExceptionInfo *exception = AcquireExceptionInfo();
 	exception->signature = MagickCoreSignature;
 	ImageInfo *palette_im_f = CloneImageInfo(NULL);
-	palette_im_f->file = protected_fopen(palette_path, "r+b");
+	palette_im_f->file = protected_fopen(palette_path, "rb");
 	ImageInfo *input_im_f = CloneImageInfo(NULL);
-	input_im_f->file = fopen(input_path, "r+b");
+	input_im_f->file = protected_fopen(input_path, "rb");
 	Image *palette = ReadImage(palette_im_f, exception);
 	CatchException(exception);
 	
@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
 	free_map(map);
 	
 	if (no_gz) {
-		FILE *output_nbt = protected_fopen(output_path, "w+b");
+		FILE *output_nbt = protected_fopen(output_path, "wb");
 		fwrite(map_binary, 1, size_map, output_nbt);
 		fclose(output_nbt);
 	} else {
