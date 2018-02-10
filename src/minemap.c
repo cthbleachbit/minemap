@@ -15,20 +15,28 @@ int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf("minemap <options>\n");
-	printf("\t-f, --floydsteinberg\n");
-	printf("\t\tOptional, turn on Floyd Steinberg dithering\n");
-	printf("\t\tDefault to no dithering.\n");
-	printf("\t-i, --input INPUT\n");
-	printf("\t\tRequired, image input\n");
-	printf("\t--no-gz\n");
-	printf("\t\tDo not gzip generated NBT file\n");
-	printf("\t-o, --output FILE\n");
-	printf("\t\tRequired, output file in NBT format\n");
-	printf("\t-p, --palette PALETTE.GIF\n");
-	printf("\t\tRequired, colors in specific minecraft version\n");
-	printf("\t-v, --verbose\n");
-	printf("\t\tOptional, Turn on verbose output\n");
+	printf("Usage: minemap <options>\n");
+	printf("\n");
+	printf("-f, --floydsteinberg\n");
+	printf("\tOptional, turn on Floyd Steinberg dithering\n");
+	printf("\tDefault to no dithering.\n");
+	printf("\n");
+	printf("-i, --input INPUT\n");
+	printf("\tRequired, image input\n");
+	printf("\n");
+	printf("--no-gz\n");
+	printf("\tDo not gzip generated NBT file\n");
+	printf("\n");
+	printf("-o, --output FILE\n");
+	printf("\tRequired, output file in NBT format\n");
+	printf("\n");
+	printf("-p, --palette PALETTE.GIF\n");
+	printf("\tRequired, colors in specific minecraft version, installed to\n");
+	printf("\t/usr/share/minemap/palettes\n");
+	printf("\n");
+	printf("-v, --verbose\n");
+	printf("\tOptional, Turn on verbose output and store intermediate files\n");
+	printf("\tinto /tmp for debug purposes\n");
 }
 
 int main(int argc, char **argv) {
@@ -89,14 +97,14 @@ int main(int argc, char **argv) {
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);
 	
-	/*
-	ImageInfo *dbg_img = CloneImageInfo(NULL);
-	dbg_img->file = fopen("/tmp/remapped.gif", "w+b");
-	strcpy(dbg_img->filename, "remapped.gif");
-	strcpy(dbg_img->magick, "gif");
-	WriteImage (dbg_img, output, exception);
-	DestroyImageInfo(dbg_img);
-	*/
+	if (verbose) {
+		ImageInfo *dbg_img = CloneImageInfo(NULL);
+		dbg_img->file = fopen("/tmp/remapped.gif", "w+b");
+		strcpy(dbg_img->filename, "remapped.gif");
+		strcpy(dbg_img->magick, "gif");
+		WriteImage (dbg_img, output, exception);
+		DestroyImageInfo(dbg_img);
+	}
 	
 	PixelInfo *orig_pix = protected_malloc(sizeof(PixelInfo));
 	PixelInfo *palette_pix = protected_malloc(sizeof(PixelInfo));
