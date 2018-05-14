@@ -1,7 +1,11 @@
-# include "mc_nbt.h"
+/* Minemap
+ * mc_map.h: Minecraft Map Abstraction
+ */
 
-# ifndef MM_MCMAP_H
-# define MM_MCMAP_H
+#include "mc_nbt.h"
+
+#ifndef MM_MCMAP_H
+#define MM_MCMAP_H
 
 static unsigned char map_header[] = {
 		0x0a, 0x00, 0x00, // root compound tag without name

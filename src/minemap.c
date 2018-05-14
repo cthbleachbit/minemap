@@ -1,42 +1,40 @@
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <zlib.h>
-# include <ImageMagick-7/MagickCore/MagickCore.h>
+/* Minemap
+ *
+ * minemap.c: Main program: convert picture to map
+ */
 
-# include "mc_map.h"
-# include "utils.h"
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <zlib.h>
+#include <ImageMagick-7/MagickCore/MagickCore.h>
+
+#include "mc_map.h"
+#include "utils.h"
 
 char verbose = 0;
 char no_gz = 0;
-char floydsteinberg = 0;
+DitherMethod dithering = NoDitherMethod;;
 
 int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf("Usage: minemap <options>\n");
-	printf("\n");
-	printf("-f, --floydsteinberg\n");
-	printf("\tOptional, turn on Floyd Steinberg dithering\n");
-	printf("\tDefault to no dithering.\n");
-	printf("\n");
-	printf("-i, --input INPUT\n");
-	printf("\tRequired, image input\n");
-	printf("\n");
-	printf("--no-gz\n");
-	printf("\tDo not gzip generated NBT file\n");
-	printf("\n");
-	printf("-o, --output FILE\n");
-	printf("\tRequired, output file in NBT format\n");
-	printf("\n");
-	printf("-p, --palette PALETTE.GIF\n");
-	printf("\tRequired, colors in specific minecraft version, installed to\n");
-	printf("\t/usr/share/minemap/palettes\n");
-	printf("\n");
-	printf("-v, --verbose\n");
-	printf("\tOptional, Turn on verbose output and store intermediate files\n");
-	printf("\tinto /tmp for debug purposes\n");
+	printf("minemap <options>\n");
+	printf("\t-d, --dithering ALGORITHM\n");
+	printf("\t\tOptional, turn on dithering, available algorithms as follows\n");
+	printf("\t\t\triemersma\n");
+	printf("\t\t\tfloydsteinberg\n");
+	printf("\t-i, --input INPUT\n");
+	printf("\t\tRequired, image input\n");
+	printf("\t--no-gz\n");
+	printf("\t\tDo not gzip generated NBT file\n");
+	printf("\t-o, --output FILE\n");
+	printf("\t\tRequired, output file in NBT format\n");
+	printf("\t-p, --palette PALETTE.GIF\n");
+	printf("\t\tRequired, colors in specific minecraft version\n");
+	printf("\t-v, --verbose\n");
+	printf("\t\tOptional, Turn on verbose output\n");
 }
 
 int main(int argc, char **argv) {
@@ -46,16 +44,24 @@ int main(int argc, char **argv) {
 	int i = 1;
 	while (i < argc) {
 		if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--palette") == 0) {
-			palette_path = argv[i+1];
 			i++;
+			palette_path = argv[i];
 		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
-			input_path = argv[i+1];
 			i++;
-		} else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--floydsteinberg") == 0) {
-			floydsteinberg = 1;
+			input_path = argv[i];
+		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
+			i++;
+			if (strcmp(argv[i], "riemersma") == 0) {
+				dithering = RiemersmaDitherMethod;
+			} else if (strcmp(argv[i], "floydstenberg") == 0) {
+				dithering = FloydSteinbergDitherMethod;
+			} else {
+				fprintf(stderr, "Unknown dithering method\n");
+				exit(1);
+			} 
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
-			output_path = argv[i+1];
 			i++;
+			output_path = argv[i];
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
 			verbose = 1;
 		} else if (strcmp(argv[i], "--no-gz") == 0) {
@@ -89,11 +95,7 @@ int main(int argc, char **argv) {
 	// Scale input to 128x128
 	Image *output = ResizeImage(input, 128, 128, LanczosFilter, exception);
 	QuantizeInfo *quantize_info = CloneQuantizeInfo(NULL);
-	if (floydsteinberg) {
-		quantize_info->dither_method = FloydSteinbergDitherMethod;
-	} else {
-		quantize_info->dither_method = NoDitherMethod;
-	}
+	quantize_info->dither_method = dithering;
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);
 	

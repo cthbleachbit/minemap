@@ -1,10 +1,15 @@
-# include <stdint.h>
-# include <string.h>
-# include <stdint.h>
+/* Minemap
+ *
+ * mc_map.c: Minecraft Map Abstraction
+ */
 
-# include "mc_map.h"
-# include "mc_nbt.h"
-# include "utils.h"
+#include <stdint.h>
+#include <string.h>
+#include <stdint.h>
+
+#include "mc_map.h"
+#include "mc_nbt.h"
+#include "utils.h"
 
 // Init map and nbt from parameter
 mc_map *init_map(char scale, char dim, int16_t width, int16_t height, int32_t xC, int32_t zC) {

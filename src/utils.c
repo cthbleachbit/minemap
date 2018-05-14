@@ -1,7 +1,12 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include "utils.h"
+/* Minemap
+ *
+ * util.c: Utilities
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "utils.h"
 
 void die(const int ret, char *errmsg) {
 	fprintf(stderr, "%s", errmsg);

@@ -1,7 +1,12 @@
-# include <stdint.h>
-# include <stdlib.h>
-# include "mc_endian.h"
-# include "utils.h"
+/* Minemap
+ * 
+ * mc_endian.c: Big / Little Conversion
+ */
+
+#include <stdint.h>
+#include <stdlib.h>
+#include "mc_endian.h"
+#include "utils.h"
 
 /* Deal with in-place value replacement in byte sequences.
  * Presumably not safe

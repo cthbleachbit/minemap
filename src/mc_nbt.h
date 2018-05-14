@@ -1,8 +1,13 @@
-# include <stddef.h>
-# include <stdint.h>
+/* Minemap
+ *
+ * mc_nbt.h: Minecraft NBT format
+ */
 
-# ifndef MM_NBT_H
-# define MM_NBT_H
+#include <stddef.h>
+#include <stdint.h>
+
+#ifndef MM_NBT_H
+#define MM_NBT_H
 
 // a single byte, signed
 typedef struct {

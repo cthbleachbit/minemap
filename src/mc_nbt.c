@@ -1,10 +1,14 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <stdint.h>
-# include <string.h>
-# include "mc_nbt.h"
-# include "mc_endian.h"
-# include "utils.h"
+/* Minemap
+ *
+ * mc_nbt.c: Minecraft NBT format
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include "mc_nbt.h"
+#include "mc_endian.h"
+#include "utils.h"
 
 /* Two functions for manipulating nbt byte type
    Just init is enough

@@ -1,7 +1,12 @@
-# include <stdint.h>
+/* Minemap
+ *
+ * mc_endian.h: Big / Little Endian Conversion
+ */
 
-# ifndef MC_ENDIAN
-# define MC_ENDIAN
+#include <stdint.h>
+
+#ifndef MC_ENDIAN
+#define MC_ENDIAN
 
 typedef union {
 	unsigned char payload[2];
