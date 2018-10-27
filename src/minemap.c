@@ -31,6 +31,8 @@ void usage() {
 	printf("\t\tDo not gzip generated NBT file\n");
 	printf("\t-o, --output FILE\n");
 	printf("\t\tRequired, output file in NBT format\n");
+	printf("\t-e, --export FILE\n");
+	printf("\t\tOptional, export the result of color reduction in png format\n");
 	printf("\t-p, --palette PALETTE.GIF\n");
 	printf("\t\tRequired, colors in specific minecraft version\n");
 	printf("\t-v, --verbose\n");
@@ -41,6 +43,7 @@ int main(int argc, char **argv) {
 	char *palette_path = NULL;
 	char *input_path = NULL;
 	char *output_path = NULL;
+	char *export_path = NULL;
 	int i = 1;
 	while (i < argc) {
 		if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--palette") == 0) {
@@ -64,6 +67,9 @@ int main(int argc, char **argv) {
 			output_path = argv[i];
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
 			verbose = 1;
+		} else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
+			i++;
+			export_path = argv[i];
 		} else if (strcmp(argv[i], "--no-gz") == 0) {
 			no_gz = 1;
 		}
@@ -99,13 +105,13 @@ int main(int argc, char **argv) {
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);
 	
-	if (verbose) {
-		ImageInfo *dbg_img = CloneImageInfo(NULL);
-		dbg_img->file = fopen("/tmp/remapped.gif", "w+b");
-		strcpy(dbg_img->filename, "remapped.gif");
-		strcpy(dbg_img->magick, "gif");
-		WriteImage (dbg_img, output, exception);
-		DestroyImageInfo(dbg_img);
+	if (export_path) {
+		ImageInfo *export_img = CloneImageInfo(NULL);
+		export_img->file = fopen(export_path, "w+b");
+		strcpy(export_img->filename, export_path);
+		strcpy(export_img->magick, "png");
+		WriteImage (export_img, output, exception);
+		DestroyImageInfo(export_img);
 	}
 	
 	PixelInfo *orig_pix = protected_malloc(sizeof(PixelInfo));
