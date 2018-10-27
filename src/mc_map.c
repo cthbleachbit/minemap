@@ -38,6 +38,7 @@ void free_map(mc_map *map) {
 	free(map -> xCenter);
 	free(map -> zCenter);
 	free_byte_array(map -> colors);
+	free(map);
 }
 
 // Convert to byte sequence
