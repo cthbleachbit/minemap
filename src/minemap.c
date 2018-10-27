@@ -162,7 +162,9 @@ int main(int argc, char **argv) {
 	DestroyImageInfo(palette_im_f);
 	DestroyImageInfo(input_im_f);
 	DestroyExceptionInfo(exception);
-	
+	free(palette_pix);
+	free(orig_pix);
+
 	// Generate map binary
 	int size_map = size_map_raw(map);
 	printf("Uncompressed map file size: %i bytes\n", size_map);
