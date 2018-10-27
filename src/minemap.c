@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
 			i++;
 			if (strcmp(argv[i], "riemersma") == 0) {
 				dithering = RiemersmaDitherMethod;
-			} else if (strcmp(argv[i], "floydstenberg") == 0) {
+			} else if (strcmp(argv[i], "floydsteinberg") == 0) {
 				dithering = FloydSteinbergDitherMethod;
 			} else {
 				fprintf(stderr, "Unknown dithering method\n");
