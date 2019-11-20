@@ -3,14 +3,19 @@ target_link_libraries(gen_color_map ${IMAGEMAGICK_LIBRARIES})
 target_include_directories(gen_color_map PUBLIC ${IMAGEMAGICK_INCLUDE_DIRS})
 target_compile_options(gen_color_map PUBLIC ${IMAGEMAGICK_CFLAGS_OTHER})
 
-add_custom_target(gen_palettes ALL
-    DEPENDS gen_color_map
-    COMMAND make -f Makefile.palette all
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+file(GLOB PALETTE_FILES
+    LIST_DIRECTORIES FALSE
+    RELATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}"
+    "rgba-*.txt"
 )
 
-set(RESOURCE_FILES
-    rgba-1.12.gif
-    rgba-1.8.gif)
-
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCE_FILES} DESTINATION share/minemap/palettes)
+foreach(PALETTE_FILE IN LISTS PALETTE_FILES)
+    get_filename_component(PALETTE_FILE_NAME "${PALETTE_FILE}" NAME)
+    string(REPLACE ".txt" ".gif" PALETTE_FILE_OUTPUT "${PALETTE_FILE_NAME}")
+    add_custom_target("gen_palettes_${PALETTE_FILE_NAME}" ALL
+        DEPENDS gen_color_map
+        COMMAND $<TARGET_FILE:gen_color_map> "${PALETTE_FILE}" "${PALETTE_FILE_OUTPUT}"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PALETTE_FILE_OUTPUT}" DESTINATION share/minemap/palettes)
+endforeach()
