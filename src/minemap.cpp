@@ -1,19 +1,28 @@
 /* Minemap
  *
- * minemap.c: Main program: convert picture to map
+ * minemap.cpp: Main program: convert picture to map
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <zlib.h>
 #include <ImageMagick-7/MagickCore/MagickCore.h>
+#include <nbtp/libnbtp.h>
+#include <cstring>
 
-#include "mc_map.h"
+#include <string>
+#include <iostream>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <fstream>
+#include <boost/iostreams/filtering_stream.hpp>
+
 #include "utils.h"
+#include "Map.h"
 
-char verbose = 0;
-char no_gz = 0;
+#define DEFAULT_X_CENTER 1 << 22
+#define DEFAULT_Z_CENTER 1 << 22
+
+bool verbose = false;
+
+bool no_gz = false;
+
 DitherMethod dithering = NoDitherMethod;;
 
 int main(int argc, char **argv);
@@ -40,51 +49,61 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
-	char *palette_path = NULL;
-	char *input_path = NULL;
-	char *output_path = NULL;
-	char *export_path = NULL;
+	std::string palette_path;
+	std::string input_path;
+	std::string output_path;
+	std::string export_path;
+
+	// Parse Parameters
 	int i = 1;
 	while (i < argc) {
 		if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--palette") == 0) {
 			i++;
 			palette_path = argv[i];
-		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
+		}
+		else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
 			input_path = argv[i];
-		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
+		}
+		else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			i++;
 			if (strcmp(argv[i], "riemersma") == 0) {
 				dithering = RiemersmaDitherMethod;
-			} else if (strcmp(argv[i], "floydsteinberg") == 0) {
+			}
+			else if (strcmp(argv[i], "floydsteinberg") == 0) {
 				dithering = FloydSteinbergDitherMethod;
-			} else {
-				fprintf(stderr, "Unknown dithering method\n");
+			}
+			else {
+				std::cerr << "Unknown dithering method" << std::endl;
 				exit(1);
-			} 
-		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
+			}
+		}
+		else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			output_path = argv[i];
-		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
-			verbose = 1;
-		} else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
+		}
+		else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
+			verbose = true;
+		}
+		else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
 			i++;
 			export_path = argv[i];
-		} else if (strcmp(argv[i], "--no-gz") == 0) {
-			no_gz = 1;
+		}
+		else if (strcmp(argv[i], "--no-gz") == 0) {
+			no_gz = true;
 		}
 		i++;
 	}
-	
-	if ((!palette_path) || (!input_path) || (!output_path)) {
+
+	if (palette_path.empty() || input_path.empty() || output_path.empty()) {
 		usage();
 		exit(1);
 	};
-	
+
 	// Init Magick Core
 	char *path = getcwd(path, 0);
 	MagickCoreGenesis(path, MagickTrue);
-	
+
 	// Loading Image
 	ExceptionInfo *exception = AcquireExceptionInfo();
 	exception->signature = MagickCoreSignature;
@@ -94,59 +113,63 @@ int main(int argc, char **argv) {
 	input_im_f->file = protected_fopen(input_path, "rb");
 	Image *palette = ReadImage(palette_im_f, exception);
 	CatchException(exception);
-	
+
 	Image *input = ReadImage(input_im_f, exception);
 	CatchException(exception);
-	
+
 	// Scale input to 128x128
 	Image *output = ResizeImage(input, 128, 128, LanczosFilter, exception);
 	QuantizeInfo *quantize_info = CloneQuantizeInfo(NULL);
 	quantize_info->dither_method = dithering;
 	RemapImage(quantize_info, output, palette, exception);
 	DestroyQuantizeInfo(quantize_info);
-	
-	if (export_path) {
+
+	if (!export_path.empty()) {
 		ImageInfo *export_img = CloneImageInfo(NULL);
-		export_img->file = fopen(export_path, "w+b");
-		strcpy(export_img->filename, export_path);
+		export_img->file = protected_fopen(export_path, "w+b");
+		strcpy(export_img->filename, export_path.c_str());
 		strcpy(export_img->magick, "png");
-		WriteImage (export_img, output, exception);
+		WriteImage(export_img, output, exception);
 		DestroyImageInfo(export_img);
 	}
-	
-	PixelInfo *orig_pix = protected_malloc(sizeof(PixelInfo));
-	PixelInfo *palette_pix = protected_malloc(sizeof(PixelInfo));
+
+	PixelInfo *orig_pix = static_cast<PixelInfo *>(protected_malloc(sizeof(PixelInfo)));
+	PixelInfo *palette_pix = static_cast<PixelInfo *>(protected_malloc(sizeof(PixelInfo)));
 	int palette_col = palette->columns;
 	int palette_row = palette->rows;
 	int palette_number = palette_col * palette_row;
-	mc_map *map = init_map(0, 1, 128, 128, 16777216, 16777216);
-	unsigned char *map_payload = map -> colors -> payload;
+
+	// Create Map Payload
+	auto map_tag = NBTP::CompoundTag();
+	auto data_tag = Minemap::Map::makeMapData(1, 1, 128, 128, DEFAULT_X_CENTER, DEFAULT_Z_CENTER);
+	map_tag.insert("data", data_tag);
+	auto colors_tag = (NBTP::BytesTag*) data_tag->getPayload()["colors"].get();
 	for (i = 0; i < 16384; i++) {
 		GetOneVirtualPixelInfo(output,
-		                       EdgeVirtualPixelMethod,
-		                       i % 128,
-		                       i / 128,
-		                       orig_pix,
-		                       exception);
+							   EdgeVirtualPixelMethod,
+							   i % 128,
+							   i / 128,
+							   orig_pix,
+							   exception);
 		if (verbose) {
 			fprintf(stderr, "Pixel at %i, %i:\n%f\t%f\t%f\t%f\n",
-			        i % 128, i / 128,
-			        orig_pix->red,
-			        orig_pix->green,
-			        orig_pix->blue,
-			        orig_pix->alpha);
+					i % 128, i / 128,
+					orig_pix->red,
+					orig_pix->green,
+					orig_pix->blue,
+					orig_pix->alpha);
 		}
 		for (int j = 0; j < palette_number; j++) {
 			GetOneVirtualPixelInfo(palette,
-			                       EdgeVirtualPixelMethod,
-			                       j % palette_col,
-			                       j / palette_col,
-			                       palette_pix,
-			                       exception);
+								   EdgeVirtualPixelMethod,
+								   j % palette_col,
+								   j / palette_col,
+								   palette_pix,
+								   exception);
 			if (orig_pix->red == palette_pix->red &&
-			    orig_pix->green == palette_pix->green &&
-			    orig_pix->blue == palette_pix->blue) {
-				map_payload[i] = j;
+				orig_pix->green == palette_pix->green &&
+				orig_pix->blue == palette_pix->blue) {
+				colors_tag->insert(std::make_shared<NBTP::ByteTag>(static_cast<int8_t>(j)));
 				if (verbose) {
 					fprintf(stderr, "Matched color id %i\n", j);
 				}
@@ -154,7 +177,7 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-	
+
 	// Close all Imagemagick handles
 	DestroyImage(palette);
 	DestroyImage(input);
@@ -166,23 +189,22 @@ int main(int argc, char **argv) {
 	free(orig_pix);
 
 	// Generate map binary
-	int size_map = size_map_raw(map);
-	printf("Uncompressed map file size: %i bytes\n", size_map);
-	unsigned char *map_binary = protected_malloc(size_map);
-	generate_map_raw(map_binary, map);
-	free_map(map);
-	
-	if (no_gz) {
-		FILE *output_nbt = protected_fopen(output_path, "wb");
-		fwrite(map_binary, 1, size_map, output_nbt);
-		fclose(output_nbt);
-	} else {
-		gzFile output_gz = gzopen(output_path, "wb");
-		gzwrite(output_gz, map_binary, size_map);
-		gzclose(output_gz);
+	std::vector<char> out_array;
+	boost::iostreams::back_insert_device<std::vector<char>> snk{out_array};
+
+	std::ofstream output_file(output_path, std::ios::binary);
+
+	boost::iostreams::filtering_ostream os;
+	if (!no_gz) {
+		os.push(boost::iostreams::gzip_compressor{});
 	}
-	
-	free(map_binary);
+	os.push(output_file);
+
+	NBTP::TagIO::writeRoot(os, map_tag);
+	os << std::flush;
+	os.pop();
+	output_file.flush();
+
 	MagickCoreTerminus();
 	free(path);
 	return 0;

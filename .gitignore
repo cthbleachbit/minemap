@@ -12,3 +12,6 @@ CTestTestfile.cmake
 *.o
 minemap
 build
+
+cmake-build-*
+.idea

@@ -11,9 +11,11 @@
 #include "utils.h"
 
 char *map_buf;
+
 ExceptionInfo exception;
 
 char *ipath = NULL;
+
 char *opath = NULL;
 
 void usage() {
@@ -30,10 +32,12 @@ int main(int argc, char **argv) {
 		if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
 			ipath = argv[i];
-		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
+		}
+		else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			opath = argv[i];
-		} else {
+		}
+		else {
 			usage();
 			exit(1);
 		}
