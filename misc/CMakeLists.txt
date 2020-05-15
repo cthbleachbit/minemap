@@ -1,7 +1,7 @@
-add_executable(gen_color_map gen_color_map.c)
-target_link_libraries(gen_color_map ${IMAGEMAGICK_LIBRARIES})
-target_include_directories(gen_color_map PUBLIC ${IMAGEMAGICK_INCLUDE_DIRS})
-target_compile_options(gen_color_map PUBLIC ${IMAGEMAGICK_CFLAGS_OTHER})
+add_executable(gen_color_map gen_color_map.cpp)
+target_link_libraries(gen_color_map PUBLIC ${ImageMagick_LIBRARIES})
+target_include_directories(gen_color_map PUBLIC ${ImageMagick_INCLUDE_DIRS})
+target_compile_options(gen_color_map PUBLIC ${ImageMagick_CFLAGS_OTHER})
 
 file(GLOB PALETTE_FILES
     LIST_DIRECTORIES FALSE
