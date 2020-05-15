@@ -20,15 +20,21 @@ install(TARGETS minemap DESTINATION bin)
 
 if (BUILD_PAMENIM)
     add_executable(pamenim
-            pamenim.c)
-    target_link_libraries(pamenim ${IMAGEMAGICK_LIBRARIES})
-    target_include_directories(pamenim PUBLIC ${IMAGEMAGICK_INCLUDE_DIRS})
-    target_compile_options(pamenim PUBLIC ${IMAGEMAGICK_CFLAGS_OTHER})
+            pamenim.cpp
+            Map.h
+            Map.cpp
+            VersionSpec.cpp
+            ColorMap.cpp
+            )
+    target_link_libraries(pamenim PUBLIC ${NBTP_LIBRARIES})
+    target_link_libraries(pamenim PUBLIC ${ImageMagick_LIBRARIES})
+    target_link_libraries(pamenim PUBLIC ${Boost_LIBRARIES})
 
-    pkg_check_modules(ZLIB REQUIRED zlib)
-    target_link_libraries(pamenim ${ZLIB_LIBRARIES})
-    target_include_directories(pamenim PUBLIC ${ZLIB_INCLUDE_DIRS})
-    target_compile_options(pamenim PUBLIC ${ZLIB_CFLAGS_OTHER})
+    target_include_directories(pamenim PUBLIC ${NBTP_INCLUDE_DIRS})
+    target_include_directories(pamenim PUBLIC ${ImageMagick_INCLUDE_DIRS})
+    target_include_directories(pamenim PUBLIC ${Boost_INCLUDE_DIRS})
+
+    target_compile_options(pamenim PUBLIC ${ImageMagick_CFLAGS})
 
     install(TARGETS pamenim DESTINATION bin)
 endif ()
