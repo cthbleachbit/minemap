@@ -35,14 +35,17 @@ void usage() {
 	printf("\t-i, --input INPUT\n");
 	printf("\t\tRequired, image input\n");
 	printf("\t--no-gz\n");
-	printf("\t\tDo not gzip generated NBT file\n");
+	printf("\t\tOptional, do not gzip generated NBT file\n");
 	printf("\t-o, --output FILE\n");
 	printf("\t\tRequired, output file in NBT format\n");
 	printf("\t-e, --export FILE\n");
 	printf("\t\tOptional, export the result of color reduction in png format\n");
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, Minecraft game version this map is going to be used in\n");
-	printf("\t\tValid values: 1.8, 1.12\n");
+	printf("\t\tSelect from the following values: \n");
+	printf("\t\t\t1.12 for game version [1.12, +oo)\n");
+	printf("\t\t\t1.8  for game version [1.8,  1.12)\n");
+	printf("\t\tOther versions are not supported yet.\n");
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
 }
@@ -97,7 +100,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (mc_ver == VersionSpec::INVALID) {
-		std::cout << "Invalid game version" << std::endl;
+		std::cout << "No game version specified" << std::endl;
 		usage();
 		exit(1);
 	}
