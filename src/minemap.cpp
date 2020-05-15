@@ -3,7 +3,6 @@
  * minemap.cpp: Main program: convert picture to map
  */
 
-#include <ImageMagick-7/MagickCore/MagickCore.h>
 #include <nbtp/libnbtp.h>
 #include <cstring>
 
@@ -12,21 +11,25 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <Magick++.h>
 
 #include "utils.h"
 #include "Map.h"
-
-#define DEFAULT_X_CENTER 1 << 22
-#define DEFAULT_Z_CENTER 1 << 22
 
 bool verbose = false;
 
 bool no_gz = false;
 
-DitherMethod dithering = NoDitherMethod;;
+Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
 
 int main(int argc, char **argv);
 void usage();
+
+namespace Minemap {
+	bool inline colorEqual(const Magick::ColorRGB &q1, const Magick::ColorRGB &q2) {
+		return (q1.red() == q2.red() && q1.green() == q2.green() && q1.blue() == q2.blue());
+	}
+}
 
 void usage() {
 	printf("minemap <options>\n");
@@ -68,10 +71,10 @@ int main(int argc, char **argv) {
 		else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			i++;
 			if (strcmp(argv[i], "riemersma") == 0) {
-				dithering = RiemersmaDitherMethod;
+				dithering = Magick::DitherMethod::RiemersmaDitherMethod;
 			}
 			else if (strcmp(argv[i], "floydsteinberg") == 0) {
-				dithering = FloydSteinbergDitherMethod;
+				dithering = Magick::DitherMethod::FloydSteinbergDitherMethod;
 			}
 			else {
 				std::cerr << "Unknown dithering method" << std::endl;
@@ -100,98 +103,89 @@ int main(int argc, char **argv) {
 		exit(1);
 	};
 
-	// Init Magick Core
-	char *path = getcwd(path, 0);
-	MagickCoreGenesis(path, MagickTrue);
-
-	// Loading Image
-	ExceptionInfo *exception = AcquireExceptionInfo();
-	exception->signature = MagickCoreSignature;
-	ImageInfo *palette_im_f = CloneImageInfo(NULL);
-	palette_im_f->file = protected_fopen(palette_path, "rb");
-	ImageInfo *input_im_f = CloneImageInfo(NULL);
-	input_im_f->file = protected_fopen(input_path, "rb");
-	Image *palette = ReadImage(palette_im_f, exception);
-	CatchException(exception);
-
-	Image *input = ReadImage(input_im_f, exception);
-	CatchException(exception);
-
-	// Scale input to 128x128
-	Image *output = ResizeImage(input, 128, 128, LanczosFilter, exception);
-	QuantizeInfo *quantize_info = CloneQuantizeInfo(NULL);
-	quantize_info->dither_method = dithering;
-	RemapImage(quantize_info, output, palette, exception);
-	DestroyQuantizeInfo(quantize_info);
-
-	if (!export_path.empty()) {
-		ImageInfo *export_img = CloneImageInfo(NULL);
-		export_img->file = protected_fopen(export_path, "w+b");
-		strcpy(export_img->filename, export_path.c_str());
-		strcpy(export_img->magick, "png");
-		WriteImage(export_img, output, exception);
-		DestroyImageInfo(export_img);
-	}
-
-	PixelInfo *orig_pix = static_cast<PixelInfo *>(protected_malloc(sizeof(PixelInfo)));
-	PixelInfo *palette_pix = static_cast<PixelInfo *>(protected_malloc(sizeof(PixelInfo)));
-	int palette_col = palette->columns;
-	int palette_row = palette->rows;
-	int palette_number = palette_col * palette_row;
-
 	// Create Map Payload
 	auto map_tag = NBTP::CompoundTag();
-	auto data_tag = Minemap::Map::makeMapData(1, 1, 128, 128, DEFAULT_X_CENTER, DEFAULT_Z_CENTER);
+	auto data_tag = Minemap::Map::makeMapData();
 	map_tag.insert("data", data_tag);
 	auto colors_tag = (NBTP::BytesTag*) data_tag->getPayload()["colors"].get();
-	for (i = 0; i < 16384; i++) {
-		GetOneVirtualPixelInfo(output,
-							   EdgeVirtualPixelMethod,
-							   i % 128,
-							   i / 128,
-							   orig_pix,
-							   exception);
-		if (verbose) {
-			fprintf(stderr, "Pixel at %i, %i:\n%f\t%f\t%f\t%f\n",
-					i % 128, i / 128,
-					orig_pix->red,
-					orig_pix->green,
-					orig_pix->blue,
-					orig_pix->alpha);
+
+	{
+		// Init Magick Core
+		Magick::InitializeMagick(*argv);
+
+		// Loading Image
+		Magick::Image palette_img;
+		Magick::Image input_img;
+		Magick::Image output_img;
+		try {
+			palette_img.read(palette_path);
+			palette_img.colorSpace(Magick::RGBColorspace);
 		}
-		for (int j = 0; j < palette_number; j++) {
-			GetOneVirtualPixelInfo(palette,
-								   EdgeVirtualPixelMethod,
-								   j % palette_col,
-								   j / palette_col,
-								   palette_pix,
-								   exception);
-			if (orig_pix->red == palette_pix->red &&
-				orig_pix->green == palette_pix->green &&
-				orig_pix->blue == palette_pix->blue) {
-				colors_tag->insert(std::make_shared<NBTP::ByteTag>(static_cast<int8_t>(j)));
-				if (verbose) {
-					fprintf(stderr, "Matched color id %i\n", j);
+		catch (Magick::Exception &e) {
+			std::cerr << e.what() << std::endl;
+			return 1;
+		}
+
+		try {
+			input_img.read(input_path);
+			input_img.colorSpace(Magick::RGBColorspace);
+		}
+		catch (Magick::Exception &e) {
+			std::cerr << e.what() << std::endl;
+			return 1;
+		}
+
+		output_img = input_img;
+		output_img.modifyImage();
+		// Scale input to 128x128
+		output_img.resize("128x128!");
+		output_img.colorSpace(Magick::RGBColorspace);
+		// Execute remap
+		output_img.quantizeDitherMethod(dithering);
+		output_img.quantizeColorSpace(Magick::RGBColorspace);
+		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
+
+		if (!export_path.empty()) {
+			palette_img.write(export_path);
+		}
+
+		int palette_width = palette_img.size().width();
+		int palette_height = palette_img.size().height();
+		int palette_number = palette_width * palette_height;
+
+		for (i = 0; i < 16384; i++) {
+			ssize_t col = i % 128;
+			ssize_t row = i / 128;
+			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
+			if (verbose) {
+				fprintf(stderr,
+						"Pixel at %li, %li: (%f, %f, %f)\n",
+						col, row,
+						output_pix.red(),
+						output_pix.green(),
+						output_pix.blue());
+			}
+			int j;
+			for (j = 0; j < palette_number; j++) {
+				ssize_t palette_col = j % palette_width;
+				ssize_t palette_row = j / palette_width;
+				Magick::ColorRGB palette_pix = palette_img.pixelColor(palette_col, palette_row);
+				if (Minemap::colorEqual(palette_pix, output_pix)) {
+					colors_tag->insert(std::make_shared<NBTP::ByteTag>(static_cast<int8_t>(j)));
+					if (verbose) {
+						fprintf(stderr, "Matched color id %i\n", j);
+					}
+					break;
 				}
-				break;
+			}
+			if (j == palette_number) {
+				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
+				exit(1);
 			}
 		}
 	}
 
-	// Close all Imagemagick handles
-	DestroyImage(palette);
-	DestroyImage(input);
-	DestroyImage(output);
-	DestroyImageInfo(palette_im_f);
-	DestroyImageInfo(input_im_f);
-	DestroyExceptionInfo(exception);
-	free(palette_pix);
-	free(orig_pix);
-
 	// Generate map binary
-	std::vector<char> out_array;
-	boost::iostreams::back_insert_device<std::vector<char>> snk{out_array};
-
 	std::ofstream output_file(output_path, std::ios::binary);
 
 	boost::iostreams::filtering_ostream os;
@@ -205,7 +199,5 @@ int main(int argc, char **argv) {
 	os.pop();
 	output_file.flush();
 
-	MagickCoreTerminus();
-	free(path);
 	return 0;
 }

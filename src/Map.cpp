@@ -17,5 +17,10 @@ namespace Minemap {
 			data->insert("colors", std::make_shared<NBTP::BytesTag>());
 			return data;
 		}
+
+		std::shared_ptr<NBTP::CompoundTag> makeMapData() {
+			return makeMapData(1, 1, 128, 128, DEFAULT_X_CENTER, DEFAULT_Z_CENTER);
+		}
+
 	}
 }
