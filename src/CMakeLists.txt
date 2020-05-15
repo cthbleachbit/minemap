@@ -3,6 +3,7 @@ add_executable(minemap
         Map.h
         Map.cpp
         VersionSpec.cpp
+        ColorMap.cpp
         )
 
 target_link_libraries(minemap PUBLIC ${NBTP_LIBRARIES})

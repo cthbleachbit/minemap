@@ -15,6 +15,7 @@
 
 #include "Map.h"
 #include "VersionSpec.h"
+#include "ColorMap.h"
 
 bool verbose = false;
 
@@ -24,12 +25,6 @@ Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
 
 int main(int argc, char **argv);
 void usage();
-
-namespace Minemap {
-	bool inline colorEqual(const Magick::ColorRGB &q1, const Magick::ColorRGB &q2) {
-		return (q1.red() == q2.red() && q1.green() == q2.green() && q1.blue() == q2.blue());
-	}
-}
 
 void usage() {
 	printf("minemap <options>\n");
@@ -161,9 +156,7 @@ int main(int argc, char **argv) {
 			output_img.write(export_path);
 		}
 
-		int palette_width = palette_img.size().width();
-		int palette_height = palette_img.size().height();
-		int palette_number = palette_width * palette_height;
+		auto palette_lookup_table = loadColorMapFromPalette(palette_img);
 
 		for (i = 0; i < 16384; i++) {
 			ssize_t col = i % 128;
@@ -177,25 +170,13 @@ int main(int argc, char **argv) {
 						output_pix.green(),
 						output_pix.blue());
 			}
-			int j;
-			for (j = 0; j < palette_number; j++) {
-				ssize_t palette_col = j % palette_width;
-				ssize_t palette_row = j / palette_width;
-				Magick::ColorRGB palette_pix = palette_img.pixelColor(palette_col, palette_row);
-				if (verbose) {
-					fprintf(stderr, "Trying palette %li, %li\n", palette_col, palette_row);
-				}
-				if (Minemap::colorEqual(palette_pix, output_pix)) {
-					colors_tag->insert(std::make_shared<NBTP::ByteTag>(static_cast<int8_t>(j)));
-					if (verbose) {
-						fprintf(stderr, "Matched color id %i\n", j);
-					}
-					break;
-				}
-			}
-			if (j == palette_number) {
+			auto itr = palette_lookup_table->find(TupleRGB(output_pix));
+			if (itr == palette_lookup_table->end()) {
 				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
 				exit(1);
+			}
+			else {
+				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->second));
 			}
 		}
 	}
