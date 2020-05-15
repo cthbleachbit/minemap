@@ -105,11 +105,13 @@ int main(int argc, char **argv) {
 		std::cout << "Invalid game version" << std::endl;
 		usage();
 		exit(1);
-	} else if (input_path.empty()) {
+	}
+	else if (input_path.empty()) {
 		std::cout << "No input file specified" << std::endl;
 		usage();
 		exit(1);
-	} else if (output_path.empty()) {
+	}
+	else if (output_path.empty()) {
 		std::cout << "No output file specified" << std::endl;
 		usage();
 		exit(1);
@@ -120,8 +122,8 @@ int main(int argc, char **argv) {
 
 	// Create Template Map Payload
 	auto map_tag = Map::makeMapRoot(mc_ver);
-	NBTP::CompoundTag* data_tag = (NBTP::CompoundTag*) map_tag->getPayload()["data"].get();
-	auto colors_tag = (NBTP::BytesTag*) data_tag->getPayload()["colors"].get();
+	NBTP::CompoundTag *data_tag = (NBTP::CompoundTag *) map_tag->getPayload()["data"].get();
+	auto colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
 
 	{
 		// Init Magick Core

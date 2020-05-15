@@ -21,7 +21,7 @@ namespace Minemap {
 		MC_1_12,
 	};
 
-	VersionSpec verSpecFromString(const std::string &verString) ;
+	VersionSpec verSpecFromString(const std::string &verString);
 
 	std::string verSpecToPalettePath(VersionSpec ver);
 

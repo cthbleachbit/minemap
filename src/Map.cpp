@@ -23,7 +23,7 @@ namespace Minemap {
 			data->insert("zCenter", std::make_shared<NBTP::IntTag>(geometry.zC));
 			data->insert("colors", std::make_shared<NBTP::BytesTag>());
 
-			for (const auto& tag : *extra) {
+			for (const auto &tag : *extra) {
 				data->insert(tag.first, tag.second);
 			}
 

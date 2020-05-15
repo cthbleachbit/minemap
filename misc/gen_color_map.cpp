@@ -32,15 +32,14 @@ int main(int argc, char **argv) {
 	// Determine number of lines in input
 	char c;
 	ssize_t num_colors = 0;
-	while ((c = fgetc(input_file)) != EOF)
-	{
+	while ((c = fgetc(input_file)) != EOF) {
 		if (c == '\n') {
 			num_colors++;
 		}
 	}
 	rewind(input_file);
 	printf("Number of colors in this file: %li\n", num_colors);
-	
+
 	// Parse to array of colors
 	auto *line_buffer = new char[LINE_MAX];
 	auto *colors = new unsigned char[sizeof(short) * 4 * num_colors];
@@ -64,7 +63,8 @@ int main(int argc, char **argv) {
 		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
 		try {
 			palette_img.write(output_filename);
-		} catch (Magick::Exception &e) {
+		}
+		catch (Magick::Exception &e) {
 			std::cerr << "Error when writing palette image: " << e.what() << std::endl;
 			exit(1);
 		}
