@@ -3,6 +3,7 @@
 //
 
 #include "VersionSpec.h"
+#include "constants.h"
 #include <boost/format.hpp>
 
 namespace Minemap {
@@ -16,7 +17,7 @@ namespace Minemap {
 		std::string versionString;
 		switch (ver) {
 			case INVALID:
-				throw std::runtime_error("Invalid game version");
+				throw std::runtime_error(INVALID_GAME_VER);
 			case MC_1_8:
 				versionString = "1.8";
 				break;
@@ -39,7 +40,7 @@ namespace Minemap {
 				(*extra)["frames"] = std::make_shared<NBTP::ListTag>(NBTP::TagType::COMPOUND);
 				break;
 			default:
-				throw std::runtime_error("Invalid game version");
+				throw std::runtime_error(INVALID_GAME_VER);
 		}
 		return extra;
 	}
@@ -51,7 +52,7 @@ namespace Minemap {
 				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(1343));
 				break;
 			default:
-				throw std::runtime_error("Invalid game version");
+				throw std::runtime_error(INVALID_GAME_VER);
 		}
 	}
 }
