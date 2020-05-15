@@ -16,6 +16,7 @@
 #include "Map.h"
 #include "VersionSpec.h"
 #include "ColorMap.h"
+#include "constants.h"
 
 bool verbose = false;
 
@@ -100,20 +101,20 @@ int main(int argc, char **argv) {
 	}
 
 	if (mc_ver == VersionSpec::INVALID) {
-		std::cout << "No game version specified" << std::endl;
+		std::cout << MISSING_GAME_VER << std::endl;
 		usage();
 		exit(1);
 	}
 	else if (input_path.empty()) {
-		std::cout << "No input file specified" << std::endl;
+		std::cout << MISSING_IN_FILE << std::endl;
 		usage();
 		exit(1);
 	}
 	else if (output_path.empty()) {
-		std::cout << "No output file specified" << std::endl;
+		std::cout << MISSING_OUT_FILE << std::endl;
 		usage();
 		exit(1);
-	};
+	}
 
 	palette_path = verSpecToPalettePath(mc_ver);
 	std::cout << "Using palette GIF " << palette_path << std::endl;

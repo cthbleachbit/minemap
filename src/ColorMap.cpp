@@ -61,5 +61,14 @@ namespace Minemap {
 
 	bool TupleRGB::operator>=(const TupleRGB &rhs) const {
 		return !(*this < rhs);
+	}
+
+	TupleRGB::operator Magick::ColorRGB() const {
+		Magick::ColorRGB rgb;
+		rgb.red(this->r);
+		rgb.green(this->g);
+		rgb.blue(this->b);
+		rgb.alpha(1.0);
+		return rgb;
 	};
 }

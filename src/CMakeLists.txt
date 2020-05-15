@@ -1,10 +1,9 @@
 add_executable(minemap
         minemap.cpp
-        Map.h
         Map.cpp
         VersionSpec.cpp
         ColorMap.cpp
-        )
+        constants.h)
 
 target_link_libraries(minemap PUBLIC ${NBTP_LIBRARIES})
 target_link_libraries(minemap PUBLIC ${ImageMagick_LIBRARIES})
@@ -21,11 +20,9 @@ install(TARGETS minemap DESTINATION bin)
 if (BUILD_PAMENIM)
     add_executable(pamenim
             pamenim.cpp
-            Map.h
-            Map.cpp
             VersionSpec.cpp
             ColorMap.cpp
-            )
+            constants.h)
     target_link_libraries(pamenim PUBLIC ${NBTP_LIBRARIES})
     target_link_libraries(pamenim PUBLIC ${ImageMagick_LIBRARIES})
     target_link_libraries(pamenim PUBLIC ${Boost_LIBRARIES})
