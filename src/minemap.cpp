@@ -13,8 +13,8 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 
-#include "utils.h"
 #include "Map.h"
+#include "VersionSpec.h"
 
 bool verbose = false;
 
@@ -45,8 +45,9 @@ void usage() {
 	printf("\t\tRequired, output file in NBT format\n");
 	printf("\t-e, --export FILE\n");
 	printf("\t\tOptional, export the result of color reduction in png format\n");
-	printf("\t-p, --palette PALETTE.GIF\n");
-	printf("\t\tRequired, colors in specific minecraft version\n");
+	printf("\t-g, --game VER\n");
+	printf("\t\tRequired, Minecraft game version this map is going to be used in\n");
+	printf("\t\tValid values: 1.8, 1.12\n");
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
 }
@@ -60,9 +61,9 @@ int main(int argc, char **argv) {
 	// Parse Parameters
 	int i = 1;
 	while (i < argc) {
-		if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--palette") == 0) {
+		if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--game") == 0) {
 			i++;
-			palette_path = argv[i];
+			palette_path = Minemap::verSpecToPalettePath(Minemap::verSpecFromString(argv[i]));
 		}
 		else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
@@ -102,6 +103,8 @@ int main(int argc, char **argv) {
 		usage();
 		exit(1);
 	};
+
+	std::cout << "Using palette GIF " << palette_path << std::endl;
 
 	// Create Map Payload
 	auto map_tag = NBTP::CompoundTag();
