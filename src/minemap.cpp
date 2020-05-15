@@ -170,13 +170,16 @@ int main(int argc, char **argv) {
 						output_pix.green(),
 						output_pix.blue());
 			}
-			auto itr = palette_lookup_table->find(TupleRGB(output_pix));
-			if (itr == palette_lookup_table->end()) {
+			auto itr = palette_lookup_table->left.find(TupleRGB(output_pix));
+			if (itr == palette_lookup_table->left.end()) {
 				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
 				exit(1);
 			}
 			else {
-				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->second));
+				if (verbose) {
+					fprintf(stderr, "Matched color code %i\n", itr->get_right());
+				}
+				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->get_right()));
 			}
 		}
 	}

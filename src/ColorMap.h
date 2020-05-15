@@ -7,7 +7,7 @@
 
 #include <Magick++.h>
 #include <memory>
-#include <unordered_map>
+#include <boost/bimap.hpp>
 
 namespace Minemap {
 	class TupleRGB {
@@ -19,9 +19,14 @@ namespace Minemap {
 		TupleRGB(const Magick::ColorRGB &color);
 		bool operator==(const TupleRGB &rhs) const;
 		bool operator!=(const TupleRGB &rhs) const;
+		bool operator<(const TupleRGB &rhs) const;
+		bool operator>(const TupleRGB &rhs) const;
+		bool operator<=(const TupleRGB &rhs) const;
+		bool operator>=(const TupleRGB &rhs) const;
 	};
 
-	typedef std::unordered_map<TupleRGB, int8_t> ColorMap;
+	typedef boost::bimap<TupleRGB, int8_t> ColorMap;
+	typedef ColorMap::value_type ColorEntry;
 
 	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &img);
 }

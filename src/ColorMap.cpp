@@ -18,7 +18,7 @@ namespace Minemap {
 			Magick::ColorRGB palette_pix = palette_img.pixelColor(palette_col, palette_row);
 
 			// Insert the pixel into the color map
-			(*color_map)[Minemap::TupleRGB(palette_pix)] = static_cast<int8_t>(j);
+			color_map->insert(ColorEntry(Minemap::TupleRGB(palette_pix), static_cast<int8_t>(j)));
 		}
 		return color_map;
 	}
@@ -37,5 +37,29 @@ namespace Minemap {
 
 	bool TupleRGB::operator!=(const TupleRGB &rhs) const {
 		return !(rhs == *this);
+	}
+
+	bool TupleRGB::operator<(const TupleRGB &rhs) const {
+		if (r < rhs.r)
+			return true;
+		if (rhs.r < r)
+			return false;
+		if (g < rhs.g)
+			return true;
+		if (rhs.g < g)
+			return false;
+		return b < rhs.b;
+	}
+
+	bool TupleRGB::operator>(const TupleRGB &rhs) const {
+		return rhs < *this;
+	}
+
+	bool TupleRGB::operator<=(const TupleRGB &rhs) const {
+		return !(rhs < *this);
+	}
+
+	bool TupleRGB::operator>=(const TupleRGB &rhs) const {
+		return !(*this < rhs);
 	};
 }
