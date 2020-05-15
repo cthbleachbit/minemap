@@ -53,6 +53,8 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
+	using namespace Minemap;
+	VersionSpec mc_ver = VersionSpec::INVALID;
 	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
@@ -63,7 +65,7 @@ int main(int argc, char **argv) {
 	while (i < argc) {
 		if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--game") == 0) {
 			i++;
-			palette_path = Minemap::verSpecToPalettePath(Minemap::verSpecFromString(argv[i]));
+			mc_ver = verSpecFromString(argv[i]);
 		}
 		else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
@@ -99,17 +101,26 @@ int main(int argc, char **argv) {
 		i++;
 	}
 
-	if (palette_path.empty() || input_path.empty() || output_path.empty()) {
+	if (mc_ver == VersionSpec::INVALID) {
+		std::cout << "Invalid game version" << std::endl;
+		usage();
+		exit(1);
+	} else if (input_path.empty()) {
+		std::cout << "No input file specified" << std::endl;
+		usage();
+		exit(1);
+	} else if (output_path.empty()) {
+		std::cout << "No output file specified" << std::endl;
 		usage();
 		exit(1);
 	};
 
+	palette_path = verSpecToPalettePath(mc_ver);
 	std::cout << "Using palette GIF " << palette_path << std::endl;
 
-	// Create Map Payload
-	auto map_tag = NBTP::CompoundTag();
-	auto data_tag = Minemap::Map::makeMapData();
-	map_tag.insert("data", data_tag);
+	// Create Template Map Payload
+	auto map_tag = Map::makeMapRoot(mc_ver);
+	NBTP::CompoundTag* data_tag = (NBTP::CompoundTag*) map_tag->getPayload()["data"].get();
 	auto colors_tag = (NBTP::BytesTag*) data_tag->getPayload()["colors"].get();
 
 	{
@@ -122,7 +133,6 @@ int main(int argc, char **argv) {
 		Magick::Image output_img;
 		try {
 			palette_img.read(palette_path);
-			palette_img.colorSpace(Magick::RGBColorspace);
 		}
 		catch (Magick::Exception &e) {
 			std::cerr << e.what() << std::endl;
@@ -131,7 +141,6 @@ int main(int argc, char **argv) {
 
 		try {
 			input_img.read(input_path);
-			input_img.colorSpace(Magick::RGBColorspace);
 		}
 		catch (Magick::Exception &e) {
 			std::cerr << e.what() << std::endl;
@@ -142,14 +151,12 @@ int main(int argc, char **argv) {
 		output_img.modifyImage();
 		// Scale input to 128x128
 		output_img.resize("128x128!");
-		output_img.colorSpace(Magick::RGBColorspace);
 		// Execute remap
 		output_img.quantizeDitherMethod(dithering);
-		output_img.quantizeColorSpace(Magick::RGBColorspace);
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
 
 		if (!export_path.empty()) {
-			palette_img.write(export_path);
+			output_img.write(export_path);
 		}
 
 		int palette_width = palette_img.size().width();
@@ -173,6 +180,9 @@ int main(int argc, char **argv) {
 				ssize_t palette_col = j % palette_width;
 				ssize_t palette_row = j / palette_width;
 				Magick::ColorRGB palette_pix = palette_img.pixelColor(palette_col, palette_row);
+				if (verbose) {
+					fprintf(stderr, "Trying palette %li, %li\n", palette_col, palette_row);
+				}
 				if (Minemap::colorEqual(palette_pix, output_pix)) {
 					colors_tag->insert(std::make_shared<NBTP::ByteTag>(static_cast<int8_t>(j)));
 					if (verbose) {
@@ -197,7 +207,7 @@ int main(int argc, char **argv) {
 	}
 	os.push(output_file);
 
-	NBTP::TagIO::writeRoot(os, map_tag);
+	NBTP::TagIO::writeRoot(os, *map_tag);
 	os << std::flush;
 	os.pop();
 	output_file.flush();

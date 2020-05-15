@@ -6,7 +6,7 @@ set (Minemap_VERSION_MINOR 2)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(NBTP REQUIRED nbtp)
 find_package(Boost REQUIRED COMPONENTS iostreams)
-find_package(ImageMagick COMPONENTS Magick++)
+pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
 
 # Compilation options
 set (CMAKE_CXX_STANDARD 14)
