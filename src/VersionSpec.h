@@ -25,8 +25,6 @@ namespace Minemap {
 
 	std::string verSpecToPalettePath(VersionSpec ver);
 
-	std::shared_ptr<NBTP::CompoundTag::Compound> extraDataForVersion(VersionSpec ver);
-
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver);
 }
 #endif //VERSIONSPEC_H

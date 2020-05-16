@@ -6,6 +6,13 @@
 
 namespace Minemap {
 
+	/**
+	 * Constructs a bijective map between every color in the palette and corresponding colro code in game. This data
+	 * structure allows fast lookup into both representations.
+	 *
+	 * @param img       Loaded Magick image
+	 * @return          the said bijective map
+	 */
 	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &palette_img) {
 		auto color_map = std::make_shared<ColorMap>();
 		int palette_width = palette_img.size().width();

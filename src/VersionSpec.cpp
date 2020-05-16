@@ -4,6 +4,7 @@
 
 #include "VersionSpec.h"
 #include "constants.h"
+#include "Map.h"
 #include <boost/format.hpp>
 
 namespace Minemap {
@@ -26,23 +27,6 @@ namespace Minemap {
 				break;
 		}
 		return (boost::format(MINEMAP_PALETTE_EXPR) % versionString).str();
-	}
-	std::shared_ptr<NBTP::CompoundTag::Compound> extraDataForVersion(VersionSpec ver) {
-		auto extra = std::make_shared<NBTP::CompoundTag::Compound>();
-		switch (ver) {
-			case MC_1_8:
-				break;
-			case MC_1_12:
-				(*extra)["trackingPosition"] = std::make_shared<NBTP::ByteTag>(0);
-				(*extra)["unlimitedTracking"] = std::make_shared<NBTP::ByteTag>(0);
-				(*extra)["locked"] = std::make_shared<NBTP::ByteTag>(1);
-				(*extra)["banners"] = std::make_shared<NBTP::ListTag>(NBTP::TagType::COMPOUND);
-				(*extra)["frames"] = std::make_shared<NBTP::ListTag>(NBTP::TagType::COMPOUND);
-				break;
-			default:
-				throw std::runtime_error(INVALID_GAME_VER);
-		}
-		return extra;
 	}
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
 		switch (ver) {

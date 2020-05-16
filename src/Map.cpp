@@ -2,26 +2,74 @@
 // Created by cth451 on 2020/05/14.
 //
 
+#include <boost/format.hpp>
+#include "constants.h"
+#include "VersionSpec.h"
 #include "Map.h"
+
+// the default center coordinates should be close enough to the "borderlands" that players would not normally reach
+#define DEFAULT_X_CENTER 1 << 30
+#define DEFAULT_Z_CENTER 1 << 30
 
 namespace Minemap {
 	namespace Map {
 
-		static struct MapGeometry DEFAULT_GEOMETRY = {1, 1, 128, 128, DEFAULT_X_CENTER, DEFAULT_Z_CENTER};
+		using namespace NBTP;
 
-		std::shared_ptr<NBTP::CompoundTag>
-		makeMapData(VersionSpec ver, const struct MapGeometry &geometry) {
-			std::shared_ptr<NBTP::CompoundTag> data = std::make_shared<NBTP::CompoundTag>();
+		static struct MapGeometry DEFAULT_GEOMETRY = {
+			1,
+			1,
+			128,
+			128,
+			DEFAULT_X_CENTER,
+			DEFAULT_Z_CENTER
+		};
 
-			auto extra = extraDataForVersion(ver);
+		/**
+		 * Per-version specific contents
+		 *
+		 * This function should be extended every time a new Minecraft version introduced changes in map item format.
+		 *
+		 * @param ver          Minecraft version specification
+		 * @param geometry     Map geometry
+		 * @return
+		 */
+		inline std::shared_ptr<CompoundTag::Compound> extraDataForVersion(VersionSpec ver, const MapGeometry &geometry) {
+			auto extra = std::make_shared<CompoundTag::Compound>();
+			switch (ver) {
+				case MC_1_8:
+					(*extra)["width"] = std::make_shared<ShortTag>(geometry.width);
+					(*extra)["height"] = std::make_shared<ShortTag>(geometry.height);
+					break;
+				case MC_1_12:
+					(*extra)["trackingPosition"] = std::make_shared<ByteTag>(0);
+					(*extra)["unlimitedTracking"] = std::make_shared<ByteTag>(0);
+					(*extra)["locked"] = std::make_shared<ByteTag>(1);
+					(*extra)["banners"] = std::make_shared<ListTag>(NBTP::COMPOUND);
+					(*extra)["frames"] = std::make_shared<ListTag>(NBTP::COMPOUND);
+					break;
+				default:
+					throw std::runtime_error(INVALID_GAME_VER);
+			}
+			return extra;
+		}
 
-			data->insert("scale", std::make_shared<NBTP::ShortTag>(geometry.scale));
-			data->insert("dimension", std::make_shared<NBTP::ByteTag>(geometry.dim));
-			data->insert("width", std::make_shared<NBTP::ShortTag>(geometry.width));
-			data->insert("height", std::make_shared<NBTP::ShortTag>(geometry.height));
-			data->insert("xCenter", std::make_shared<NBTP::IntTag>(geometry.xC));
-			data->insert("zCenter", std::make_shared<NBTP::IntTag>(geometry.zC));
-			data->insert("colors", std::make_shared<NBTP::BytesTag>());
+		/**
+		 * Constructs the data tag that holds the majority of map data
+		 * @param ver          Minecraft version specification
+		 * @param geometry     Map geometry
+		 * @return             Map data tag
+		 */
+		std::shared_ptr<CompoundTag> makeMapData(VersionSpec ver, const struct MapGeometry &geometry) {
+			std::shared_ptr<CompoundTag> data = std::make_shared<CompoundTag>();
+
+			auto extra = extraDataForVersion(ver, geometry);
+
+			data->insert("scale", std::make_shared<ShortTag>(geometry.scale));
+			data->insert("dimension", std::make_shared<ByteTag>(geometry.dim));
+			data->insert("xCenter", std::make_shared<IntTag>(geometry.xC));
+			data->insert("zCenter", std::make_shared<IntTag>(geometry.zC));
+			data->insert("colors", std::make_shared<BytesTag>());
 
 			for (const auto &tag : *extra) {
 				data->insert(tag.first, tag.second);
@@ -30,10 +78,12 @@ namespace Minemap {
 			return data;
 		}
 
-		std::shared_ptr<NBTP::CompoundTag> makeMapData(VersionSpec ver) {
-			return makeMapData(ver, DEFAULT_GEOMETRY);
-		}
-
+		/**
+		 * Constructs a root tag according for specified version of minecraft
+		 * @param ver          Minecraft version specification
+		 * @param geometry     Map geometry
+		 * @return             Map root tag
+		 */
 		std::shared_ptr<NBTP::CompoundTag>
 		makeMapRoot(VersionSpec ver, const struct MapGeometry &geometry) {
 			auto map_tag = std::make_shared<NBTP::CompoundTag>();
@@ -43,6 +93,11 @@ namespace Minemap {
 			return map_tag;
 		}
 
+		/**
+		 * Constructs a root tag according for specified version of minecraft with default geometry
+		 * @param ver          Minecraft version specification
+		 * @return             Map root tag
+		 */
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(VersionSpec ver) {
 			return makeMapRoot(ver, DEFAULT_GEOMETRY);
 		}
