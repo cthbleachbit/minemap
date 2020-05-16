@@ -5,6 +5,7 @@
 #include "VersionSpec.h"
 #include "constants.h"
 #include <boost/format.hpp>
+#include <iostream>
 
 namespace Minemap {
 	VersionSpec verSpecFromString(const std::string &verString) {

@@ -7,12 +7,13 @@
 
 #include <string>
 #include <libnbtp.h>
+#include <boost/filesystem.hpp>
 
 #ifndef MINEMAP_PALETTE_DIR
 #define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
 #endif
 
-#define MINEMAP_PALETTE_EXPR MINEMAP_PALETTE_DIR "/rgba-%s.gif"
+#define MINEMAP_PALETTE_EXPR std::string(MINEMAP_PALETTE_DIR) + boost::filesystem::path::separator + "rgba-%s.gif"
 
 namespace Minemap {
 	enum VersionSpec {
