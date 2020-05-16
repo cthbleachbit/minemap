@@ -25,6 +25,11 @@ namespace Minemap {
 
 	std::string verSpecToPalettePath(VersionSpec ver);
 
+	/**
+	 * Insert the data version tag if the map is to be used for Minecraft >= 1.12
+	 * @param root    the root tag to operate on
+	 * @param ver     Version spec
+	 */
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver);
 }
 #endif //VERSIONSPEC_H

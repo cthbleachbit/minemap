@@ -6,8 +6,8 @@
 
 /* Used to convert text describing colors into gif palette
  *
- * This application is not designed with security in mind (and there is no 
- * checks and memfrees), and is onlt used to generate static gif files.
+ * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
+ * whatsoever) and is only used to generate static gif files at build time.
  */
 
 void usage() {

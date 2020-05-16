@@ -4,7 +4,6 @@
 
 #include "VersionSpec.h"
 #include "constants.h"
-#include "Map.h"
 #include <boost/format.hpp>
 
 namespace Minemap {
@@ -28,6 +27,7 @@ namespace Minemap {
 		}
 		return (boost::format(MINEMAP_PALETTE_EXPR) % versionString).str();
 	}
+
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
 		switch (ver) {
 			case MC_1_8:

@@ -34,7 +34,8 @@ namespace Minemap {
 		 * @param geometry     Map geometry
 		 * @return
 		 */
-		inline std::shared_ptr<CompoundTag::Compound> extraDataForVersion(VersionSpec ver, const MapGeometry &geometry) {
+		inline std::shared_ptr<CompoundTag::Compound>
+		extraDataForVersion(VersionSpec ver, const MapGeometry &geometry) {
 			auto extra = std::make_shared<CompoundTag::Compound>();
 			switch (ver) {
 				case MC_1_8:

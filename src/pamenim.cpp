@@ -117,7 +117,8 @@ int main(int argc, char **argv) {
 		TupleRGB rgb;
 		try {
 			rgb = palette_lookup_table->right.at(colorIndex);
-		} catch (std::runtime_error &e) {
+		}
+		catch (std::runtime_error &e) {
 			std::cerr << e.what() << " Is this a map nbt file?" << std::endl;
 			exit(1);
 		}
