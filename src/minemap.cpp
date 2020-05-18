@@ -3,13 +3,12 @@
  * minemap.cpp: Main program: convert picture to map
  */
 
-#include <nbtp/libnbtp.h>
+#include <libnbtp.h>
 #include <cstring>
 
 #include <string>
 #include <iostream>
 #include <boost/iostreams/filter/gzip.hpp>
-#include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 

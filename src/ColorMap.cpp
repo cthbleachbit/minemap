@@ -22,7 +22,11 @@ namespace Minemap {
 		for (int j = 0; j < palette_number; j++) {
 			ssize_t palette_col = j % palette_width;
 			ssize_t palette_row = j / palette_width;
-			Magick::ColorRGB palette_pix = palette_img.pixelColor(palette_col, palette_row);
+			// This should have been palette_img.pixelColor, but visual studio refuses to link to it
+			auto q = palette_img.getConstPixels(palette_col, palette_row, 1, 1);
+			Magick::PixelInfo p_inf;
+			MagickCore::GetPixelInfoPixel(palette_img.constImage(), q, &p_inf);
+			Magick::ColorRGB palette_pix = Magick::Color(p_inf);
 
 			// Insert the pixel into the color map
 			color_map->insert(ColorEntry(Minemap::TupleRGB(palette_pix), static_cast<int8_t>(j)));
