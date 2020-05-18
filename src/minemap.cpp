@@ -12,6 +12,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 
+#include "common.h"
 #include "Map.h"
 #include "VersionSpec.h"
 #include "ColorMap.h"

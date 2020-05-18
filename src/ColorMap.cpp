@@ -2,6 +2,7 @@
 // Created by cth451 on 2020/05/15.
 //
 
+#include "common.h"
 #include "ColorMap.h"
 
 namespace Minemap {

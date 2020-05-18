@@ -8,6 +8,7 @@
 #include <iostream>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include "common.h"
 #include "ColorMap.h"
 #include "VersionSpec.h"
 #include "constants.h"

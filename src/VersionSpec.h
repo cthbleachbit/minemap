@@ -8,6 +8,7 @@
 #include <string>
 #include <libnbtp.h>
 #include <boost/filesystem.hpp>
+#include "common.h"
 
 #ifndef MINEMAP_PALETTE_DIR
 #define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
