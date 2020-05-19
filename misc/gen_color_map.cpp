@@ -1,3 +1,10 @@
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+#define LINE_MAX 4096
+#define _CRT_SECURE_NO_WARNINGS 1
+typedef SSIZE_T ssize_t;
+#endif
+
 #include <cstring>
 #include <climits>
 #include <iostream>
@@ -8,11 +15,6 @@
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
  * whatsoever) and is only used to generate static gif files at build time.
  */
-
-#if defined(_MSC_VER)
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#endif
 
 void usage() {
 	using namespace std;
