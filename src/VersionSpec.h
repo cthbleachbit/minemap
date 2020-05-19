@@ -14,7 +14,7 @@
 #define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
 #endif
 
-#define MINEMAP_PALETTE_EXPR std::string(MINEMAP_PALETTE_DIR) + boost::filesystem::path::separator + "rgba-%s.gif"
+#define MINEMAP_PALETTE_FILE "rgba-%s.gif"
 
 namespace Minemap {
 	enum VersionSpec {
@@ -26,6 +26,8 @@ namespace Minemap {
 	VersionSpec verSpecFromString(const std::string &verString);
 
 	std::string verSpecToPalettePath(VersionSpec ver);
+
+	std::string VerSpecToFallbackPalettePath(VersionSpec ver);
 
 	/**
 	 * Insert the data version tag if the map is to be used for Minecraft >= 1.12

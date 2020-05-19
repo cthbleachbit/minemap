@@ -117,7 +117,6 @@ int main(int argc, char **argv) {
 	}
 
 	palette_path = verSpecToPalettePath(mc_ver);
-	std::cout << "Using palette GIF " << palette_path << std::endl;
 
 	// Create Template Map Payload
 	auto map_tag = Map::makeMapRoot(mc_ver);
@@ -136,9 +135,18 @@ int main(int argc, char **argv) {
 			palette_img.read(palette_path);
 		}
 		catch (Magick::Exception &e) {
-			std::cerr << e.what() << std::endl;
-			return 1;
+			// If we can't find the pre-configured one, try looking in the program directory
+			palette_path = VerSpecToFallbackPalettePath(mc_ver);
+			try {
+				palette_img.read(palette_path);
+			}
+			catch (Magick::Exception &e) {
+				std::cerr << e.what() << std::endl;
+				return 1;
+			}
 		}
+
+		std::cout << "Using palette GIF " << palette_path << std::endl;
 
 		try {
 			input_img.read(input_path);
