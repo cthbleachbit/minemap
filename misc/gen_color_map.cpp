@@ -1,5 +1,4 @@
 #include <cstring>
-#include <unistd.h>
 #include <climits>
 #include <iostream>
 #include <Magick++.h>
@@ -9,6 +8,11 @@
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
  * whatsoever) and is only used to generate static gif files at build time.
  */
+
+#if defined(_MSC_VER)
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
 
 void usage() {
 	using namespace std;
