@@ -7,7 +7,7 @@
 
 #if defined(_MSC_VER)
 #include <BaseTsd.h>
-typedef SSIZE_T size_t;
+typedef SSIZE_T ssize_t;
 #endif
 
 #endif //COMMON_H
