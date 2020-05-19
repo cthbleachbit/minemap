@@ -20,6 +20,9 @@ void usage() {
 	using namespace std;
 	cout << "Usage:" << endl;
 	cout << "    gen_color_map <input.txt> <output.gif>" << endl;
+#if defined(_MSC_VER)
+	printf("Executable built at %s %s", __DATE__, __TIME__);
+#endif
 }
 
 int main(int argc, char **argv) {
