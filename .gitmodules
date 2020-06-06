@@ -1,0 +1,3 @@
+[submodule "nbtp"]
+	path = nbtp
+	url = https://git.cth451.me/cth451/nbtp

@@ -8,9 +8,10 @@ This repository contains two command line utilities, "minemap" to convert images
 
 Building is handled by CMake. Please make sure you have the following dependencies:
 
-* [libnbtp](https://git.cth451.me/cth451/nbtp), my nbt manipulation and parsing library
 * boost libraries with headers
 * Magick++ 7, part of Imagemagick
+
+Prior to building, please run `git submodule update --init --recursive`.
 
 ### Building on Windows...
 
