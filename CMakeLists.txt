@@ -17,10 +17,16 @@ option(BUILD_PAMENIM "Build Pamenim" ON)
 set(MINEMAP_PALETTE_DIR ${CMAKE_INSTALL_PREFIX}/share/minemap/palettes CACHE STRING "Directory to minemap palette GIFs")
 add_compile_definitions(MINEMAP_PALETTE_DIR=\"${MINEMAP_PALETTE_DIR}\")
 
-# External imports
-option(NBTP_BUILD_PYTHON_MODULE OFF)
-add_subdirectory(nbtp EXCLUDE_FROM_ALL)
-target_include_directories(nbtp INTERFACE ./nbtp/include)
+# External
+option(SYSTEM_NBTP "Use system nbtp" ON)
+if (${SYSTEM_NBTP})
+    pkg_check_modules(nbtp REQUIRED nbtp)
+    include_directories(INTERFACE "${nbtp_INCLUDE_DIRS}")
+else ()
+    option(NBTP_BUILD_PYTHON_MODULE OFF)
+    add_subdirectory(nbtp EXCLUDE_FROM_ALL)
+    target_include_directories(nbtp INTERFACE ./nbtp/include)
+endif ()
 
 # Source files
 add_subdirectory(src)
