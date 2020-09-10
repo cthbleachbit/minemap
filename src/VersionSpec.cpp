@@ -12,17 +12,21 @@ namespace Minemap {
 	VersionSpec verSpecFromString(const std::string &verString) {
 		if (verString == "1.8") return VersionSpec::MC_1_8;
 		if (verString == "1.12") return VersionSpec::MC_1_12;
+		if (verString == "1.16") return VersionSpec::MC_1_16;
 		return VersionSpec::INVALID;
 	}
 
 	static inline std::string verSpecToFileName(VersionSpec ver) {
 		switch (ver) {
 			case INVALID:
+			default:
 				throw std::runtime_error(INVALID_GAME_VER);
 			case MC_1_8:
 				return "1.8";
 			case MC_1_12:
 				return "1.12";
+			case MC_1_16:
+				return "1.16";
 		}
 	}
 
@@ -34,10 +38,14 @@ namespace Minemap {
 
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
 		switch (ver) {
-			case MC_1_8:
+			case MC_1_8: // 1.8.1-pre1
+				// Data version isn't introduced to the game yet
 				break;
-			case MC_1_12:
-				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(1343));
+			case MC_1_12: // 1.12-17w17a
+				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(1128));
+				break;
+			case MC_1_16: // 1.16-pre-6
+				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(2562));
 				break;
 			default:
 				throw std::runtime_error(INVALID_GAME_VER);

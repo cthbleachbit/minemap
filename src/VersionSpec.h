@@ -21,6 +21,7 @@ namespace Minemap {
 		INVALID,
 		MC_1_8,
 		MC_1_12,
+		MC_1_16,
 	};
 
 	VersionSpec verSpecFromString(const std::string &verString);
@@ -30,7 +31,7 @@ namespace Minemap {
 	std::string VerSpecToFallbackPalettePath(VersionSpec ver);
 
 	/**
-	 * Insert the data version tag if the map is to be used for Minecraft >= 1.12
+	 * Insert the data version tag depending on the game version this map is intended for
 	 * @param root    the root tag to operate on
 	 * @param ver     Version spec
 	 */
