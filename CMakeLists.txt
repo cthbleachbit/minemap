@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
-set (Minemap_VERSION_MINOR 2)
+set (Minemap_VERSION_MINOR 3)
 
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED COMPONENTS iostreams filesystem)
