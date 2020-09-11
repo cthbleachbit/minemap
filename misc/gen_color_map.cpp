@@ -25,6 +25,38 @@ void usage() {
 #endif
 }
 
+void run_colors(ssize_t& num_colors, FILE* input_file, unsigned char *colors) {
+	bool dry_run = false;
+	if (num_colors == 0 || colors == nullptr) {
+		// Dry run mode
+		dry_run = true;
+		num_colors = 0;
+	}
+	auto *line_buffer = new char[LINE_MAX];
+
+	int i = 0;
+	while(fgets(line_buffer, LINE_MAX, input_file) != nullptr) {
+		if (line_buffer[0] == '\n' || line_buffer[0] == '#') {
+			continue;
+		}
+		if (dry_run) {
+			num_colors++;
+		} else {
+			unsigned char r, g, b, a;
+			sscanf(line_buffer, "{%hhd, %hhd, %hhd, %hhd},", &r, &g, &b, &a);
+			colors[i * 4] = r;
+			colors[i * 4 + 1] = g;
+			colors[i * 4 + 2] = b;
+			colors[i * 4 + 3] = a;
+			i++;
+		}
+		//printf("Index %i:\t%i\t%i\t%i\t%i\n", i , r, g, b, a);
+	}
+	rewind(input_file);
+
+	delete line_buffer;
+}
+
 int main(int argc, char **argv) {
 	if (argc != 3) {
 		usage();
@@ -39,30 +71,13 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	// Determine number of lines in input
-	char c;
 	ssize_t num_colors = 0;
-	while ((c = fgetc(input_file)) != EOF) {
-		if (c == '\n') {
-			num_colors++;
-		}
-	}
-	rewind(input_file);
-	printf("Number of colors in this file: %li\n", num_colors);
+	run_colors(num_colors, input_file, nullptr);
+	printf("Number of colors in %s: %li\n", input_filename.c_str(), num_colors);
 
 	// Parse to array of colors
-	auto *line_buffer = new char[LINE_MAX];
 	auto *colors = new unsigned char[sizeof(short) * 4 * num_colors];
-
-	for (int i = 0; i < num_colors; i++) {
-		fgets(line_buffer, LINE_MAX, input_file);
-		unsigned char r, g, b, a;
-		sscanf(line_buffer, "{%hhd, %hhd, %hhd, %hhd},", &r, &g, &b, &a);
-		colors[i * 4] = r;
-		colors[i * 4 + 1] = g;
-		colors[i * 4 + 2] = b;
-		colors[i * 4 + 3] = a;
-		//printf("Index %i:\t%i\t%i\t%i\t%i\n", i , r, g, b, a);
-	}
+	run_colors(num_colors, input_file, colors);
 	fclose(input_file);
 
 	// Generate palette image
@@ -78,5 +93,5 @@ int main(int argc, char **argv) {
 			exit(1);
 		}
 	}
-
+	return 0;
 }
