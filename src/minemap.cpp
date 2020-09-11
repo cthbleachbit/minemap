@@ -44,9 +44,11 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, Minecraft game version this map is going to be used in\n");
 	printf("\t\tSelect from the following values: \n");
-	printf("\t\t\t1.12 for game version [1.12, +oo)\n");
-	printf("\t\t\t1.8  for game version [1.8,  1.12)\n");
-	printf("\t\tOther versions are not supported yet.\n");
+	for (Minemap::VersionSpec verSpec : Minemap::SUPPORTED_VERSION) {
+		printf("\t\t\t%8s for game version %s\n",
+			   Minemap::verSpecToString(verSpec).c_str(), Minemap::verSpecToVerRange(verSpec).c_str());
+	}
+	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
 #if defined(_MSC_VER)

@@ -24,7 +24,23 @@ namespace Minemap {
 		MC_1_16,
 	};
 
+	static VersionSpec SUPPORTED_VERSION[] = {MC_1_8, MC_1_12, MC_1_16};
+
 	VersionSpec verSpecFromString(const std::string &verString);
+
+	/**
+	 * @param ver
+	 * @return A string representation of the version specification
+	 */
+	std::string verSpecToString(VersionSpec ver);
+
+	/**
+	 * Convert a version specification to the range of Minecraft versions that accepts the
+	 * encoding specified by the palette
+	 * @param ver version specification
+	 * @return    game version range
+	 */
+	std::string verSpecToVerRange(VersionSpec ver);
 
 	std::string verSpecToPalettePath(VersionSpec ver);
 

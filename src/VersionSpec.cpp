@@ -16,7 +16,7 @@ namespace Minemap {
 		return VersionSpec::INVALID;
 	}
 
-	static inline std::string verSpecToFileName(VersionSpec ver) {
+	std::string verSpecToString(VersionSpec ver) {
 		switch (ver) {
 			case INVALID:
 			default:
@@ -30,8 +30,22 @@ namespace Minemap {
 		}
 	}
 
+	std::string verSpecToVerRange(VersionSpec ver) {
+		switch (ver) {
+			case INVALID:
+			default:
+				throw std::runtime_error(INVALID_GAME_VER);
+			case MC_1_8:
+				return "[1.8, 1,12)";
+			case MC_1_12:
+				return "[1.12, 1.16)";
+			case MC_1_16:
+				return "[1.16, +oo)";
+		}
+	}
+
 	std::string verSpecToPalettePath(VersionSpec ver) {
-		std::string versionString = verSpecToFileName(ver);
+		std::string versionString = verSpecToString(ver);
 		auto loc = boost::filesystem::path(MINEMAP_PALETTE_DIR);
 		return loc.append((boost::format(MINEMAP_PALETTE_FILE) % versionString).str()).string();
 	}
@@ -53,7 +67,7 @@ namespace Minemap {
 	}
 
 	std::string VerSpecToFallbackPalettePath(VersionSpec ver) {
-		std::string versionString = verSpecToFileName(ver);
+		std::string versionString = verSpecToString(ver);
 		auto loc = boost::dll::program_location().parent_path();
 		return loc.append((boost::format(MINEMAP_PALETTE_FILE) % versionString).str()).string();
 	}
