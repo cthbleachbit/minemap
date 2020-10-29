@@ -12,17 +12,10 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 
-#include "common.h"
 #include "Map.h"
 #include "VersionSpec.h"
 #include "ColorMap.h"
 #include "constants.h"
-
-bool verbose = false;
-
-bool no_gz = false;
-
-Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
 
 int main(int argc, char **argv);
 void usage();
@@ -58,11 +51,16 @@ void usage() {
 
 int main(int argc, char **argv) {
 	using namespace Minemap;
+
+	// Task properties
 	VersionSpec mc_ver = VersionSpec::INVALID;
 	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
 	std::string export_path;
+	bool verbose = false;
+	bool no_gz = false;
+	Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
 
 	// Parse Parameters
 	int i = 1;
