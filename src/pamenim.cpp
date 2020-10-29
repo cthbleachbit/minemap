@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
-	bool no_gz;
+	bool no_gz = false;
 
 	{
 		int i = 1;
