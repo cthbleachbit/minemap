@@ -116,9 +116,9 @@ int main(int argc, char **argv) {
 	auto colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
 
 	// We only care about the first 128*128 bytes
-	double pixelStore[16384 * 3];
+	double pixelStore[16384 * 4];
 	for (int i = 0; i < 16384; i++) {
-		int8_t colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
+		uint8_t colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
 		TupleRGB rgb;
 		try {
 			rgb = palette_lookup_table->right.at(colorIndex);
@@ -128,12 +128,13 @@ int main(int argc, char **argv) {
 			exit(1);
 		}
 
-		pixelStore[i * 3] = rgb.r;
-		pixelStore[i * 3 + 1] = rgb.g;
-		pixelStore[i * 3 + 2] = rgb.b;
+		pixelStore[i * 4] = rgb.r;
+		pixelStore[i * 4 + 1] = rgb.g;
+		pixelStore[i * 4 + 2] = rgb.b;
+		pixelStore[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
 	}
 
-	Magick::Image output_img(128, 128, "RGB", MagickCore::DoublePixel, pixelStore);
+	Magick::Image output_img(128, 128, "RGBA", MagickCore::DoublePixel, pixelStore);
 	output_img.write(output_path);
 
 	return 0;
