@@ -2,6 +2,15 @@ cmake_minimum_required (VERSION 3.0)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 3)
+set (Minemap_VERSION_PATCH 1)
+
+if (${Minemap_VERSION_PATCH} EQUAL 0)
+    set(CMAKE_PROJECT_VERSION ${Minemap_VERSION_MAJOR}.${Minemap_VERSION_MINOR})
+else()
+    set(CMAKE_PROJECT_VERSION ${Minemap_VERSION_MAJOR}.${Minemap_VERSION_MINOR}.${Minemap_VERSION_PATCH})
+endif()
+
+add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
 
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED COMPONENTS iostreams filesystem)

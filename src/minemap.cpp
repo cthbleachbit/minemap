@@ -12,6 +12,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 
+#include "common.h"
 #include "Map.h"
 #include "VersionSpec.h"
 #include "ColorMap.h"
@@ -44,9 +45,8 @@ void usage() {
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
-#if defined(_MSC_VER)
-	printf("Executable built at %s %s", __DATE__, __TIME__);
-#endif
+	printf("\n");
+	print_version();
 }
 
 int main(int argc, char **argv) {

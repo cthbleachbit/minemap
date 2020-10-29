@@ -29,9 +29,8 @@ void usage() {
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-o, --output OUTPUT\n");
 	printf("\t\tRequired, output picture\n");
-#if defined(_MSC_VER)
-	printf("Executable built at %s %s", __DATE__, __TIME__);
-#endif
+	printf("\n");
+	print_version();
 }
 
 int main(int argc, char **argv) {
