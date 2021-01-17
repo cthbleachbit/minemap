@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <libnbtp.h>
 #include <iostream>
+#include <fstream>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include "common.h"

@@ -7,18 +7,20 @@
 
 #include <string>
 #include <libnbtp.h>
-#include <boost/filesystem.hpp>
 #include "common.h"
 
 #ifndef MINEMAP_PALETTE_DIR
 #define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
 #endif
 
-#define MINEMAP_PALETTE_FILE "rgba-%s.gif"
+#define MINEMAP_PALETTE_FILE "rgba-{}.gif"
 
 namespace Minemap {
+	/**
+	 * When a new version is added make sure the array paletteFiles in VersionSpec.cpp is updated too.
+	 */
 	enum VersionSpec {
-		INVALID,
+		INVALID = 0,
 		MC_1_8,
 		MC_1_12,
 		MC_1_16,
@@ -43,8 +45,6 @@ namespace Minemap {
 	std::string verSpecToVerRange(VersionSpec ver);
 
 	std::string verSpecToPalettePath(VersionSpec ver);
-
-	std::string VerSpecToFallbackPalettePath(VersionSpec ver);
 
 	/**
 	 * Insert the data version tag depending on the game version this map is intended for

@@ -4,11 +4,18 @@
 
 #include "VersionSpec.h"
 #include "constants.h"
-#include <boost/format.hpp>
-#include <boost/dll/runtime_symbol_info.hpp>
+#include <filesystem>
 #include <iostream>
 
 namespace Minemap {
+
+	static const char* paletteFiles[] = {
+		"",
+		"rgba-1.8.gif",
+		"rgba-1.12.gif",
+		"rgba-1.16.gif"
+	};
+
 	VersionSpec verSpecFromString(const std::string &verString) {
 		if (verString == "1.8") return VersionSpec::MC_1_8;
 		if (verString == "1.12") return VersionSpec::MC_1_12;
@@ -45,9 +52,8 @@ namespace Minemap {
 	}
 
 	std::string verSpecToPalettePath(VersionSpec ver) {
-		std::string versionString = verSpecToString(ver);
-		auto loc = boost::filesystem::path(MINEMAP_PALETTE_DIR);
-		return loc.append((boost::format(MINEMAP_PALETTE_FILE) % versionString).str()).string();
+		auto loc = std::filesystem::path(MINEMAP_PALETTE_DIR);
+		return loc.append(paletteFiles[ver]);
 	}
 
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
@@ -64,11 +70,5 @@ namespace Minemap {
 			default:
 				throw std::runtime_error(INVALID_GAME_VER);
 		}
-	}
-
-	std::string VerSpecToFallbackPalettePath(VersionSpec ver) {
-		std::string versionString = verSpecToString(ver);
-		auto loc = boost::dll::program_location().parent_path();
-		return loc.append((boost::format(MINEMAP_PALETTE_FILE) % versionString).str()).string();
 	}
 }

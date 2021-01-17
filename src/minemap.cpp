@@ -8,6 +8,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
@@ -138,15 +139,8 @@ int main(int argc, char **argv) {
 			palette_img.read(palette_path);
 		}
 		catch (Magick::Exception &e) {
-			// If we can't find the pre-configured one, try looking in the program directory
-			palette_path = VerSpecToFallbackPalettePath(mc_ver);
-			try {
-				palette_img.read(palette_path);
-			}
-			catch (Magick::Exception &e) {
-				std::cerr << e.what() << std::endl;
-				return 1;
-			}
+			std::cerr << e.what() << std::endl;
+			return 1;
 		}
 
 		std::cout << "Using palette GIF " << palette_path << std::endl;

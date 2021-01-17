@@ -17,7 +17,7 @@ find_package(Boost REQUIRED COMPONENTS iostreams filesystem)
 pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
 
 # Compilation options
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 set(warnings "-g -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
