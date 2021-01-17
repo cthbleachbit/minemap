@@ -6,7 +6,6 @@
 #include <cstdio>
 #include <libnbtp.h>
 #include <iostream>
-#include <fstream>
 
 #include "common.h"
 #include "ColorMap.h"
