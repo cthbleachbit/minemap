@@ -12,6 +12,9 @@
 #define DEFAULT_Z_CENTER 1 << 30
 
 namespace Minemap {
+	/**
+	 * This file handles creation of bare bone map structures and fills in optional parameters.
+	 */
 	namespace Map {
 
 		using namespace NBTP;
@@ -32,14 +35,12 @@ namespace Minemap {
 		 *
 		 * @param ver          Minecraft version specification
 		 * @param geometry     Map geometry
-		 * @return
+		 * @return             A compound tag containing new tags added after that minecraft version
 		 */
-		inline std::shared_ptr<CompoundTag::Compound>
+		inline std::unique_ptr<CompoundTag::Compound>
 		extraDataForVersion(VersionSpec ver, const MapGeometry &geometry) {
-			auto extra = std::make_shared<CompoundTag::Compound>();
+			auto extra = std::make_unique<CompoundTag::Compound>();
 			switch (ver) {
-				case INVALID:
-					throw std::runtime_error(INVALID_GAME_VER);
 				case MC_1_8:
 					(*extra)["width"] = std::make_shared<ShortTag>(geometry.width);
 					(*extra)["height"] = std::make_shared<ShortTag>(geometry.height);
@@ -51,6 +52,9 @@ namespace Minemap {
 					(*extra)["frames"] = std::make_shared<ListTag>(NBTP::COMPOUND);
 				case MC_1_16:
 					break;
+				case INVALID:
+				default:
+					throw std::runtime_error(INVALID_GAME_VER);
 			}
 			return extra;
 		}
@@ -80,7 +84,7 @@ namespace Minemap {
 		}
 
 		/**
-		 * Constructs a root tag according for specified version of minecraft
+		 * Constructs a map tag according for specified version of minecraft
 		 * @param ver          Minecraft version specification
 		 * @param geometry     Map geometry
 		 * @return             Map root tag
@@ -95,7 +99,7 @@ namespace Minemap {
 		}
 
 		/**
-		 * Constructs a root tag according for specified version of minecraft with default geometry
+		 * Constructs a map tag according for specified version of minecraft with default geometry
 		 * @param ver          Minecraft version specification
 		 * @return             Map root tag
 		 */
