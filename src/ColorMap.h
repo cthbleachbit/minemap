@@ -27,7 +27,7 @@ namespace Minemap {
 	};
 
 
-	typedef int8_t MapColorCode;
+	typedef uint8_t MapColorCode;
 	typedef boost::bimap<TupleRGB, MapColorCode> ColorMap;
 	typedef ColorMap::value_type ColorEntry;
 

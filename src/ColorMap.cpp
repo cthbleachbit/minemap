@@ -20,9 +20,9 @@ namespace Minemap {
 		int palette_height = palette_img.size().height();
 		int palette_pixels = palette_width * palette_height;
 
-		MapColorCode maxCode = std::min(palette_pixels, INT8_MAX);
+		MapColorCode maxCode = std::min(palette_pixels, UINT8_MAX);
 
-		for (int j = 0; j < maxCode; j++) {
+		for (MapColorCode j = 0; j < maxCode; j++) {
 			ssize_t palette_col = j % palette_width;
 			ssize_t palette_row = j / palette_width;
 			// This should have been palette_img.pixelColor, but visual studio refuses to link to it
