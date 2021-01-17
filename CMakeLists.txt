@@ -15,6 +15,7 @@ add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
 find_package(PkgConfig REQUIRED)
 find_package(Boost REQUIRED COMPONENTS iostreams filesystem)
 pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
+pkg_check_modules(zlib REQUIRED zlib)
 
 # Compilation options
 set(CMAKE_CXX_STANDARD 17)

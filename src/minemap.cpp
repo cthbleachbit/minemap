@@ -8,9 +8,6 @@
 
 #include <string>
 #include <iostream>
-#include <fstream>
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
 #include <Magick++.h>
 
 #include "common.h"
@@ -18,6 +15,8 @@
 #include "VersionSpec.h"
 #include "ColorMap.h"
 #include "constants.h"
+
+#include "GZStream.h"
 
 int main(int argc, char **argv);
 void usage();
@@ -193,19 +192,18 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	// Generate map binary
-	std::ofstream output_file(output_path, std::ios::binary);
+	{
+		// Generate map binary
+		std::unique_ptr<std::ostream> os = nullptr;
+		if (no_gz) {
+			os = std::make_unique<std::ofstream>(output_path, std::ios::binary);
+		} else {
+			os = std::make_unique<oGZStream>(output_path.c_str());
+		}
 
-	boost::iostreams::filtering_ostream os;
-	if (!no_gz) {
-		os.push(boost::iostreams::gzip_compressor{});
+		NBTP::TagIO::writeRoot(*os, *map_tag);
+		os->flush();
 	}
-	os.push(output_file);
-
-	NBTP::TagIO::writeRoot(os, *map_tag);
-	os << std::flush;
-	os.pop();
-	output_file.flush();
 
 	return 0;
 }

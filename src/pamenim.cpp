@@ -7,12 +7,13 @@
 #include <libnbtp.h>
 #include <iostream>
 #include <fstream>
-#include <boost/iostreams/filtering_stream.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
+
 #include "common.h"
 #include "ColorMap.h"
 #include "VersionSpec.h"
 #include "constants.h"
+
+#include "GZStream.h"
 
 void usage() {
 	printf("pamenim <options>\n");
@@ -90,15 +91,17 @@ int main(int argc, char **argv) {
 	// Get input color array ready
 	std::shared_ptr<NBTP::Tag> root_tag;
 	{
-		boost::iostreams::filtering_istream is;
-		std::ifstream input_file(input_path, std::ios::binary);
-		if (!no_gz) {
-			is.push(boost::iostreams::gzip_decompressor());
+		std::unique_ptr<std::istream> is = nullptr;
+		if (no_gz) {
+			is = std::make_unique<std::ifstream>(input_path, std::ios::binary);
+		} else {
+			is = std::make_unique<iGZStream>(input_path.c_str());
 		}
-		is.push(input_file);
+
 		ssize_t parsed_bytes;
-		root_tag = NBTP::TagIO::parseRoot(is, parsed_bytes);
+		root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
 	}
+
 	if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
 		throw std::invalid_argument(ROOT_NOT_COMPOUND);
 		exit(1);
