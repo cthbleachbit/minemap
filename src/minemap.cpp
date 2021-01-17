@@ -172,22 +172,23 @@ int main(int argc, char **argv) {
 			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
 			if (verbose) {
 				fprintf(stderr,
-						"Pixel at %li, %li: (%f, %f, %f)\n",
-						col, row,
-						output_pix.red(),
-						output_pix.green(),
-						output_pix.blue());
+				        "Pixel at %li, %li: (%f, %f, %f)\n",
+				        col, row,
+				        output_pix.red(),
+				        output_pix.green(),
+				        output_pix.blue());
 			}
-			auto itr = palette_lookup_table->left.find(TupleRGB(output_pix));
-			if (itr == palette_lookup_table->left.end()) {
+			auto lookup = palette_lookup_table->reverse();
+			auto itr = lookup.find(TupleRGB(output_pix));
+			if (itr == lookup.end()) {
 				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
 				exit(1);
 			}
 			else {
 				if (verbose) {
-					fprintf(stderr, "Matched color code %i\n", itr->get_right());
+					fprintf(stderr, "Matched color code %i\n", itr->second);
 				}
-				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->get_right()));
+				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->second));
 			}
 		}
 	}

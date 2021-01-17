@@ -32,7 +32,7 @@ namespace Minemap {
 			Magick::ColorRGB palette_pix = Magick::Color(p_inf);
 
 			// Insert the pixel into the color map
-			color_map->insert(ColorEntry(Minemap::TupleRGB(palette_pix), static_cast<int8_t>(j)));
+			color_map->insert(Minemap::TupleRGB(palette_pix), static_cast<MapColorCode>(j));
 		}
 		return color_map;
 	}
@@ -85,4 +85,17 @@ namespace Minemap {
 		rgb.alpha(1.0);
 		return rgb;
 	};
+
+	const ColorMap::ReverseLookup &ColorMap::reverse() const {
+		return this->reverseMap;
+	}
+
+	const ColorMap::ForwardLookup &ColorMap::forward() const {
+		return this->forwardMap;
+	}
+
+	void ColorMap::insert(TupleRGB rgb, MapColorCode code) {
+		this->reverseMap.insert(std::make_pair(rgb, code));
+		this->forwardMap.insert(std::make_pair(code, rgb));
+	}
 }

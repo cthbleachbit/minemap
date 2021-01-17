@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <libnbtp.h>
 #include <iostream>
+#include <cstring>
 
 #include "common.h"
 #include "ColorMap.h"
@@ -103,17 +104,14 @@ int main(int argc, char **argv) {
 
 	if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
 		throw std::invalid_argument(ROOT_NOT_COMPOUND);
-		exit(1);
 	}
 	NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root_tag.get())->getPayload()["data"].get();
 	if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
 		throw std::invalid_argument("Map data is not a compound. Is this a map nbt file?");
-		exit(1);
 	}
 	NBTP::Tag *bytes_tag = ((NBTP::CompoundTag *) data_tag)->getPayload()["colors"].get();
 	if (bytes_tag->typeCode() != NBTP::TagType::BYTES) {
 		throw std::invalid_argument("Color data is not a byte array. Is this a map nbt file?");
-		exit(1);
 	}
 	auto colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
 
@@ -123,7 +121,7 @@ int main(int argc, char **argv) {
 		uint8_t colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
 		TupleRGB rgb;
 		try {
-			rgb = palette_lookup_table->right.at(colorIndex);
+			rgb = palette_lookup_table->forward().at(colorIndex);
 		}
 		catch (std::runtime_error &e) {
 			std::cerr << e.what() << " Is this a map nbt file?" << std::endl;
