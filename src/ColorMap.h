@@ -23,11 +23,12 @@ namespace Minemap {
 		bool operator>(const TupleRGB &rhs) const;
 		bool operator<=(const TupleRGB &rhs) const;
 		bool operator>=(const TupleRGB &rhs) const;
-		operator Magick::ColorRGB() const;
+		explicit operator Magick::ColorRGB() const;
 	};
 
-	typedef boost::bimap<TupleRGB, int8_t> ColorMap;
 
+	typedef int8_t MapColorCode;
+	typedef boost::bimap<TupleRGB, MapColorCode> ColorMap;
 	typedef ColorMap::value_type ColorEntry;
 
 	/**
