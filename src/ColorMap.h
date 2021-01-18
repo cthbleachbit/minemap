@@ -51,8 +51,8 @@ namespace Minemap {
 	 */
 	class ColorMap {
 	public:
-		typedef std::map<TupleRGB, MapColorCode> ReverseLookup;
-		typedef std::map<MapColorCode, TupleRGB> ForwardLookup;
+		typedef std::unordered_map<TupleRGB, MapColorCode> ReverseLookup;
+		typedef std::unordered_map<MapColorCode, TupleRGB> ForwardLookup;
 	private:
 		ReverseLookup reverseMap;
 		ForwardLookup forwardMap;
