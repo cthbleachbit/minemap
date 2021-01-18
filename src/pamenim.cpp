@@ -118,13 +118,13 @@ int main(int argc, char **argv) {
 	// We only care about the first 128*128 bytes
 	double pixelStore[16384 * 4];
 	for (int i = 0; i < 16384; i++) {
-		uint8_t colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
+		MapColorCode colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
 		TupleRGB rgb;
 		try {
-			rgb = palette_lookup_table->forward().at(colorIndex);
+			rgb = palette_lookup_table->lookup(colorIndex);
 		}
-		catch (std::runtime_error &e) {
-			std::cerr << e.what() << " Is this a map nbt file?" << std::endl;
+		catch (std::range_error &e) {
+			std::cerr << e.what() << ": Is this a map nbt file?" << std::endl;
 			exit(1);
 		}
 

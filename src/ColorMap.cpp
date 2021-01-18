@@ -15,13 +15,13 @@ namespace Minemap {
 	 * @return          the said bijective map
 	 */
 	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &palette_img) {
-		auto color_map = std::make_shared<ColorMap>();
 		int palette_width = palette_img.size().width();
 		int palette_height = palette_img.size().height();
 		int palette_pixels = palette_width * palette_height;
 
 		MapColorCode maxCode = std::min(palette_pixels, UINT8_MAX);
 
+		auto color_map = std::make_shared<ColorMap>(maxCode);
 		for (MapColorCode j = 0; j < maxCode; j++) {
 			ssize_t palette_col = j % palette_width;
 			ssize_t palette_row = j / palette_width;
@@ -90,13 +90,27 @@ namespace Minemap {
 		return this->reverseMap;
 	}
 
-	const ColorMap::ForwardLookup &ColorMap::forward() const {
-		return this->forwardMap;
+	void ColorMap::insert(const TupleRGB& rgb, MapColorCode code) {
+		if (code >= _size) {
+			return;
+		}
+		this->reverseMap.insert(std::make_pair(rgb, code));
+		this->forwardMap[code] = rgb;
 	}
 
-	void ColorMap::insert(const TupleRGB& rgb, MapColorCode code) {
-		this->reverseMap.reserve(200);
-		this->reverseMap.insert(std::make_pair(rgb, code));
-		this->forwardMap.insert(std::make_pair(code, rgb));
+	ColorMap::ColorMap(uint8_t size) noexcept {
+		this->_size = size;
+		this->forwardMap = new TupleRGB[size];
+	}
+
+	ColorMap::~ColorMap() noexcept {
+		delete this->forwardMap;
+	}
+
+	TupleRGB ColorMap::lookup(MapColorCode code) const{
+		if (code > _size) {
+			throw std::range_error("Unrecognized color code");
+		}
+		return this->forwardMap[code];
 	}
 }
