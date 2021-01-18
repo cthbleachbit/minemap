@@ -6,14 +6,14 @@ Command line utilities for manipulating Minecraft Map item so that we can have t
 
 This repository contains two command line utilities, "minemap" to convert images to map items, the other "pamenim" to do the reverse. Run the utilities themselves with no arguments to view usage information.
 
-Building is handled by CMake. Please make sure you have the following dependencies:
+Building is handled by CMake. As of version 0.4.0, boost is no longer required both at compile time and run time. Please make sure you have the following dependencies:
 
-* boost libraries with headers
 * Magick++ 7, part of Imagemagick
+* zlib, used to compress / decompress NBT data stream
 
 Prior to building, please run `git submodule update --init --recursive`.
 
-### Building on Windows...
+### [Update Needed for 0.4.0] Building on Windows...
 
 Without loss of generality, let's admit that building this on Windows is the worst part for me, and probably for readers as well. To save the hassle you may download prebuilt, statically linked executables from the release page. For fearless Windows users who prefer to build yourself out there, follow me (or even better, improve the following as I have no idea how Visual Studio should really work):
 
