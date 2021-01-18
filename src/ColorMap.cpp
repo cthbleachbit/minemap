@@ -94,7 +94,7 @@ namespace Minemap {
 		return this->forwardMap;
 	}
 
-	void ColorMap::insert(TupleRGB rgb, MapColorCode code) {
+	void ColorMap::insert(const TupleRGB& rgb, MapColorCode code) {
 		this->reverseMap.insert(std::make_pair(rgb, code));
 		this->forwardMap.insert(std::make_pair(code, rgb));
 	}

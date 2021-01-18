@@ -7,7 +7,7 @@
 
 #include <Magick++.h>
 #include <memory>
-#include <unordered_map>
+#include <map>
 
 namespace Minemap {
 	class TupleRGB {
@@ -51,15 +51,15 @@ namespace Minemap {
 	 */
 	class ColorMap {
 	public:
-		typedef std::unordered_map<TupleRGB, MapColorCode> ReverseLookup;
-		typedef std::unordered_map<MapColorCode, TupleRGB> ForwardLookup;
+		typedef std::map<TupleRGB, MapColorCode> ReverseLookup;
+		typedef std::map<MapColorCode, TupleRGB> ForwardLookup;
 	private:
 		ReverseLookup reverseMap;
 		ForwardLookup forwardMap;
 	public:
 		const ReverseLookup & reverse() const;
 		const ForwardLookup & forward() const;
-		void insert(TupleRGB rgb, MapColorCode code);
+		void insert(const TupleRGB& rgb, MapColorCode code);
 		ColorMap() = default;
 		~ColorMap() = default;
 	};
