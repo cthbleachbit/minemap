@@ -90,7 +90,11 @@ int main(int argc, char **argv) {
 		ssize_t height = num_colors / 4;
 		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
 		try {
-			palette_img.write(output_filename);
+			Magick::Blob output_buf;
+			palette_img.write(&output_buf, "GIF");
+			FILE* output_fd = fopen(output_filename.c_str(), "wb");
+			fwrite(output_buf.data(), output_buf.length(), 1, output_fd);
+			fclose(output_fd);
 		}
 		catch (Magick::Exception &e) {
 			std::cerr << "Error when writing palette image: " << e.what() << std::endl;
