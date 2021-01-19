@@ -1,4 +1,4 @@
-#if defined(_MSC_VER)
+#if defined(_WIN32) || defined(_WIN64)
 #include <BaseTsd.h>
 #define LINE_MAX 4096
 #define _CRT_SECURE_NO_WARNINGS 1
@@ -20,7 +20,7 @@ void usage() {
 	using namespace std;
 	cout << "Usage:" << endl;
 	cout << "    gen_color_map <input.txt> <output.gif>" << endl;
-#if defined(_MSC_VER)
+#if defined(_WIN32) || defined(_WIN64)
 	printf("Executable built at %s %s", __DATE__, __TIME__);
 #endif
 }
@@ -73,7 +73,11 @@ int main(int argc, char **argv) {
 	// Determine number of lines in input
 	ssize_t num_colors = 0;
 	run_colors(num_colors, input_file, nullptr);
+#if defined(_WIN32) || defined(_WIN64)
+	printf("Number of colors in %s: %lli\n", input_filename.c_str(), num_colors);
+#else
 	printf("Number of colors in %s: %li\n", input_filename.c_str(), num_colors);
+#endif
 
 	// Parse to array of colors
 	auto *colors = new unsigned char[sizeof(short) * 4 * num_colors];
