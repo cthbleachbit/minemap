@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
 		try {
 			Magick::Blob output_buf;
-			palette_img.write(&output_buf, "GIF");
+			palette_img.write(&output_buf, "PNG");
 			FILE* output_fd = fopen(output_filename.c_str(), "wb");
 			fwrite(output_buf.data(), output_buf.length(), 1, output_fd);
 			fclose(output_fd);

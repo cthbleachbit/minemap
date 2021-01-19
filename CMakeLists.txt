@@ -14,6 +14,9 @@ add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
+if (WIN32)
+    set(ENV{MAGICK_CODER_MODULE_PATH} /mingw64/lib/ImageMagick-${ImageMagick_VERSION}/modules-Q16HDRI/coders)
+endif()
 pkg_check_modules(zlib REQUIRED zlib)
 
 # Compilation options
