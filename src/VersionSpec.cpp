@@ -53,7 +53,7 @@ namespace Minemap {
 
 	std::string verSpecToPalettePath(VersionSpec ver) {
 		auto loc = std::filesystem::path(MINEMAP_PALETTE_DIR);
-		return loc.append(paletteFiles[ver]);
+		return loc.append(paletteFiles[ver]).string();
 	}
 
 	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
