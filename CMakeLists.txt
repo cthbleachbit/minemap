@@ -34,7 +34,7 @@ if (${SYSTEM_NBTP})
 else ()
     option(NBTP_BUILD_PYTHON_MODULE OFF)
     add_subdirectory(nbtp EXCLUDE_FROM_ALL)
-    target_include_directories(nbtp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/nbtp/include)
+    include_directories(INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/nbtp/include)
 endif ()
 
 # Source files

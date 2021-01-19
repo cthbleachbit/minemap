@@ -5,9 +5,12 @@ add_executable(minemap
         ColorMap.cpp
         constants.h)
 
-target_link_libraries(minemap PUBLIC nbtp)
+if(WIN32)
+    target_link_libraries(minemap PRIVATE nbtp-static)
+else()
+    target_link_libraries(minemap PUBLIC nbtp)
+endif()
 target_link_libraries(minemap PUBLIC ${ImageMagick_LIBRARIES})
-#target_link_libraries(minemap PUBLIC ${Boost_LIBRARIES})
 target_link_libraries(minemap PUBLIC ${zlib_LIBRARIES})
 if (UNIX)
     target_link_libraries(minemap PUBLIC dl)
@@ -26,9 +29,13 @@ if (BUILD_PAMENIM)
             VersionSpec.cpp
             ColorMap.cpp
             constants.h)
-    target_link_libraries(pamenim PUBLIC nbtp)
+    if(WIN32)
+        target_link_libraries(pamenim PRIVATE nbtp-static)
+    else()
+        target_link_libraries(pamenim PUBLIC nbtp)
+    endif()
+
     target_link_libraries(pamenim PUBLIC ${ImageMagick_LIBRARIES})
-#    target_link_libraries(pamenim PUBLIC ${Boost_LIBRARIES})
     target_link_libraries(pamenim PUBLIC ${zlib_LIBRARIES})
     if (UNIX)
         target_link_libraries(pamenim PUBLIC dl)
