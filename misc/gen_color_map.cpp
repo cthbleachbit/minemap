@@ -10,6 +10,11 @@ typedef SSIZE_T ssize_t;
 #include <iostream>
 #include <Magick++.h>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define WIN32_LEAN_AND_MEAN
+#include <stdlib.h>
+#endif
+
 /* Used to convert text describing colors into gif palette
  *
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
@@ -58,6 +63,9 @@ void run_colors(ssize_t& num_colors, FILE* input_file, unsigned char *colors) {
 }
 
 int main(int argc, char **argv) {
+#if defined(_WIN32) || defined(_WIN64)
+	_wputenv_s(L"MAGICK_CODER_MODULE_PATH", WIN_MAGICK_CODER_MODULE_PATH);
+#endif
 	if (argc != 3) {
 		usage();
 		return 1;
@@ -91,7 +99,7 @@ int main(int argc, char **argv) {
 		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
 		try {
 			Magick::Blob output_buf;
-			palette_img.write(&output_buf, "PNG");
+			palette_img.write(&output_buf, "GIF");
 			FILE* output_fd = fopen(output_filename.c_str(), "wb");
 			fwrite(output_buf.data(), output_buf.length(), 1, output_fd);
 			fclose(output_fd);
