@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.10)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 4)
-set (Minemap_VERSION_PATCH 0)
+set (Minemap_VERSION_PATCH 1)
 
 if (${Minemap_VERSION_PATCH} EQUAL 0)
     set(CMAKE_PROJECT_VERSION ${Minemap_VERSION_MAJOR}.${Minemap_VERSION_MINOR})
