@@ -49,11 +49,7 @@ namespace Minemap {
 		return rgb;
 	};
 
-	const ColorMap::ReverseLookup &ColorMap::reverse() const {
-		return this->reverseMap;
-	}
-
-	void ColorMap::insert(const TupleRGB& rgb, MapColorCode code) {
+	void ColorMap::insert(const TupleRGB &rgb, MapColorCode code) {
 		if (code >= _size) {
 			return;
 		}
@@ -70,10 +66,15 @@ namespace Minemap {
 		delete this->forwardMap;
 	}
 
-	TupleRGB ColorMap::lookup(MapColorCode code) const{
+	std::optional<TupleRGB> ColorMap::lookup(MapColorCode code) const noexcept {
 		if (code > _size) {
-			throw std::range_error("Unrecognized color code");
+			return std::nullopt;
 		}
 		return this->forwardMap[code];
+	}
+
+	std::optional<MapColorCode> ColorMap::lookup(const TupleRGB &rgb) const noexcept {
+		auto itr = this->reverseMap.find(rgb);
+		return itr == this->reverseMap.end() ? std::nullopt : std::optional<MapColorCode>(itr->second);
 	}
 }

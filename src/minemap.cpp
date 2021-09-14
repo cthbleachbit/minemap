@@ -43,9 +43,9 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
 	printf("\t\tSelect from the following values: \n");
-	for (Minemap::VersionSpec verSpec : Minemap::SUPPORTED_VERSION) {
+	for (Minemap::VersionSpec verSpec: Minemap::SUPPORTED_VERSION) {
 		printf("\t\t\t%8s for game version %s\n",
-			   Minemap::verSpecToString(verSpec).c_str(), Minemap::verSpecToVerRange(verSpec).c_str());
+		       Minemap::verSpecToString(verSpec).c_str(), Minemap::verSpecToVerRange(verSpec).c_str());
 	}
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-v, --verbose\n");
@@ -76,36 +76,28 @@ int main(int argc, char **argv) {
 		if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--game") == 0) {
 			i++;
 			mc_ver = verSpecFromString(argv[i]);
-		}
-		else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
+		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
 			input_path = argv[i];
-		}
-		else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
+		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			i++;
 			if (strcmp(argv[i], "riemersma") == 0) {
 				dithering = Magick::DitherMethod::RiemersmaDitherMethod;
-			}
-			else if (strcmp(argv[i], "floydsteinberg") == 0) {
+			} else if (strcmp(argv[i], "floydsteinberg") == 0) {
 				dithering = Magick::DitherMethod::FloydSteinbergDitherMethod;
-			}
-			else {
+			} else {
 				std::cerr << "Unknown dithering method" << std::endl;
 				exit(1);
 			}
-		}
-		else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
+		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			output_path = argv[i];
-		}
-		else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
+		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
 			verbose = true;
-		}
-		else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
+		} else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
 			i++;
 			export_path = argv[i];
-		}
-		else if (strcmp(argv[i], "--no-gz") == 0) {
+		} else if (strcmp(argv[i], "--no-gz") == 0) {
 			no_gz = true;
 		}
 		i++;
@@ -115,13 +107,11 @@ int main(int argc, char **argv) {
 		std::cout << MISSING_GAME_VER << std::endl;
 		usage();
 		exit(1);
-	}
-	else if (input_path.empty()) {
+	} else if (input_path.empty()) {
 		std::cout << MISSING_IN_FILE << std::endl;
 		usage();
 		exit(1);
-	}
-	else if (output_path.empty()) {
+	} else if (output_path.empty()) {
 		std::cout << MISSING_OUT_FILE << std::endl;
 		usage();
 		exit(1);
@@ -190,17 +180,15 @@ int main(int argc, char **argv) {
 				        output_pix.green(),
 				        output_pix.blue());
 			}
-			auto lookup = palette_lookup_table->reverse();
-			auto itr = lookup.find(TupleRGB(output_pix));
-			if (itr == lookup.end()) {
+			auto colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
+			if (!colorCode.has_value()) {
 				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
 				exit(1);
-			}
-			else {
+			} else {
 				if (verbose) {
-					fprintf(stderr, "Matched color code %i\n", itr->second);
+					fprintf(stderr, "Matched color code %i for pixel at %li, %li\n", colorCode.value(), col, row);
 				}
-				colors_tag->insert(std::make_shared<NBTP::ByteTag>(itr->second));
+				colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
 			}
 		}
 	}

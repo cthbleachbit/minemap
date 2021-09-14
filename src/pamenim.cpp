@@ -127,18 +127,16 @@ int main(int argc, char **argv) {
 	double pixelStore[16384 * 4];
 	for (int i = 0; i < 16384; i++) {
 		MapColorCode colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
-		TupleRGB rgb;
-		try {
-			rgb = palette_lookup_table->lookup(colorIndex);
-		}
-		catch (std::range_error &e) {
-			std::cerr << e.what() << ": Is this a map nbt file?" << std::endl;
+		auto rgb = palette_lookup_table->lookup(colorIndex);
+
+		if (!rgb.has_value()) {
+			std::cerr << "Is this a map nbt file? Color code is out of range: " << colorIndex << std::endl;
 			exit(1);
 		}
 
-		pixelStore[i * 4] = rgb.r;
-		pixelStore[i * 4 + 1] = rgb.g;
-		pixelStore[i * 4 + 2] = rgb.b;
+		pixelStore[i * 4] = rgb->r;
+		pixelStore[i * 4 + 1] = rgb->g;
+		pixelStore[i * 4 + 2] = rgb->b;
 		pixelStore[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
 	}
 

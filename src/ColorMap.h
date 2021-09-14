@@ -60,9 +60,9 @@ namespace Minemap {
 		ReverseLookup reverseMap;
 		ForwardLookup forwardMap;
 	public:
-		const ReverseLookup & reverse() const;
 		void insert(const TupleRGB& rgb, MapColorCode code);
-		TupleRGB lookup(MapColorCode code) const;
+		std::optional<TupleRGB> lookup(MapColorCode code) const noexcept;
+		std::optional<MapColorCode> lookup(const TupleRGB& rgb) const noexcept;
 
 		explicit ColorMap(uint8_t size) noexcept;
 		~ColorMap() noexcept;
