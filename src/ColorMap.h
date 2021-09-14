@@ -10,20 +10,22 @@
 #include <map>
 
 namespace Minemap {
-	class TupleRGB {
-	public:
-		double r;
-		double g;
-		double b;
-		TupleRGB();
-		explicit TupleRGB(const Magick::ColorRGB &color);
-		bool operator==(const TupleRGB &rhs) const;
-		bool operator!=(const TupleRGB &rhs) const;
-		bool operator<(const TupleRGB &rhs) const;
-		bool operator>(const TupleRGB &rhs) const;
-		bool operator<=(const TupleRGB &rhs) const;
-		bool operator>=(const TupleRGB &rhs) const;
-		explicit operator Magick::ColorRGB() const;
+	struct TupleRGB {
+		double r = 0.0;
+		double g = 0.0;
+		double b = 0.0;
+		constexpr TupleRGB() = default;
+		TupleRGB(double r, double g, double b) noexcept : r(r), g(g), b(b) {};
+
+		// Comparison operators
+		bool operator==(const TupleRGB &rhs) const = default;
+		bool operator!=(const TupleRGB &rhs) const = default;
+		friend std::strong_ordering operator<=>(const TupleRGB &lhs, const TupleRGB &rhs) = default;
+
+		// Construct from Magick ColorRGB
+		explicit TupleRGB(const Magick::ColorRGB &color) noexcept;
+		// Cast to Magick ColorRGB
+		explicit operator Magick::ColorRGB() const noexcept;
 	};
 }
 

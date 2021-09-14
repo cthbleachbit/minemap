@@ -15,11 +15,11 @@ namespace Minemap {
 	 * @return          the said bijective map
 	 */
 	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &palette_img) {
-		int palette_width = palette_img.size().width();
-		int palette_height = palette_img.size().height();
-		int palette_pixels = palette_width * palette_height;
+		ssize_t palette_width = palette_img.size().width();
+		ssize_t palette_height = palette_img.size().height();
+		ssize_t palette_pixels = palette_width * palette_height;
 
-		MapColorCode maxCode = std::min(palette_pixels, UINT8_MAX);
+		MapColorCode maxCode = std::min(palette_pixels, (ssize_t) UINT8_MAX);
 
 		auto color_map = std::make_shared<ColorMap>(maxCode);
 		for (MapColorCode j = 0; j < maxCode; j++) {
@@ -37,47 +37,10 @@ namespace Minemap {
 		return color_map;
 	}
 
-	TupleRGB::TupleRGB()
-		: r(0.0), g(0.0), b(0.0) {}
-
-	TupleRGB::TupleRGB(const Magick::ColorRGB &color)
+	TupleRGB::TupleRGB(const Magick::ColorRGB &color) noexcept
 		: r(color.red()), g(color.green()), b(color.blue()) {}
 
-	bool TupleRGB::operator==(const TupleRGB &rhs) const {
-		return r == rhs.r &&
-			g == rhs.g &&
-			b == rhs.b;
-	}
-
-	bool TupleRGB::operator!=(const TupleRGB &rhs) const {
-		return !(rhs == *this);
-	}
-
-	bool TupleRGB::operator<(const TupleRGB &rhs) const {
-		if (r < rhs.r)
-			return true;
-		if (rhs.r < r)
-			return false;
-		if (g < rhs.g)
-			return true;
-		if (rhs.g < g)
-			return false;
-		return b < rhs.b;
-	}
-
-	bool TupleRGB::operator>(const TupleRGB &rhs) const {
-		return rhs < *this;
-	}
-
-	bool TupleRGB::operator<=(const TupleRGB &rhs) const {
-		return !(rhs < *this);
-	}
-
-	bool TupleRGB::operator>=(const TupleRGB &rhs) const {
-		return !(*this < rhs);
-	}
-
-	TupleRGB::operator Magick::ColorRGB() const {
+	TupleRGB::operator Magick::ColorRGB() const noexcept {
 		Magick::ColorRGB rgb;
 		rgb.red(this->r);
 		rgb.green(this->g);
