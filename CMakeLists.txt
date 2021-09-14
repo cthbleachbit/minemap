@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.10)
 project (Minemap)
+include(GNUInstallDirs)
+
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 4)
 set (Minemap_VERSION_PATCH 1)
@@ -29,8 +31,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
 option(BUILD_PAMENIM "Build Pamenim" ON)
 
-set(MINEMAP_PALETTE_DIR ${CMAKE_INSTALL_PREFIX}/share/minemap/palettes CACHE STRING "Directory to minemap palette GIFs")
-add_compile_definitions(MINEMAP_PALETTE_DIR=\"${MINEMAP_PALETTE_DIR}\")
+set(MINEMAP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/minemap/palettes CACHE STRING "Directory to place minemap palette GIFs relative to prefix")
+add_compile_definitions(MINEMAP_PALETTE_DIR=\"${CMAKE_INSTALL_PREFIX}/${MINEMAP_PALETTE_DIR}\")
 
 # External
 option(SYSTEM_NBTP "Use system nbtp" ON)
