@@ -38,10 +38,10 @@ namespace std {
 		 * @return
 		 */
 		unsigned long operator()(const Minemap::TupleRGB &rgb) const {
-			unsigned long hr = std::hash<double>()(rgb.r);
-			unsigned long hg = std::hash<double>()(rgb.g);
-			unsigned long rb = std::hash<double>()(rgb.b);
-			return ((hr ^ (hg << 1)) >> 1) ^ (rb << 1);
+			auto hr = static_cast<unsigned long>(rgb.r * 256);
+			auto hg = static_cast<unsigned long>(rgb.g * 256);
+			auto hb = static_cast<unsigned long>(rgb.b * 256);
+			return (hr << 16) + (hg << 8) + hb;
 		}
 	};
 }
@@ -61,6 +61,7 @@ namespace Minemap {
 		ForwardLookup forwardMap;
 	public:
 		void insert(const TupleRGB& rgb, MapColorCode code);
+		uint8_t size() const noexcept { return _size; };
 		std::optional<TupleRGB> lookup(MapColorCode code) const noexcept;
 		std::optional<MapColorCode> lookup(const TupleRGB& rgb) const noexcept;
 

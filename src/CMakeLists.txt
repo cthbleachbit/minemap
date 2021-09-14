@@ -20,12 +20,14 @@ target_link_libraries(libminemap PUBLIC ${ImageMagick_LIBRARIES})
 target_compile_options(libminemap PUBLIC ${ImageMagick_CFLAGS})
 target_include_directories(libminemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
 
+###### Minemap main executable
 add_executable(minemap minemap.cpp)
 target_link_libraries(minemap PRIVATE libminemap)
 target_link_libraries(minemap PUBLIC ${zlib_LIBRARIES})
 target_include_directories(minemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
 install(TARGETS minemap DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+###### Pamenim main executable
 if (BUILD_PAMENIM)
     add_executable(pamenim pamenim.cpp)
     target_link_libraries(pamenim PRIVATE libminemap)
@@ -33,3 +35,5 @@ if (BUILD_PAMENIM)
     target_include_directories(pamenim PUBLIC ${ImageMagick_INCLUDE_DIRS})
     install(TARGETS pamenim DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif ()
+
+add_subdirectory(tests)

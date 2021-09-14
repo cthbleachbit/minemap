@@ -29,6 +29,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(warnings "-g -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
+option(BUILD_TESTS "Build library test harness" OFF)
 option(BUILD_PAMENIM "Build Pamenim" ON)
 
 set(MINEMAP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/minemap/palettes CACHE STRING "Directory to place minemap palette GIFs relative to prefix")
