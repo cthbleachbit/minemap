@@ -24,9 +24,10 @@ namespace Minemap {
 		MC_1_8,
 		MC_1_12,
 		MC_1_16,
+		MC_1_17,
 	};
 
-	static VersionSpec SUPPORTED_VERSION[] = {MC_1_8, MC_1_12, MC_1_16};
+	static VersionSpec SUPPORTED_VERSION[] = {MC_1_8, MC_1_12, MC_1_16, MC_1_17};
 
 	VersionSpec verSpecFromString(const std::string &verString);
 

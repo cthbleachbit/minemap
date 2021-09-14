@@ -13,13 +13,15 @@ namespace Minemap {
 		"",
 		"rgba-1.8.gif",
 		"rgba-1.12.gif",
-		"rgba-1.16.gif"
+		"rgba-1.16.gif",
+		"rgba-1.17.gif",
 	};
 
 	VersionSpec verSpecFromString(const std::string &verString) {
 		if (verString == "1.8") return VersionSpec::MC_1_8;
 		if (verString == "1.12") return VersionSpec::MC_1_12;
 		if (verString == "1.16") return VersionSpec::MC_1_16;
+		if (verString == "1.17") return VersionSpec::MC_1_17;
 		return VersionSpec::INVALID;
 	}
 
@@ -34,6 +36,8 @@ namespace Minemap {
 				return "1.12";
 			case MC_1_16:
 				return "1.16";
+			case MC_1_17:
+				return "1.17";
 		}
 	}
 
@@ -47,7 +51,9 @@ namespace Minemap {
 			case MC_1_12:
 				return "[1.12, 1.16)";
 			case MC_1_16:
-				return "[1.16, +oo)";
+				return "[1.16, 1.17)";
+			case MC_1_17:
+				return "[1.17, +oo)";
 		}
 	}
 
@@ -66,6 +72,9 @@ namespace Minemap {
 				break;
 			case MC_1_16: // 1.16-pre-6
 				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(2562));
+				break;
+			case MC_1_17: // 21w10a and 1.17
+				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(2699));
 				break;
 			default:
 				throw std::runtime_error(INVALID_GAME_VER);

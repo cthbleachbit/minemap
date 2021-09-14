@@ -31,13 +31,24 @@ namespace Minemap {
 				case MC_1_8:
 					(*extra)["width"] = std::make_shared<ShortTag>(geometry.width);
 					(*extra)["height"] = std::make_shared<ShortTag>(geometry.height);
+					(*extra)["dimension"] = std::make_shared<ByteTag>(geometry.dim);
+					break;
 				case MC_1_12:
+                case MC_1_16:
 					(*extra)["trackingPosition"] = std::make_shared<ByteTag>(0);
 					(*extra)["unlimitedTracking"] = std::make_shared<ByteTag>(0);
 					(*extra)["locked"] = std::make_shared<ByteTag>(1);
 					(*extra)["banners"] = std::make_shared<ListTag>(NBTP::COMPOUND);
 					(*extra)["frames"] = std::make_shared<ListTag>(NBTP::COMPOUND);
-				case MC_1_16:
+					(*extra)["dimension"] = std::make_shared<ByteTag>(geometry.dim);
+					break;
+				case MC_1_17:
+					(*extra)["trackingPosition"] = std::make_shared<ByteTag>(0);
+					(*extra)["unlimitedTracking"] = std::make_shared<ByteTag>(0);
+					(*extra)["locked"] = std::make_shared<ByteTag>(1);
+					(*extra)["banners"] = std::make_shared<ListTag>(NBTP::COMPOUND);
+					(*extra)["frames"] = std::make_shared<ListTag>(NBTP::COMPOUND);
+					(*extra)["dimension"] = std::make_shared<StringTag>("minecraft:overworld");
 					break;
 				case INVALID:
 				default:
