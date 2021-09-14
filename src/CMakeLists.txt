@@ -1,51 +1,35 @@
-add_executable(minemap
-        minemap.cpp
+# Common functionality
+add_library(libminemap SHARED
+        ColorMap.cpp
         Map.cpp
         VersionSpec.cpp
-        ColorMap.cpp
         common.h
-        constants.h)
+        constants.h
+        GZStream.h
+        VersionSpec.h)
+set_target_properties(libminemap PROPERTIES LIBRARY_OUTPUT_NAME minemap)
+set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
+install(TARGETS libminemap DESTINATION lib)
 
 if(WIN32)
-    target_link_libraries(minemap PRIVATE nbtp-static)
+    target_link_libraries(libminemap PRIVATE nbtp-static)
 else()
-    target_link_libraries(minemap PUBLIC nbtp)
+    target_link_libraries(libminemap PUBLIC nbtp)
 endif()
-target_link_libraries(minemap PUBLIC ${ImageMagick_LIBRARIES})
+target_link_libraries(libminemap PUBLIC ${ImageMagick_LIBRARIES})
+target_compile_options(libminemap PUBLIC ${ImageMagick_CFLAGS})
+target_include_directories(libminemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
+
+add_executable(minemap minemap.cpp)
+target_link_libraries(minemap PRIVATE libminemap)
 target_link_libraries(minemap PUBLIC ${zlib_LIBRARIES})
-if (UNIX)
-    target_link_libraries(minemap PUBLIC dl)
-endif()
-
 target_include_directories(minemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
-target_include_directories(minemap PUBLIC ${Boost_INCLUDE_DIRS})
-
-target_compile_options(minemap PUBLIC ${ImageMagick_CFLAGS})
-
 install(TARGETS minemap DESTINATION bin)
 
 if (BUILD_PAMENIM)
-    add_executable(pamenim
-            pamenim.cpp
-            VersionSpec.cpp
-            ColorMap.cpp
-            common.h
-            constants.h)
-    if(WIN32)
-        target_link_libraries(pamenim PRIVATE nbtp-static)
-    else()
-        target_link_libraries(pamenim PUBLIC nbtp)
-    endif()
-
-    target_link_libraries(pamenim PUBLIC ${ImageMagick_LIBRARIES})
+    add_executable(pamenim pamenim.cpp)
+    target_link_libraries(pamenim PRIVATE libminemap)
     target_link_libraries(pamenim PUBLIC ${zlib_LIBRARIES})
-    if (UNIX)
-        target_link_libraries(pamenim PUBLIC dl)
-    endif()
     target_include_directories(pamenim PUBLIC ${ImageMagick_INCLUDE_DIRS})
-    target_include_directories(pamenim PUBLIC ${Boost_INCLUDE_DIRS})
-
-    target_compile_options(pamenim PUBLIC ${ImageMagick_CFLAGS})
-
     install(TARGETS pamenim DESTINATION bin)
 endif ()
