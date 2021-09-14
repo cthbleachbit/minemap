@@ -3,6 +3,7 @@ add_executable(minemap
         Map.cpp
         VersionSpec.cpp
         ColorMap.cpp
+        common.h
         constants.h)
 
 if(WIN32)
@@ -28,6 +29,7 @@ if (BUILD_PAMENIM)
             pamenim.cpp
             VersionSpec.cpp
             ColorMap.cpp
+            common.h
             constants.h)
     if(WIN32)
         target_link_libraries(pamenim PRIVATE nbtp-static)

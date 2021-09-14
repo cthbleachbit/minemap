@@ -7,10 +7,6 @@
 #include "VersionSpec.h"
 #include "Map.h"
 
-// the default center coordinates should be close enough to the "borderlands" that players would not normally reach
-#define DEFAULT_X_CENTER 1 << 30
-#define DEFAULT_Z_CENTER 1 << 30
-
 namespace Minemap {
 	/**
 	 * This file handles creation of bare bone map structures and fills in optional parameters.
@@ -18,15 +14,6 @@ namespace Minemap {
 	namespace Map {
 
 		using namespace NBTP;
-
-		static struct MapGeometry DEFAULT_GEOMETRY = {
-			1,
-			1,
-			128,
-			128,
-			DEFAULT_X_CENTER,
-			DEFAULT_Z_CENTER
-		};
 
 		/**
 		 * Per-version specific contents
@@ -76,7 +63,7 @@ namespace Minemap {
 			data->insert("zCenter", std::make_shared<IntTag>(geometry.zC));
 			data->insert("colors", std::make_shared<BytesTag>());
 
-			for (const auto &tag : *extra) {
+			for (const auto &tag: *extra) {
 				data->insert(tag.first, tag.second);
 			}
 
@@ -104,7 +91,7 @@ namespace Minemap {
 		 * @return             Map root tag
 		 */
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(VersionSpec ver) {
-			return makeMapRoot(ver, DEFAULT_GEOMETRY);
+			return makeMapRoot(ver, MapGeometry());
 		}
 	}
 }

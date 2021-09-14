@@ -8,15 +8,25 @@
 #include "libnbtp.h"
 #include "VersionSpec.h"
 
+// the default center coordinates should be close enough to the "borderlands" that players would not normally reach
+#define DEFAULT_X_CENTER 1 << 30
+#define DEFAULT_Z_CENTER 1 << 30
+
 namespace Minemap {
 	namespace Map {
 		struct MapGeometry {
-			char scale;
-			char dim;
-			int16_t width;
-			int16_t height;
-			int32_t xC;
-			int32_t zC;
+			char scale = 1;
+			char dim = 1;
+			int16_t width = 128;
+			int16_t height = 128;
+			int32_t xC = DEFAULT_X_CENTER;
+			int32_t zC = DEFAULT_Z_CENTER;
+
+			constexpr MapGeometry() = default;
+			MapGeometry(char _scale, char _dim, int16_t _width, int16_t _height, int32_t _xC, int16_t _zC) noexcept
+				: scale(_scale), dim(_dim), height(_height), xC(_xC), zC(_zC) {};
+			MapGeometry(int16_t _width, int16_t _height) noexcept
+				: width(_width), height(_height) {};
 		};
 
 		/**

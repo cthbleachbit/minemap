@@ -41,7 +41,7 @@ void usage() {
 	printf("\t-e, --export FILE\n");
 	printf("\t\tOptional, export the result of color reduction in png format\n");
 	printf("\t-g, --game VER\n");
-	printf("\t\tRequired, Minecraft game version this map is going to be used in\n");
+	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
 	printf("\t\tSelect from the following values: \n");
 	for (Minemap::VersionSpec verSpec : Minemap::SUPPORTED_VERSION) {
 		printf("\t\t\t%8s for game version %s\n",
@@ -130,7 +130,8 @@ int main(int argc, char **argv) {
 	palette_path = verSpecToPalettePath(mc_ver);
 
 	// Create Template Map Payload
-	auto map_tag = Map::makeMapRoot(mc_ver);
+	struct Map::MapGeometry geometry;
+	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
 	NBTP::CompoundTag *data_tag = (NBTP::CompoundTag *) map_tag->getPayload()["data"].get();
 	auto colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
 
@@ -162,8 +163,11 @@ int main(int argc, char **argv) {
 
 		output_img = input_img;
 		output_img.modifyImage();
-		// Scale input to 128x128
-		output_img.resize("128x128!");
+		// Scale input to width x width
+		Magick::Geometry resize_geometry;
+		resize_geometry.width(geometry.width);
+		resize_geometry.height(geometry.height);
+		output_img.sample(resize_geometry);
 		// Execute remap
 		output_img.quantizeDitherMethod(dithering);
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
@@ -174,9 +178,9 @@ int main(int argc, char **argv) {
 
 		auto palette_lookup_table = loadColorMapFromPalette(palette_img);
 
-		for (i = 0; i < 16384; i++) {
-			ssize_t col = i % 128;
-			ssize_t row = i / 128;
+		for (i = 0; i < geometry.width * geometry.width; i++) {
+			ssize_t col = i % geometry.width;
+			ssize_t row = i / geometry.width;
 			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
 			if (verbose) {
 				fprintf(stderr,
