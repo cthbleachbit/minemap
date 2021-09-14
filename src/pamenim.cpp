@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
 	// Get input color array ready
 	std::shared_ptr<NBTP::Tag> root_tag;
 	{
-		std::unique_ptr<std::istream> is = nullptr;
+		std::unique_ptr<std::istream> is;
 		if (no_gz) {
 			is = std::make_unique<std::ifstream>(input_path, std::ios::binary);
 		} else {

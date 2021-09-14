@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.10)
 project (Minemap)
 set (Minemap_VERSION_MAJOR 0)
 set (Minemap_VERSION_MINOR 4)
@@ -23,7 +23,7 @@ endif()
 pkg_check_modules(zlib REQUIRED zlib)
 
 # Compilation options
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(warnings "-g -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 

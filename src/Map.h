@@ -27,6 +27,7 @@ namespace Minemap {
 				: scale(_scale), dim(_dim), height(_height), xC(_xC), zC(_zC) {};
 			MapGeometry(int16_t _width, int16_t _height) noexcept
 				: width(_width), height(_height) {};
+			bool operator==(const MapGeometry&) const = default;
 		};
 
 		/**

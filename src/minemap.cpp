@@ -207,7 +207,7 @@ int main(int argc, char **argv) {
 
 	{
 		// Generate map binary
-		std::unique_ptr<std::ostream> os = nullptr;
+		std::unique_ptr<std::ostream> os;
 		if (no_gz) {
 			os = std::make_unique<std::ofstream>(output_path, std::ios::binary);
 		} else {
