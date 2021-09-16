@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 		auto rgb = palette_lookup_table->lookup(colorIndex);
 
 		if (!rgb.has_value()) {
-			std::cerr << "Is this a map nbt file? Color code is out of range: " << colorIndex << std::endl;
+			std::cerr << "Is this a map nbt file? Color code is out of range: " << (uint16_t) colorIndex << std::endl;
 			exit(1);
 		}
 
