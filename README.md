@@ -4,15 +4,19 @@ Command line utilities for manipulating Minecraft Map item so that we can have t
 
 ![Screenshot](Screenshot.png)
 
-This repository contains two command line utilities, "minemap" to convert images to map items, the other "pamenim" to do the reverse. Run the utilities themselves with no arguments to view usage information.
+This repository contains two command line utilities, "minemap" to convert images to map items, the other "pamenim" to do the reverse. Run the utilities themselves with no arguments to view usage information and supported minecraft versions.
 
 Building is handled by CMake. As of version 0.4.0, boost is no longer required neither at compile time and run time. Please make sure you have the following dependencies:
 
 * Magick++ 7, part of Imagemagick
 * zlib, used to compress / decompress NBT data stream
-* nbtp, used to manipulate NBT data structure (included as a git submodule)
+* nbtp, used to manipulate NBT data structure (as a git submodule or use existing library)
 
-Prior to building, please run `git submodule update --init --recursive`.
+If you want to build with NBTP in the submodule, please run `git submodule update --init --recursive` prior to building.
+
+### Technical Details
+
+View README-minecraft.md for a detailed explanation on map item formats. See `misc` for color tables used in different minecraft versions.
 
 ### [Update Needed for 0.4.0] Building on Windows...
 
