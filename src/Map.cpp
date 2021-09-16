@@ -34,7 +34,7 @@ namespace Minemap {
 					(*extra)["dimension"] = std::make_shared<ByteTag>(geometry.dim);
 					break;
 				case MC_1_12:
-                case MC_1_16:
+				case MC_1_16:
 					(*extra)["trackingPosition"] = std::make_shared<ByteTag>(0);
 					(*extra)["unlimitedTracking"] = std::make_shared<ByteTag>(0);
 					(*extra)["locked"] = std::make_shared<ByteTag>(1);

@@ -30,7 +30,7 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, Minecraft game version this map is exported from\n");
 	printf("\t\tSelect from the following values: \n");
-	for (const auto &itr : Minemap::SUPPORTED_VERSIONS) {
+	for (const auto &itr: Minemap::SUPPORTED_VERSIONS) {
 		printf("\t\t\t%8s for game version %s\n", itr.name.c_str(), itr.versionRange.c_str());
 	}
 	printf("\t\tOlder versions are not supported.\n");
@@ -58,16 +58,13 @@ int main(int argc, char **argv) {
 			if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--game") == 0) {
 				i++;
 				mc_ver = verSpecFromString(argv[i]);
-			}
-			else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
+			} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 				i++;
 				input_path = argv[i];
-			}
-			else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
+			} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 				i++;
 				output_path = argv[i];
-			}
-			else if (strcmp(argv[i], "--no-gz") == 0) {
+			} else if (strcmp(argv[i], "--no-gz") == 0) {
 				no_gz = true;
 			}
 			i++;
@@ -77,13 +74,11 @@ int main(int argc, char **argv) {
 			std::cout << MISSING_GAME_VER << std::endl;
 			usage();
 			exit(1);
-		}
-		else if (input_path.empty()) {
+		} else if (input_path.empty()) {
 			std::cout << MISSING_IN_FILE << std::endl;
 			usage();
 			exit(1);
-		}
-		else if (output_path.empty()) {
+		} else if (output_path.empty()) {
 			std::cout << MISSING_OUT_FILE << std::endl;
 			usage();
 			exit(1);

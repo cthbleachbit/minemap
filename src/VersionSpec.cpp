@@ -25,8 +25,12 @@ namespace Minemap {
 	}
 
 	Version verSpecFromString(const std::string &verString) noexcept {
-		auto comparePredicate = [&verString](const VersionSpec& spec) {return spec.name == verString;};
+		auto comparePredicate = [&verString](const VersionSpec &spec) { return spec.name == verString; };
 		auto itr = std::find_if(SUPPORTED_VERSIONS.cbegin(), SUPPORTED_VERSIONS.cend(), comparePredicate);
-		return itr == SUPPORTED_VERSIONS.cend() ? Version::INVALID : static_cast<Version>(itr - SUPPORTED_VERSIONS.cbegin());
+		if (itr == SUPPORTED_VERSIONS.cend()) {
+			return Version::INVALID;
+		} else {
+			return static_cast<Version>(itr - SUPPORTED_VERSIONS.cbegin());
+		}
 	}
 }

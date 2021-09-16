@@ -36,8 +36,7 @@ namespace Minemap {
 		 * @param geometry     Map geometry
 		 * @return             Map data tag
 		 */
-		std::shared_ptr<NBTP::CompoundTag>
-		makeMapData(Version ver, const struct MapGeometry &geometry);
+		std::shared_ptr<NBTP::CompoundTag> makeMapData(Version ver, const struct MapGeometry &geometry);
 
 		/**
 		 * Constructs a root tag according for specified version of minecraft
@@ -45,16 +44,14 @@ namespace Minemap {
 		 * @param geometry     Map geometry
 		 * @return             Map root tag
 		 */
-		std::shared_ptr<NBTP::CompoundTag>
-		makeMapRoot(Version ver, const struct MapGeometry &geometry);
+		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver, const struct MapGeometry &geometry);
 
 		/**
 		 * Constructs a root tag according for specified version of minecraft with default geometry
 		 * @param ver          Minecraft version specification
 		 * @return             Map root tag
 		 */
-		std::shared_ptr<NBTP::CompoundTag>
-		makeMapRoot(Version ver);
+		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver);
 	}
 }
 

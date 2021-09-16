@@ -19,6 +19,9 @@ typedef SSIZE_T ssize_t;
  *
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
  * whatsoever) and is only used to generate static gif files at build time.
+ *
+ * There's probably no point installing this program after build phase,  * since code changes are required to support
+ * new minecraft versions.
  */
 
 void usage() {

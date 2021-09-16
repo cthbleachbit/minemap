@@ -15,25 +15,31 @@
 #define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
 #endif
 
-#define MINEMAP_PALETTE_FILE "rgba-{}.gif"
+// Quick hand for defining a version spec
+#define DEFINE_VERSION_SPEC(ver_start, ver_end, dv) \
+VersionSpec{ \
+    .name = (ver_start), \
+    .versionRange = "[" ver_start ", " ver_end ")", \
+    .palettePath = MINEMAP_PALETTE_DIR "/rgba-" ver_start ".gif", \
+    .dataVersion = (dv) \
+}
 
 namespace Minemap {
-	/**
-	 * When a new version is added make sure the array paletteFiles in VersionSpec.cpp is updated too.
-	 */
+	// A list of supported versions.
+	// END_OF_VERSION is used to sanity check SUPPORTED_VERSIONS array and enum boundary.
 	enum Version {
 		INVALID = -1,
 		MC_1_8 = 0,
-		MC_1_12,
-		MC_1_16,
-		MC_1_17,
-		END_OF_VERSION
+		MC_1_12 = 1,
+		MC_1_16 = 2,
+		MC_1_17 = 3,
+		END_OF_VERSION,
 	};
 
 	struct VersionSpec {
-		// Human readable name of this version
+		// Human-readable name of this version
 		std::string name = "Invalid";
-		// Human readable range of game version this VersionSpec can be used in
+		// Human-readable range of game version this VersionSpec can be used in
 		std::string versionRange = "Invalid";
 		// Palette file name
 		std::string palettePath = "Invalid";
@@ -49,15 +55,6 @@ namespace Minemap {
 
 		VersionSpec(const VersionSpec &v) = default;
 	};
-
-	// Quick hand for defining a version spec
-#define DEFINE_VERSION_SPEC(ver_start, ver_end, dv) \
-VersionSpec{ \
-    .name = (ver_start), \
-    .versionRange = "[" ver_start ", " ver_end ")", \
-    .palettePath = MINEMAP_PALETTE_DIR "/rgba-" ver_start ".gif", \
-    .dataVersion = (dv) \
-}
 
 	const std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
 			DEFINE_VERSION_SPEC("1.8", "1.12", std::nullopt), // 1.8.1-pre1

@@ -14,16 +14,21 @@ namespace Minemap {
 		double r = 0.0;
 		double g = 0.0;
 		double b = 0.0;
+
 		constexpr TupleRGB() = default;
-		TupleRGB(double r, double g, double b) noexcept : r(r), g(g), b(b) {};
+
+		TupleRGB(double r, double g, double b) noexcept: r(r), g(g), b(b) {};
 
 		// Comparison operators
 		bool operator==(const TupleRGB &rhs) const = default;
+
 		bool operator!=(const TupleRGB &rhs) const = default;
+
 		friend std::strong_ordering operator<=>(const TupleRGB &lhs, const TupleRGB &rhs) = default;
 
 		// Construct from Magick ColorRGB
 		explicit TupleRGB(const Magick::ColorRGB &color) noexcept;
+
 		// Cast to Magick ColorRGB
 		explicit operator Magick::ColorRGB() const noexcept;
 	};
@@ -48,24 +53,58 @@ namespace std {
 
 namespace Minemap {
 	typedef uint8_t MapColorCode;
+
 	/**
 	 * Replaces boost::bimap. This maps minecraft map color code between RGB tuples.
 	 */
 	class ColorMap {
-	public:
-		typedef std::unordered_map<TupleRGB, MapColorCode> ReverseLookup;
-		typedef TupleRGB* ForwardLookup;
 	private:
+		typedef std::unordered_map<TupleRGB, MapColorCode> ReverseLookup;
+		typedef TupleRGB *ForwardLookup;
 		uint8_t _size;
 		ReverseLookup reverseMap;
-		ForwardLookup forwardMap;
+		ForwardLookup forwardMap; // Note that this is a pointer to an array on the heap
 	public:
-		void insert(const TupleRGB& rgb, MapColorCode code);
-		uint8_t size() const noexcept { return _size; };
-		std::optional<TupleRGB> lookup(MapColorCode code) const noexcept;
-		std::optional<MapColorCode> lookup(const TupleRGB& rgb) const noexcept;
+		/**
+		 * Insert mapping between RGB <-> Color code
+		 * @param rgb    RGB
+		 * @param code   Map color code
+		 */
+		void insert(const TupleRGB &rgb, MapColorCode code);
 
+		/**
+		 * @return size of this mapping
+		 */
+		uint8_t size() const noexcept { return _size; };
+
+		/**
+		 * Lookup RGB from Map color code
+		 * @param code   color code
+		 * @return       RGB or nullopt if code not found
+		 */
+		std::optional<TupleRGB> lookup(MapColorCode code) const noexcept;
+
+		/**
+		 * Lookup Map color code from RGB
+		 * @param rgb     RGB tuple
+		 * @return        Map color code or nullopt if this RGB is not mapped
+		 */
+		std::optional<MapColorCode> lookup(const TupleRGB &rgb) const noexcept;
+
+		/**
+		 * Default constructor must not be used as the array size must be determined at construction
+		 */
+		ColorMap() = delete;
+
+		/**
+		 * construct a color map with this much size
+		 * @param size capacity / the number of color codes this color map can hold
+		 */
 		explicit ColorMap(uint8_t size) noexcept;
+
+		/**
+		 * Destructor
+		 */
 		~ColorMap() noexcept;
 	};
 
@@ -78,7 +117,6 @@ namespace Minemap {
 	 */
 	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &img);
 }
-
 
 
 #endif //COLORMAP_H

@@ -25,6 +25,7 @@
 #endif
 
 int main(int argc, char **argv);
+
 void usage();
 
 void usage() {
@@ -44,7 +45,7 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
 	printf("\t\tSelect from the following values: \n");
-	for (const auto &itr : Minemap::SUPPORTED_VERSIONS) {
+	for (const auto &itr: Minemap::SUPPORTED_VERSIONS) {
 		printf("\t\t\t%8s for game version %s\n", itr.name.c_str(), itr.versionRange.c_str());
 	}
 	printf("\t\tOlder versions are not supported.\n");
