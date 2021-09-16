@@ -29,8 +29,8 @@
 // Adapted for C++17
 // - cth451
 
-#ifndef GZSTREAM_H
-#define GZSTREAM_H 1
+#ifndef MINEMAP_GZSTREAM_H
+#define MINEMAP_GZSTREAM_H
 
 // standard C++ with new header file names and std:: namespace
 #include <iostream>

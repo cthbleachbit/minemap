@@ -2,8 +2,8 @@
 // Created by cth451 on 2020/05/15.
 //
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef MINEMAP_CONSTANTS_H
+#define MINEMAP_CONSTANTS_H
 
 #define INVALID_GAME_VER "Invalid Minecraft Version Specifier"
 

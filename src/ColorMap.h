@@ -2,8 +2,8 @@
 // Created by cth451 on 2020/05/15.
 //
 
-#ifndef COLORMAP_H
-#define COLORMAP_H
+#ifndef MINEMAP_COLORMAP_H
+#define MINEMAP_COLORMAP_H
 
 #include <Magick++.h>
 #include <memory>

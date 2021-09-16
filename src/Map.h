@@ -2,8 +2,8 @@
 // Created by cth451 on 2020/05/14.
 //
 
-#ifndef MAP_H
-#define MAP_H
+#ifndef MINEMAP_MAP_H
+#define MINEMAP_MAP_H
 
 #include "libnbtp.h"
 #include "VersionSpec.h"

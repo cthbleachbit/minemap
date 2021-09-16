@@ -2,8 +2,8 @@
 // Created by cth451 on 2020/05/18.
 //
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef MINEMAP_COMMON_H
+#define MINEMAP_COMMON_H
 #include <cstdio>
 
 #if defined(_MSC_VER)

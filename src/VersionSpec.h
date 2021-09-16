@@ -2,8 +2,8 @@
 // Created by cth451 on 2020/05/15.
 //
 
-#ifndef VERSIONSPEC_H
-#define VERSIONSPEC_H
+#ifndef MINEMAP_VERSIONSPEC_H
+#define MINEMAP_VERSIONSPEC_H
 
 #include <string>
 #include <libnbtp.h>
