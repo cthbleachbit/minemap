@@ -10,7 +10,7 @@
 
 void test_colormap() {
 	Magick::Image palette_img;
-	auto palette_path = Minemap::verSpecToPalettePath(Minemap::VersionSpec::MC_1_16);
+	auto palette_path = Minemap::verSpecToPalettePath(Minemap::Version::MC_1_16);
 	palette_img.read(palette_path);
 	auto palette_lookup_table = Minemap::loadColorMapFromPalette(palette_img);
 	// Make sure every color is retrievable

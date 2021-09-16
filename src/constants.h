@@ -7,7 +7,7 @@
 
 #define INVALID_GAME_VER "Invalid Minecraft Version Specifier"
 
-#define MISSING_GAME_VER "No game version specified"
+#define MISSING_GAME_VER "No game version or invalid version specified"
 #define MISSING_IN_FILE  "No input file specified"
 #define MISSING_OUT_FILE "No output file specified"
 

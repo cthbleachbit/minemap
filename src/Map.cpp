@@ -25,7 +25,7 @@ namespace Minemap {
 		 * @return             A compound tag containing new tags added after that minecraft version
 		 */
 		inline std::unique_ptr<CompoundTag::Compound>
-		extraDataForVersion(VersionSpec ver, const MapGeometry &geometry) {
+		extraDataForVersion(Version ver, const MapGeometry &geometry) {
 			auto extra = std::make_unique<CompoundTag::Compound>();
 			switch (ver) {
 				case MC_1_8:
@@ -63,7 +63,7 @@ namespace Minemap {
 		 * @param geometry     Map geometry
 		 * @return             Map data tag
 		 */
-		std::shared_ptr<CompoundTag> makeMapData(VersionSpec ver, const struct MapGeometry &geometry) {
+		std::shared_ptr<CompoundTag> makeMapData(Version ver, const struct MapGeometry &geometry) {
 			std::shared_ptr<CompoundTag> data = std::make_shared<CompoundTag>();
 
 			auto extra = extraDataForVersion(ver, geometry);
@@ -88,7 +88,7 @@ namespace Minemap {
 		 * @return             Map root tag
 		 */
 		std::shared_ptr<NBTP::CompoundTag>
-		makeMapRoot(VersionSpec ver, const struct MapGeometry &geometry) {
+		makeMapRoot(Version ver, const struct MapGeometry &geometry) {
 			auto map_tag = std::make_shared<NBTP::CompoundTag>();
 			auto data_tag = Map::makeMapData(ver, geometry);
 			map_tag->insert("data", data_tag);
@@ -101,7 +101,7 @@ namespace Minemap {
 		 * @param ver          Minecraft version specification
 		 * @return             Map root tag
 		 */
-		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(VersionSpec ver) {
+		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver) {
 			return makeMapRoot(ver, MapGeometry());
 		}
 	}

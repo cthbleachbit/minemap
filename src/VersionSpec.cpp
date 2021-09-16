@@ -10,74 +10,47 @@
 namespace Minemap {
 
 	static const char* paletteFiles[] = {
-		"",
 		"rgba-1.8.gif",
 		"rgba-1.12.gif",
 		"rgba-1.16.gif",
 		"rgba-1.17.gif",
 	};
 
-	VersionSpec verSpecFromString(const std::string &verString) {
-		if (verString == "1.8") return VersionSpec::MC_1_8;
-		if (verString == "1.12") return VersionSpec::MC_1_12;
-		if (verString == "1.16") return VersionSpec::MC_1_16;
-		if (verString == "1.17") return VersionSpec::MC_1_17;
-		return VersionSpec::INVALID;
-	}
-
-	std::string verSpecToString(VersionSpec ver) {
-		switch (ver) {
-			case INVALID:
-			default:
-				throw std::runtime_error(INVALID_GAME_VER);
-			case MC_1_8:
-				return "1.8";
-			case MC_1_12:
-				return "1.12";
-			case MC_1_16:
-				return "1.16";
-			case MC_1_17:
-				return "1.17";
+	const std::string &verSpecToVerRange(Version ver) {
+		if (ver < 0 || ver >= END_OF_VERSION) {
+			throw std::runtime_error(INVALID_GAME_VER);
 		}
+		return versions[ver].versionRange;
 	}
 
-	std::string verSpecToVerRange(VersionSpec ver) {
-		switch (ver) {
-			case INVALID:
-			default:
-				throw std::runtime_error(INVALID_GAME_VER);
-			case MC_1_8:
-				return "[1.8, 1,12)";
-			case MC_1_12:
-				return "[1.12, 1.16)";
-			case MC_1_16:
-				return "[1.16, 1.17)";
-			case MC_1_17:
-				return "[1.17, +oo)";
+	std::string verSpecToPalettePath(Version ver) {
+		if (ver < 0 || ver >= END_OF_VERSION) {
+			throw std::runtime_error(INVALID_GAME_VER);
 		}
-	}
-
-	std::string verSpecToPalettePath(VersionSpec ver) {
 		auto loc = std::filesystem::path(MINEMAP_PALETTE_DIR);
 		return loc.append(paletteFiles[ver]).string();
 	}
 
-	void insertDataVersion(NBTP::CompoundTag &root, VersionSpec ver) {
-		switch (ver) {
-			case MC_1_8: // 1.8.1-pre1
-				// Data version isn't introduced to the game yet
-				break;
-			case MC_1_12: // 1.12-17w17a
-				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(1128));
-				break;
-			case MC_1_16: // 1.16-pre-6
-				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(2562));
-				break;
-			case MC_1_17: // 21w10a and 1.17
-				root.insert("DataVersion", std::make_shared<NBTP::IntTag>(2699));
-				break;
-			default:
-				throw std::runtime_error(INVALID_GAME_VER);
+	void insertDataVersion(NBTP::CompoundTag &root, Version ver) {
+		if (ver < 0 || ver >= END_OF_VERSION) {
+			throw std::runtime_error(INVALID_GAME_VER);
 		}
+		auto dv = versions[ver].dataVersion;
+		if (dv.has_value()) {
+			root.insert("DataVersion", std::make_shared<NBTP::IntTag>(dv.value()));
+		}
+	}
+
+	Version verSpecFromString(const std::string &verString) noexcept {
+		auto comparePredicate = [&verString](const VersionSpec& spec) {return spec.name == verString;};
+		auto itr = std::find_if(versions.cbegin(), versions.cend(), comparePredicate);
+		return itr == versions.cend() ? Version::INVALID : static_cast<Version>(itr - versions.cbegin());
+	}
+
+	const std::string &verSpecToString(Version ver) noexcept {
+		if (ver < 0 || ver >= Version::END_OF_VERSION) {
+			throw std::runtime_error(INVALID_GAME_VER);
+		}
+		return versions[ver].name;
 	}
 }

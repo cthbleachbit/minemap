@@ -29,9 +29,8 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, Minecraft game version this map is exported from\n");
 	printf("\t\tSelect from the following values: \n");
-	for (Minemap::VersionSpec verSpec : Minemap::SUPPORTED_VERSION) {
-		printf("\t\t\t%8s for game version %s\n",
-			   Minemap::verSpecToString(verSpec).c_str(), Minemap::verSpecToVerRange(verSpec).c_str());
+	for (const auto &itr : Minemap::versions) {
+		printf("\t\t\t%8s for game version %s\n", itr.name.c_str(), itr.versionRange.c_str());
 	}
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-o, --output OUTPUT\n");
@@ -46,7 +45,7 @@ int main(int argc, char **argv) {
 #endif
 	// Argument parsing
 	using namespace Minemap;
-	VersionSpec mc_ver = VersionSpec::INVALID;
+	Version mc_ver = Version::INVALID;
 	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
@@ -73,7 +72,7 @@ int main(int argc, char **argv) {
 			i++;
 		}
 
-		if (mc_ver == VersionSpec::INVALID) {
+		if (mc_ver == Version::INVALID) {
 			std::cout << MISSING_GAME_VER << std::endl;
 			usage();
 			exit(1);
