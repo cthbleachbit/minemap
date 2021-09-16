@@ -10,6 +10,7 @@
 #include <iostream>
 #include <Magick++.h>
 
+#include "libminemap.h"
 #include "common.h"
 #include "Map.h"
 #include "VersionSpec.h"

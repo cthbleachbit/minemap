@@ -5,4 +5,8 @@
 #ifndef MINEMAP_LIBMINEMAP_H
 #define MINEMAP_LIBMINEMAP_H
 
+#include <cstdio>
+
+void print_version() noexcept;
+
 #endif //MINEMAP_LIBMINEMAP_H

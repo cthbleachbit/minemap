@@ -3,10 +3,12 @@ add_library(libminemap SHARED
         ColorMap.cpp
         Map.cpp
         VersionSpec.cpp
+        libminemap.cpp
         common.h
         constants.h
         GZStream.h
-        VersionSpec.h libminemap.cpp libminemap.h)
+        VersionSpec.h
+        libminemap.h)
 set_target_properties(libminemap PROPERTIES LIBRARY_OUTPUT_NAME minemap)
 set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
 install(TARGETS libminemap DESTINATION ${CMAKE_INSTALL_LIBDIR})
