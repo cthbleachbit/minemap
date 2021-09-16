@@ -35,19 +35,36 @@ namespace Minemap {
 		std::string name = "Invalid";
 		// Human readable range of game version this VersionSpec can be used in
 		std::string versionRange = "Invalid";
+		// Palette file name
+		std::string palettePath = "Invalid";
 		// Corresponding data version tag of this version
 		std::optional<NBTP::IntTag::V> dataVersion = std::nullopt;
+
+		VersionSpec(
+				const std::string &n,
+				const std::string &vr,
+				const std::string &pl,
+				std::optional<NBTP::IntTag::V> dv
+		) noexcept: name(n), versionRange(vr), palettePath(pl), dataVersion(dv) {};
+
+		VersionSpec(const VersionSpec &v) = default;
 	};
 
-	const std::array<VersionSpec, 4> versions = {
-			VersionSpec{.name = "1.8", .versionRange="[1.8, 1.12)", .dataVersion = std::nullopt}, // 1.8.1-pre1
-			VersionSpec{.name = "1.12", .versionRange="[1.12, 1.16)", .dataVersion = 1128}, // 1.12-17w17a
-			VersionSpec{.name = "1.16", .versionRange="[1.16, 1.17)", .dataVersion = 2562}, // 1.16-pre-6
-			VersionSpec{.name = "1.17", .versionRange="[1.17, +oo)", .dataVersion = 2699}, // 21w10a and 1.17
-	};
+	// Quick hand for defining a version spec
+#define DEFINE_VERSION_SPEC(ver_start, ver_end, dv) \
+VersionSpec{ \
+    .name = (ver_start), \
+    .versionRange = "[" ver_start ", " ver_end ")", \
+    .palettePath = MINEMAP_PALETTE_DIR "/rgba-" ver_start ".gif", \
+    .dataVersion = (dv) \
+}
 
-	// A weird way to say that the number of version specs must equal to the maximum enum
-	static_assert(std::tuple_size<decltype(versions)>::value == END_OF_VERSION);
+	const std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
+			DEFINE_VERSION_SPEC("1.8", "1.12", std::nullopt), // 1.8.1-pre1
+			DEFINE_VERSION_SPEC("1.12", "1.16", 1128), // 1.12-17w17a
+			DEFINE_VERSION_SPEC("1.16", "1.17", 2562), // 1.16-pre-6
+			DEFINE_VERSION_SPEC("1.17", "+oo", 2699), // 21w10a and 1.17
+	};
 
 	/**
 	 * Match a version from human readable string
@@ -55,22 +72,6 @@ namespace Minemap {
 	 * @return corresponding Version or INVALID if version string is invalid
 	 */
 	Version verSpecFromString(const std::string &verString) noexcept;
-
-	/** Convert a version to a human readable name
-	 * @param ver version specification
-	 * @throws std::runtime_error(INVALID_GAME_VER) if version is invalid
-	 * @return A string representation of the version specification
-	 */
-	const std::string &verSpecToString(Version ver) noexcept;
-
-	/**
-	 * Convert a version specification to the range of Minecraft versions that accepts the
-	 * encoding specified by the palette
-	 * @param ver version specification
-	 * @throws std::runtime_error(INVALID_GAME_VER) if version is invalid
-	 * @return a human readable representation of the range
-	 */
-	const std::string& verSpecToVerRange(Version ver);
 
 	/**
 	 * Convert a version to an absolute palette path.
