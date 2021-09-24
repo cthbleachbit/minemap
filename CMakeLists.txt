@@ -31,9 +31,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings} -fPIC")
 
 option(BUILD_TESTS "Build library test harness" OFF)
 option(BUILD_PAMENIM "Build Pamenim" ON)
+option(BUILD_GIMP_GPL "Generate and install palette data for GIMP" ON)
 
 set(MINEMAP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/minemap/palettes CACHE STRING "Directory to place minemap palette GIFs relative to prefix")
-set(GIMP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/gimp/2.0/palettes CACHE STRING "Directory to place GIMP palettes")
+if (BUILD_GIMP_GPL)
+    set(GIMP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/gimp/2.0/palettes CACHE STRING "Directory to place GIMP palettes")
+endif()
 add_compile_definitions(MINEMAP_PALETTE_DIR=\"${CMAKE_INSTALL_PREFIX}/${MINEMAP_PALETTE_DIR}\")
 
 # External
