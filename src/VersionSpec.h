@@ -47,15 +47,6 @@ namespace Minemap {
 		std::string palettePath = "Invalid";
 		// Corresponding data version tag of this version
 		std::optional<NBTP::IntTag::V> dataVersion = std::nullopt;
-
-		VersionSpec(
-				const std::string &n,
-				const std::string &vr,
-				const std::string &pl,
-				std::optional<NBTP::IntTag::V> dv
-		) noexcept: name(n), versionRange(vr), palettePath(pl), dataVersion(dv) {};
-
-		VersionSpec(const VersionSpec &v) = default;
 	};
 
 	const std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
