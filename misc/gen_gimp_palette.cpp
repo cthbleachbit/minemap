@@ -1,21 +1,8 @@
-#if defined(_WIN32) || defined(_WIN64)
-#include <BaseTsd.h>
-#define LINE_MAX 4096
-#define _CRT_SECURE_NO_WARNINGS 1
-typedef SSIZE_T ssize_t;
-#endif
-
 #include <cstring>
 #include <climits>
 #include <iostream>
-#include <Magick++.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-#define WIN32_LEAN_AND_MEAN
-#include <stdlib.h>
-#endif
-
-/* Used to convert text describing colors into gif palette
+/* Used to convert text describing colors into GIMP palette
  *
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
  * whatsoever) and is only used to generate static gif files at build time.
@@ -27,7 +14,7 @@ typedef SSIZE_T ssize_t;
 void usage() {
 	using namespace std;
 	cout << "Usage:" << endl;
-	cout << "    gen_color_map <input.txt> <output.gif>" << endl;
+	cout << "    gen_gimp_palette <input.txt> <output-prefix>" << endl;
 #if defined(_WIN32) || defined(_WIN64)
 	printf("Executable built at %s %s", __DATE__, __TIME__);
 #endif
@@ -74,7 +61,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	std::string input_filename = argv[1];
-	std::string output_filename = argv[2];
+	std::string gpl_prefix = argv[2];
+	std::string gpl_filename = gpl_prefix + ".gpl";
 
 	FILE *input_file = fopen(input_filename.c_str(), "r");
 	if (input_file == NULL) {
@@ -95,22 +83,20 @@ int main(int argc, char **argv) {
 	run_colors(num_colors, input_file, colors);
 	fclose(input_file);
 
-	// Generate palette image
+	// Output to gimp palette gpl
 	{
-		Magick::InitializeMagick(*argv);
-		ssize_t height = num_colors / 4;
-		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
-		try {
-			Magick::Blob output_buf;
-			palette_img.write(&output_buf, "GIF");
-			FILE* output_fd = fopen(output_filename.c_str(), "wb");
-			fwrite(output_buf.data(), output_buf.length(), 1, output_fd);
-			fclose(output_fd);
+		FILE *output_file = fopen(gpl_filename.c_str(), "w");
+		if (output_file == NULL) {
+			fprintf(stderr, "%s\n", "Fail to open file");
+			return 1;
 		}
-		catch (Magick::Exception &e) {
-			std::cerr << "Error when writing palette image: " << e.what() << std::endl;
-			exit(1);
+		// Write header
+		fprintf(output_file, "GIMP Palette\nName: %s\nColumns: 4\n#\n", gpl_prefix.c_str());
+		// Write out colors
+		for (int i = 0; i < num_colors; i++) {
+			fprintf(output_file, "%3i %3i %3i #%i\n", colors[i * 4], colors[i * 4 + 1], colors[i * 4 + 2], i);
 		}
+		fclose(output_file);
 	}
 	return 0;
 }
