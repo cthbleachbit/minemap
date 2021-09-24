@@ -7,6 +7,8 @@
 
 #include <string>
 #include <utility>
+#include <array>
+#include <optional>
 #include <libnbtp.h>
 #include "common.h"
 #include "constants.h"

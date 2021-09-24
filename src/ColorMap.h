@@ -8,6 +8,7 @@
 #include <Magick++.h>
 #include <memory>
 #include <map>
+#include <optional>
 
 namespace Minemap {
 	struct TupleRGB {

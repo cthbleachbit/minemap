@@ -7,6 +7,7 @@
 
 #include "libnbtp.h"
 #include "VersionSpec.h"
+#include <optional>
 
 // the default center coordinates should be close enough to the "borderlands" that players would not normally reach
 #define DEFAULT_X_CENTER 1 << 30
