@@ -49,7 +49,7 @@ void run_colors(ssize_t& num_colors, FILE* input_file, unsigned char *colors) {
 	}
 	rewind(input_file);
 
-	delete line_buffer;
+	delete[] line_buffer;
 }
 
 int main(int argc, char **argv) {
