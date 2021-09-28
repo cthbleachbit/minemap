@@ -14,7 +14,7 @@ set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
 install(TARGETS libminemap DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if (WIN32 OR (NOT SYSTEM_NBTP))
-    target_link_libraries(libminemap PRIVATE nbtp-static)
+    target_link_libraries(libminemap PUBLIC nbtp-static)
     target_link_libraries(libminemap PRIVATE fmt)
 else ()
     target_link_libraries(libminemap PUBLIC nbtp)

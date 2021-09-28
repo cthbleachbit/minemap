@@ -26,9 +26,13 @@ namespace Minemap {
 			ssize_t palette_col = j % palette_width;
 			ssize_t palette_row = j / palette_width;
 			// This should have been palette_img.pixelColor, but visual studio refuses to link to it
+#ifdef USE_GM
+			auto p_inf = palette_img.pixelColor(palette_col, palette_row);
+#else
 			auto q = palette_img.getConstPixels(palette_col, palette_row, 1, 1);
 			Magick::PixelInfo p_inf;
 			MagickCore::GetPixelInfoPixel(palette_img.constImage(), q, &p_inf);
+#endif
 			Magick::ColorRGB palette_pix = Magick::Color(p_inf);
 
 			// Insert the pixel into the color map

@@ -21,6 +21,12 @@
 #include <stdlib.h>
 #endif
 
+#ifdef USE_GM
+#define DOUBLEPIXEL Magick::DoublePixel
+#else
+#define DOUBLEPIXEL MagickCore::DoublePixel
+#endif
+
 void usage() {
 	printf("pamenim <options>\n");
 	printf("\t-i, --input INPUT\n");
@@ -135,7 +141,7 @@ int main(int argc, char **argv) {
 		pixelStore[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
 	}
 
-	Magick::Image output_img(128, 128, "RGBA", MagickCore::DoublePixel, pixelStore);
+	Magick::Image output_img(128, 128, "RGBA", DOUBLEPIXEL, pixelStore);
 	output_img.write(output_path);
 
 	return 0;

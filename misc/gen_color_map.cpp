@@ -15,6 +15,12 @@ typedef SSIZE_T ssize_t;
 #include <stdlib.h>
 #endif
 
+#ifdef USE_GM
+#define CHARPIXEL Magick::CharPixel
+#else
+#define CHARPIXEL MagickCore::CharPixel
+#endif
+
 /* Used to convert text describing colors into gif palette
  *
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
@@ -99,7 +105,7 @@ int main(int argc, char **argv) {
 	{
 		Magick::InitializeMagick(*argv);
 		ssize_t height = num_colors / 4;
-		Magick::Image palette_img = Magick::Image(4, height, "RGBA", MagickCore::CharPixel, colors);
+		Magick::Image palette_img = Magick::Image(4, height, "RGBA", CHARPIXEL, colors);
 		try {
 			Magick::Blob output_buf;
 			palette_img.write(&output_buf, "GIF");

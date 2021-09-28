@@ -13,9 +13,17 @@ else ()
 endif ()
 
 add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
+option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" OFF)
 
 find_package(PkgConfig REQUIRED)
+
+if (USE_GRAPHICSMAGICK)
+pkg_check_modules(ImageMagick REQUIRED GraphicsMagick++)
+add_compile_definitions(USE_GM)
+else ()
 pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
+endif ()
+
 if (WIN32)
     set(ENV{MAGICK_CODER_MODULE_PATH} /mingw64/lib/ImageMagick-${ImageMagick_VERSION}/modules-Q16HDRI/coders)
     add_compile_definitions(WIN_MAGICK_CODER_MODULE_PATH=L\"$ENV{MAGICK_CODER_MODULE_PATH}\")

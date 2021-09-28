@@ -24,6 +24,16 @@
 #include <stdlib.h>
 #endif
 
+#ifdef USE_GM
+namespace Magick {
+	enum DitherMethod {
+		NoDitherMethod,
+		RiemersmaDitherMethod,
+		FloydSteinbergDitherMethod
+	};
+};
+#endif
+
 int main(int argc, char **argv);
 
 void usage();
@@ -160,7 +170,9 @@ int main(int argc, char **argv) {
 		resize_geometry.height(geometry.height);
 		output_img.sample(resize_geometry);
 		// Execute remap
+#ifndef USE_GM
 		output_img.quantizeDitherMethod(dithering);
+#endif
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
 
 		if (!export_path.empty()) {
