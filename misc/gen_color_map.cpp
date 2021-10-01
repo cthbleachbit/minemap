@@ -1,5 +1,5 @@
 #if defined(_WIN32) || defined(_WIN64)
-#include <BaseTsd.h>
+#include <basetsd.h>
 #define LINE_MAX 4096
 #define _CRT_SECURE_NO_WARNINGS 1
 typedef SSIZE_T ssize_t;

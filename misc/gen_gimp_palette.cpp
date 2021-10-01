@@ -2,6 +2,10 @@
 #include <climits>
 #include <iostream>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define LINE_MAX 4096
+#endif
+
 /* Used to convert text describing colors into GIMP palette
  *
  * This specific program is not designed with security in mind (there is no return code checks, out-of-bound checks or
