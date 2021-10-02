@@ -104,5 +104,9 @@ namespace Minemap {
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver) {
 			return makeMapRoot(ver, MapGeometry());
 		}
+
+		void saveMap(std::ostream &os, NBTP::CompoundTag &tag) {
+			NBTP::TagIO::writeRoot(os, tag);
+		}
 	}
 }

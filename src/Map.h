@@ -53,6 +53,7 @@ namespace Minemap {
 		 * @return             Map root tag
 		 */
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver);
+		void saveMap(std::ostream &os, NBTP::CompoundTag &tag);
 	}
 }
 
