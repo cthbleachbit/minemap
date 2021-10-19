@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	palette_path = verSpecToPalettePath(mc_ver);
+	palette_path = absolute(verSpecToPalettePath(mc_ver)).string();
 
 	// Create Template Map Payload
 	struct Map::MapGeometry geometry;

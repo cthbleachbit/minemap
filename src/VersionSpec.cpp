@@ -5,13 +5,52 @@
 #include "VersionSpec.h"
 #include "constants.h"
 
+#ifdef WIN32
+#include <libloaderapi.h>
+#include <windows.h>
+#include <WinError.h>
+#else
+#include <unistd.h>
+#endif
+
 namespace Minemap {
 
-	std::string verSpecToPalettePath(Version ver) {
+#ifdef WIN32
+	/**
+	 * @return the directory where the program is located or nullopt if this is unavailable
+	 */
+	static std::optional<std::wstring> getProgramPath() {
+		wchar_t buf[2048];
+		int ret = GetModuleFileName(nullptr, buf, 2048);
+		int error_code = GetLastError();
+		return (ret == 0) || (error_code == ERROR_INSUFFICIENT_BUFFER) ? std::nullopt : std::make_optional(std::wstring(buf));
+	}
+#endif
+
+	/**
+	 * Returns absolute path to a valid palette
+	 * @param ver   Version number
+	 * @return
+	 */
+	std::filesystem::path verSpecToPalettePath(Version ver) {
 		if (ver < 0 || ver >= END_OF_VERSION) {
 			throw std::runtime_error(INVALID_GAME_VER);
 		}
-		return SUPPORTED_VERSIONS[ver].palettePath;
+
+#if WIN32
+		auto programDir = getProgramPath();
+		if (programDir.has_value()) {
+			std::filesystem::path p = std::filesystem::path(programDir.value());
+			if (std::filesystem::is_regular_file(p)) {
+				return p.parent_path() / SUPPORTED_VERSIONS[ver].palettePath;
+			}
+		}
+		// Windows ONLY: prefer palettes next to the program executable, or fall back to cwd
+		return std::filesystem::current_path() / SUPPORTED_VERSIONS[ver].palettePath;
+#else
+		// Unix ONLY: Find palette in the palette directory
+		return std::filesystem::path(MINEMAP_PALETTE_DIR) / SUPPORTED_VERSIONS[ver].palettePath;
+#endif
 	}
 
 	void insertDataVersion(NBTP::CompoundTag &root, Version ver) {

@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 
 	// Start by getting bimap for color mapping
 	Magick::InitializeMagick(*argv);
-	palette_path = verSpecToPalettePath(mc_ver);
+	palette_path = absolute(verSpecToPalettePath(mc_ver)).string();
 	std::cout << "Using palette GIF " << palette_path << std::endl;
 	auto palette_lookup_table = loadColorMapFromPalette(Magick::Image(palette_path));
 

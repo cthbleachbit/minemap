@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <array>
+#include <filesystem>
 #include <optional>
 #include <libnbtp.h>
 #include "common.h"
@@ -22,7 +23,7 @@
 VersionSpec{ \
     .name = (ver_start), \
     .versionRange = "[" ver_start ", " ver_end ")", \
-    .palettePath = MINEMAP_PALETTE_DIR "/rgba-" ver_start ".gif", \
+    .palettePath = "rgba-" ver_start ".gif", \
     .dataVersion = (dv) \
 }
 
@@ -70,7 +71,7 @@ namespace Minemap {
 	 * @throws std::runtime_error(INVALID_GAME_VER) if version is invalid
 	 * @return absolute path to the palette file
 	 */
-	std::string verSpecToPalettePath(Version ver);
+	std::filesystem::path verSpecToPalettePath(Version ver);
 
 	/**
 	 * Insert the data version tag depending on the game version this map is intended for
