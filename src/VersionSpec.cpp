@@ -21,9 +21,10 @@ namespace Minemap {
 	 */
 	static std::optional<std::wstring> getProgramPath() {
 		wchar_t buf[2048];
+		SetLastError(NO_ERROR);
 		int ret = GetModuleFileName(nullptr, buf, 2048);
 		int error_code = GetLastError();
-		return (ret == 0) || (error_code == ERROR_INSUFFICIENT_BUFFER) ? std::nullopt : std::make_optional(std::wstring(buf));
+		return (error_code != NO_ERROR) ? std::nullopt : std::make_optional(std::wstring(buf));
 	}
 #endif
 
