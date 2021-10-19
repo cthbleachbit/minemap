@@ -5,28 +5,44 @@
 #include "VersionSpec.h"
 #include "constants.h"
 
+#include <iostream>
+
 #ifdef WIN32
 #include <libloaderapi.h>
 #include <windows.h>
 #include <WinError.h>
 #else
+#include <locale>
+#include <codecvt>
 #include <unistd.h>
 #endif
 
 namespace Minemap {
 
-#ifdef WIN32
+
 	/**
 	 * @return the directory where the program is located or nullopt if this is unavailable
 	 */
 	static std::optional<std::wstring> getProgramPath() {
+#ifdef WIN32
 		wchar_t buf[2048];
 		SetLastError(NO_ERROR);
 		int ret = GetModuleFileName(nullptr, buf, 2048);
 		int error_code = GetLastError();
 		return (error_code != NO_ERROR) ? std::nullopt : std::make_optional(std::wstring(buf));
-	}
+#else
+		// Apparently this doesn't work on Mac OS but I don't give shet
+		char buf[2048];
+		int ret = readlink("/proc/self/exe", buf, 2048);
+		if (ret < 0 || ret == 2048) {
+			return std::nullopt;
+		}
+		buf[ret] = 0;
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+		return conv.from_bytes(buf);
 #endif
+	}
+
 
 	/**
 	 * Returns absolute path to a valid palette
@@ -38,14 +54,16 @@ namespace Minemap {
 			throw std::runtime_error(INVALID_GAME_VER);
 		}
 
-#if WIN32
 		auto programDir = getProgramPath();
 		if (programDir.has_value()) {
-			std::filesystem::path p = std::filesystem::path(programDir.value());
+			std::filesystem::path p = absolute(std::filesystem::path(programDir.value()));
+			std::cerr << p << std::endl;
 			if (std::filesystem::is_regular_file(p)) {
 				return p.parent_path() / SUPPORTED_VERSIONS[ver].palettePath;
 			}
 		}
+
+#if WIN32
 		// Windows ONLY: prefer palettes next to the program executable, or fall back to cwd
 		return std::filesystem::current_path() / SUPPORTED_VERSIONS[ver].palettePath;
 #else
