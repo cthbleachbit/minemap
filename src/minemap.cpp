@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <Magick++.h>
+#include <inttypes.h>
 
 #include "libminemap.h"
 #include "common.h"
@@ -22,6 +23,16 @@
 #if defined(_WIN32) || defined(_WIN64)
 #define WIN32_LEAN_AND_MEAN
 #include <stdlib.h>
+#endif
+
+#ifdef USE_GM
+namespace Magick {
+	enum DitherMethod {
+		NoDitherMethod,
+		RiemersmaDitherMethod,
+		FloydSteinbergDitherMethod
+	};
+};
 #endif
 
 int main(int argc, char **argv);
@@ -160,7 +171,9 @@ int main(int argc, char **argv) {
 		resize_geometry.height(geometry.height);
 		output_img.sample(resize_geometry);
 		// Execute remap
+#ifndef USE_GM
 		output_img.quantizeDitherMethod(dithering);
+#endif
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
 
 		if (!export_path.empty()) {
@@ -175,7 +188,7 @@ int main(int argc, char **argv) {
 			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
 			if (verbose) {
 				fprintf(stderr,
-				        "Pixel at %li, %li: (%f, %f, %f)\n",
+				        "Pixel at %" PRIi64 ", %" PRIi64 ": (%f, %f, %f)\n",
 				        col, row,
 				        output_pix.red(),
 				        output_pix.green(),
@@ -183,11 +196,11 @@ int main(int argc, char **argv) {
 			}
 			auto colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
 			if (!colorCode.has_value()) {
-				fprintf(stderr, "Error: No color match for pixel at %li, %li\n", col, row);
+				fprintf(stderr, "Error: No color match for pixel at %" PRIi64 ", %" PRIi64 "\n", col, row);
 				exit(1);
 			} else {
 				if (verbose) {
-					fprintf(stderr, "Matched color code %i for pixel at %li, %li\n", colorCode.value(), col, row);
+					fprintf(stderr, "Matched color code %i for pixel at %" PRIi64 ", %" PRIi64 "\n", colorCode.value(), col, row);
 				}
 				colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
 			}
@@ -203,7 +216,7 @@ int main(int argc, char **argv) {
 			os = std::make_unique<oGZStream>(output_path.c_str());
 		}
 
-		NBTP::TagIO::writeRoot(*os, *map_tag);
+		Map::saveMap(*os, *map_tag);
 		os->flush();
 	}
 

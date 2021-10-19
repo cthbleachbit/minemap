@@ -13,16 +13,30 @@ else ()
 endif ()
 
 add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
+option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" OFF)
 
+find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
+find_package(fmt REQUIRED)
+
+if (USE_GRAPHICSMAGICK)
+    if (VCPKG_TARGET_TRIPLET)
+        find_package(unofficial-graphicsmagick CONFIG REQUIRED)
+        set(ImageMagick_LIBRARIES unofficial::graphicsmagick::graphicsmagick)
+    else ()
+        pkg_check_modules(ImageMagick REQUIRED GraphicsMagick++)
+    endif ()
+    add_compile_definitions(USE_GM)
+else ()
+    pkg_check_modules(ImageMagick REQUIRED Magick++-7.Q16HDRI)
+endif ()
+
 if (WIN32)
     set(ENV{MAGICK_CODER_MODULE_PATH} /mingw64/lib/ImageMagick-${ImageMagick_VERSION}/modules-Q16HDRI/coders)
     add_compile_definitions(WIN_MAGICK_CODER_MODULE_PATH=L\"$ENV{MAGICK_CODER_MODULE_PATH}\")
     add_compile_definitions(UNICODE)
     add_compile_definitions(_UNICODE)
 endif ()
-pkg_check_modules(zlib REQUIRED zlib)
 
 # Compilation options
 set(CMAKE_CXX_STANDARD 20)
