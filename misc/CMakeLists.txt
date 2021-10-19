@@ -1,4 +1,7 @@
 add_executable(gen_color_map gen_color_map.cpp)
+if (WIN32 AND VCPKG_TARGET_TRIPLET)
+    target_compile_definitions(gen_color_map PUBLIC STATIC_MAGICK)
+endif ()
 target_link_libraries(gen_color_map PUBLIC ${ImageMagick_LIBRARIES})
 target_include_directories(gen_color_map PUBLIC ${ImageMagick_INCLUDE_DIRS})
 target_compile_options(gen_color_map PUBLIC ${ImageMagick_CFLAGS_OTHER})
