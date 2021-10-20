@@ -8,7 +8,7 @@ This repository contains two command line utilities, "minemap" to convert images
 
 Building is handled by CMake. As of version 0.4.0, boost is no longer required neither at compile time and run time. Please make sure you have the following dependencies:
 
-* Magick++ 7, part of Imagemagick
+* Magick++ 7, part of Imagemagick, OR GraphicsMagick if you are building on Windows.
 * zlib, used to compress / decompress NBT data stream
 * nbtp, used to manipulate NBT data structure (as a git submodule or use existing library)
 
@@ -20,7 +20,9 @@ View README-minecraft.md for a detailed explanation on map item formats. See `mi
 
 ### Building on Windows ft. @liushuyu
 
-Without loss of generality, let's admit that building this on Windows is the most horrible part for me, and probably for readers as well. To save the hassle you may download prebuilt, statically linked executables from the release page. For fearless Windows users who prefer to build yourself out there, follow the following steps proposed by the almighty liushuyu...
+I have no idea how to build minemap on that shit. Luckily @liushuyu found a way to do this. Starting from v0.4.4, you may download prebuilt, statically linked executables from the release page.
+
+It's dangerous to go alone! Take these steps to compile your own copy on Windows.
 
 ##### Prepare
 
