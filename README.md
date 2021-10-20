@@ -18,14 +18,57 @@ If you want to build with NBTP in the submodule, please run `git submodule updat
 
 View README-minecraft.md for a detailed explanation on map item formats. See `misc` for color tables used in different minecraft versions.
 
-### [Update Needed for 0.4.0] Building on Windows...
+### Building on Windows ft. @liushuyu
 
-Without loss of generality, let's admit that building this on Windows is the worst part for me, and probably for readers as well. To save the hassle you may download prebuilt, statically linked executables from the release page. For fearless Windows users who prefer to build yourself out there, follow me (or even better, improve the following as I have no idea how Visual Studio should really work):
+Without loss of generality, let's admit that building this on Windows is the most horrible part for me, and probably for readers as well. To save the hassle you may download prebuilt, statically linked executables from the release page. For fearless Windows users who prefer to build yourself out there, follow the following steps proposed by the almighty liushuyu...
 
-1. Clone libnbtp, load the solution with visual studio, build the library, and take a note of where the compiled nbtp static object, say `C:\Users\john\nbtp\x64\Release\nbtp.lib`
-2. Follow [ImageMagick documentation](https://imagemagick.org/script/install-source.php) to build ImageMagick static libraries. Take a note of the output directory, say `C:\Users\john\ImageMagick-Windows\VisualMagick\lib`. You should see a bunch of `CORE_something.lib` files in that directory.
-3. Load minemap.sln. For each of the VC project, change the following project properties:
-   - VC++ Directories -> Include Directories: add path to ImageMagick installataion, add path to libnbtp include directory.
-   - C/C++ -> Code Generation -> Runtime Library: change to "Multi-threaded DLL" if you would prefer to link dynamically.
-   - Linker -> Input -> Additional Depencencies: add path in step 2 and step 1.
-4. Build solution.
+##### Prepare
+
+1. Install MinGW64 with [MSYS2](https://www.msys2.org/), and launch into a MINGW64 prompt.
+2. Install the following list of dependencies with `pacman -S <packages>`:
+    - `git`
+    - `mingw-w64-x86_64-toolchain`
+    - `mingw-w64-x86_64-cmake`
+    - `mingw-w64-x86_64-ninja`
+3. Clone [vcpkg](https://github.com/microsoft/vcpkg) to say `/home/user/vcpkg`, run their bootstrap batch file. You should find a `vcpkg.exe` in `vcpkg` repo directory.
+4. Set environment variable in your MinGW64 prompt:
+    - export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
+    - export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
+5. Install the following dependencies with `./vcpkg.exe install <packages>`:
+    - `fmt`
+    - `zlib`
+    - `jbigkit`
+    - `graphicsmagick`
+6. Go to `/home/user/vcpkg/ports/graphicsmagick`, and apply this patch:
+```diff
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7e6be2992..9f0edcb00 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,8 @@ add_definitions(-D_MAGICKLIB_ -D_WANDLIB_ -DMAGICK_IMPLEMENTATION)
+ 
+ if (BUILD_SHARED_LIBS)
+     add_definitions(-D_DLL -DDLL)
++else ()
++    add_definitions(-D_LIB)
+ endif ()
+ 
+ if (MSVC)
+```
+7. Back out and reinstall `graphicsmagick`:
+    - `./vcpkg.exe remove graphicsmagick`
+    - `./vcpkg.exe install graphicsmagick`
+
+##### Actual building
+
+1. Clone this repository and checkout to a desired revision, run `git submodule init` and `git submodule update`.
+2. Create a build directory. From here use cmake to configure the build:
+```
+cmake .. -DCMAKE_BUILD_TYPE=Release \
+         -DSYSTEM_NBTP=OFF \
+         -DUSE_GRPHICSMAGICK=ON \
+         -DCMAKE_TOOLCHAIN_FILE=/home/user/vcpkg/scripts/buildsystems/vcpkg.cmake
+         -DVCPKG_TARGET_TRIPLET=x64-mingw-static
+```
+3. Run ninja to build.
+4. Run `cmake --install . --prefix <destdir>` to install to `<destdir>`.
