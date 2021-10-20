@@ -9,7 +9,7 @@ add_library(libminemap SHARED
         GZStream.h
         VersionSpec.h
         libminemap.h)
-set_target_properties(libminemap PROPERTIES LIBRARY_OUTPUT_NAME minemap)
+set_target_properties(libminemap PROPERTIES OUTPUT_NAME minemap)
 set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
 install(TARGETS libminemap DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
