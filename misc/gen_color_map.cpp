@@ -72,9 +72,6 @@ void run_colors(ssize_t& num_colors, FILE* input_file, unsigned char *colors) {
 }
 
 int main(int argc, char **argv) {
-#if defined(_WIN32) || defined(_WIN64)
-	_wputenv_s(L"MAGICK_CODER_MODULE_PATH", WIN_MAGICK_CODER_MODULE_PATH);
-#endif
 	if (argc != 3) {
 		usage();
 		return 1;

@@ -47,9 +47,6 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
-#if defined(_WIN32) || defined(_WIN64)
-	_wputenv_s(L"MAGICK_CODER_MODULE_PATH", WIN_MAGICK_CODER_MODULE_PATH);
-#endif
 	// Argument parsing
 	using namespace Minemap;
 	Version mc_ver = Version::INVALID;
