@@ -57,8 +57,7 @@ namespace Minemap {
 		auto programDir = getProgramPath();
 		if (programDir.has_value()) {
 			std::filesystem::path p = absolute(std::filesystem::path(programDir.value()));
-			std::cerr << p << std::endl;
-			if (std::filesystem::is_regular_file(p)) {
+			if (std::filesystem::is_regular_file(p / SUPPORTED_VERSIONS[ver].palettePath)) {
 				return p.parent_path() / SUPPORTED_VERSIONS[ver].palettePath;
 			}
 		}

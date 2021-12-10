@@ -39,6 +39,7 @@ void usage() {
 	for (const auto &itr: Minemap::SUPPORTED_VERSIONS) {
 		printf("\t\t\t%8s for game version %s\n", itr.name.c_str(), itr.versionRange.c_str());
 	}
+	printf("\t\tPalette directory: " MINEMAP_PALETTE_DIR "\n");
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-o, --output OUTPUT\n");
 	printf("\t\tRequired, output picture\n");
