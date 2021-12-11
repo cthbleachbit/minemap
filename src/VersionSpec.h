@@ -21,10 +21,10 @@
 // Quick hand for defining a version spec
 #define DEFINE_VERSION_SPEC(ver_start, ver_end, dv) \
 VersionSpec{ \
-    .name = (ver_start), \
-    .versionRange = "[" ver_start ", " ver_end ")", \
-    .palettePath = "rgba-" ver_start ".gif", \
-    .dataVersion = (dv) \
+    (ver_start), \
+    "[" ver_start ", " ver_end ")", \
+    "rgba-" ver_start ".gif", \
+    (dv) \
 }
 
 namespace Minemap {
@@ -41,16 +41,16 @@ namespace Minemap {
 
 	struct VersionSpec {
 		// Human-readable name of this version
-		std::string name = "Invalid";
+		const char name[5] = "NONE";
 		// Human-readable range of game version this VersionSpec can be used in
-		std::string versionRange = "Invalid";
+		const char versionRange[20] = "NONE";
 		// Palette file name
-		std::string palettePath = "Invalid";
+		const char palettePath[20] = "Invalid";
 		// Corresponding data version tag of this version
-		std::optional<NBTP::IntTag::V> dataVersion = std::nullopt;
+		const std::optional<NBTP::IntTag::V> dataVersion = std::nullopt;
 	};
 
-	const std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
+	constexpr std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
 			DEFINE_VERSION_SPEC("1.8", "1.12", std::nullopt), // 1.8.1-pre1
 			DEFINE_VERSION_SPEC("1.12", "1.16", 1128), // 1.12-17w17a
 			DEFINE_VERSION_SPEC("1.16", "1.17", 2562), // 1.16-pre-6
