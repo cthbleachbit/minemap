@@ -9,6 +9,8 @@
 #include <memory>
 #include <map>
 #include <optional>
+#include <compare>
+#include <unordered_map>
 
 namespace Minemap {
 	struct TupleRGB {
