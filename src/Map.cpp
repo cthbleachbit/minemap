@@ -69,7 +69,6 @@ namespace Minemap {
 			auto extra = extraDataForVersion(ver, geometry);
 
 			data->insert("scale", std::make_shared<ShortTag>(geometry.scale));
-			data->insert("dimension", std::make_shared<ByteTag>(geometry.dim));
 			data->insert("xCenter", std::make_shared<IntTag>(geometry.xC));
 			data->insert("zCenter", std::make_shared<IntTag>(geometry.zC));
 			data->insert("colors", std::make_shared<BytesTag>());
