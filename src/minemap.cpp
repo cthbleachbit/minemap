@@ -173,17 +173,17 @@ int main(int argc, char **argv) {
 		output_img.quantizeDitherMethod(dithering);
 #endif
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
-
 		if (!export_path.empty()) {
 			output_img.write(export_path);
 		}
 
 		auto palette_lookup_table = loadColorMapFromPalette(palette_img);
-
+		const Magick::Quantum *quantum = input_img.getConstPixels(0, 0, input_img.columns(), input_img.rows());
 		for (i = 0; i < geometry.width * geometry.width; i++) {
 			ssize_t col = i % geometry.width;
 			ssize_t row = i / geometry.width;
 			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
+			bool is_transparent = (quantum[4 * i + 3] == 0.0f);
 			if (verbose) {
 				fprintf(stderr,
 				        "Pixel at %" PRIi64 ", %" PRIi64 ": (%f, %f, %f)\n",
@@ -192,16 +192,20 @@ int main(int argc, char **argv) {
 				        output_pix.green(),
 				        output_pix.blue());
 			}
-			auto colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
-			if (!colorCode.has_value()) {
-				fprintf(stderr, "Error: No color match for pixel at %" PRIi64 ", %" PRIi64 "\n", col, row);
-				exit(1);
+			std::optional<MapColorCode> colorCode;
+			if (is_transparent) {
+				colorCode = 0;
 			} else {
-				if (verbose) {
-					fprintf(stderr, "Matched color code %i for pixel at %" PRIi64 ", %" PRIi64 "\n", colorCode.value(), col, row);
+				colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
+				if (!colorCode.has_value()) {
+					fprintf(stderr, "Error: No color match for pixel at %" PRIi64 ", %" PRIi64 "\n", col, row);
+					exit(1);
 				}
-				colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
 			}
+			if (verbose) {
+				fprintf(stderr, "Matched color code %i for pixel at %" PRIi64 ", %" PRIi64 "\n", colorCode.value(), col, row);
+			}
+			colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
 		}
 	}
 
