@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 	struct Map::MapGeometry geometry;
 	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
 	NBTP::CompoundTag *data_tag = (NBTP::CompoundTag *) map_tag->getPayload()["data"].get();
-	auto colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
+	NBTP::BytesTag *colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
 
 	{
 		// Init Magick Core
@@ -177,35 +177,16 @@ int main(int argc, char **argv) {
 			output_img.write(export_path);
 		}
 
-		auto palette_lookup_table = loadColorMapFromPalette(palette_img);
-		const Magick::Quantum *quantum = input_img.getConstPixels(0, 0, input_img.columns(), input_img.rows());
-		for (i = 0; i < geometry.width * geometry.width; i++) {
-			ssize_t col = i % geometry.width;
-			ssize_t row = i / geometry.width;
-			Magick::ColorRGB output_pix = output_img.pixelColor(col, row);
-			bool is_transparent = (quantum[4 * i + 3] == 0.0f);
-			if (verbose) {
-				fprintf(stderr,
-				        "Pixel at %" PRIi64 ", %" PRIi64 ": (%f, %f, %f)\n",
-				        col, row,
-				        output_pix.red(),
-				        output_pix.green(),
-				        output_pix.blue());
-			}
-			std::optional<MapColorCode> colorCode;
-			if (is_transparent) {
-				colorCode = 0;
-			} else {
-				colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
-				if (!colorCode.has_value()) {
-					fprintf(stderr, "Error: No color match for pixel at %" PRIi64 ", %" PRIi64 "\n", col, row);
-					exit(1);
-				}
-			}
-			if (verbose) {
-				fprintf(stderr, "Matched color code %i for pixel at %" PRIi64 ", %" PRIi64 "\n", colorCode.value(), col, row);
-			}
-			colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
+		try {
+			Minemap::mapped_to_tag(input_img, output_img, loadColorMapFromPalette(palette_img), colors_tag);
+		} catch (std::runtime_error &e) {
+			std::cerr << e.what() << std::endl;
+			exit(1);
+		}
+
+		// Write Result image
+		if (!export_path.empty()) {
+			output_img.write(export_path);
 		}
 	}
 
