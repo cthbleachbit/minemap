@@ -64,7 +64,7 @@ void usage() {
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
 	printf("\n");
-	print_version();
+	Minemap::print_version();
 }
 
 int main(int argc, char **argv) {

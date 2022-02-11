@@ -7,6 +7,8 @@
 
 #include <cstdio>
 
-void print_version() noexcept;
+namespace Minemap {
+	void print_version() noexcept;
+}
 
 #endif //MINEMAP_LIBMINEMAP_H

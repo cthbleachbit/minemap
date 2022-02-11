@@ -44,7 +44,7 @@ void usage() {
 	printf("\t-o, --output OUTPUT\n");
 	printf("\t\tRequired, output picture\n");
 	printf("\n");
-	print_version();
+	Minemap::print_version();
 }
 
 int main(int argc, char **argv) {
