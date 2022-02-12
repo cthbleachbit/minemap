@@ -6,8 +6,8 @@
 #define MINEMAP_LIBMINEMAP_H
 
 #include <optional>
-#include <nbtp/tags/BytesTag.h>
-#include <nbtp/tags/ListTag.h>
+#include <tags/BytesTag.h>
+#include <tags/ListTag.h>
 
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
