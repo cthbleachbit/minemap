@@ -11,4 +11,7 @@
 #define MISSING_IN_FILE  "No input file specified"
 #define MISSING_OUT_FILE "No output file specified"
 
+#define MAP_NOT_COMPOUND "The map data tag is not a compound but a {}. Is this a map nbt file?"
+#define COLORS_NOT_BYTES "Color data is not a byte array. Is this a map nbt file?"
+
 #endif //CONSTANTS_H

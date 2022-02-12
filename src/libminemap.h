@@ -47,6 +47,14 @@ namespace Minemap {
 	                   const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                   NBTP::BytesTag *colors_tag);
 
+	/**
+	 * Read list of bytes from a map object and return an array of RGBA
+	 * @param colors_tag
+	 * 	      ListTag payload containing colors
+	 * @param palette_lookup_table
+	 *        LUT constructed from the palette image
+	 * @return  array of RGBA for all 128x128 pixels
+	 */
 	std::unique_ptr<std::array<double, 16384 * 4>>
 	tag_to_pixelstore(const NBTP::ListTag::List &colors_tag,
 	                  const std::shared_ptr<ColorMap> &palette_lookup_table);

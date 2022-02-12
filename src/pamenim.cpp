@@ -110,21 +110,30 @@ int main(int argc, char **argv) {
 	}
 
 	if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
-		throw std::invalid_argument(ROOT_NOT_COMPOUND);
+		std::cout << MISSING_GAME_VER << std::endl;
+		usage();
+		exit(1);
 	}
 	NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root_tag.get())->getPayload()["data"].get();
 	if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
-		throw std::invalid_argument("Map data is not a compound. Is this a map nbt file?");
+		std::cout << fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[data_tag->typeCode()]) << std::endl;
+		exit(1);
 	}
 	NBTP::Tag *bytes_tag = ((NBTP::CompoundTag *) data_tag)->getPayload()["colors"].get();
 	if (bytes_tag->typeCode() != NBTP::TagType::BYTES) {
-		throw std::invalid_argument("Color data is not a byte array. Is this a map nbt file?");
+		std::cout << COLORS_NOT_BYTES << std::endl;
+		exit(1);
 	}
 	NBTP::ListTag::List colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
 
 	// Convert
 	std::unique_ptr<std::array<double, 16384 * 4>> pixelStore = nullptr;
-	pixelStore = Minemap::tag_to_pixelstore(colors_list, palette_lookup_table);
+	try {
+		pixelStore = Minemap::tag_to_pixelstore(colors_list, palette_lookup_table);
+	} catch (const std::runtime_error &e) {
+		std::cerr << e.what() << std::endl;
+		exit(1);
+	}
 
 	Magick::Image output_img(128, 128, "RGBA", DOUBLEPIXEL, pixelStore->data());
 	output_img.write(output_path);
