@@ -21,14 +21,14 @@ namespace Minemap {
 	                          const Magick::Image &mapped_img,
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                          NBTP::BytesTag *colors_tag) {
-		const Magick::Quantum *quantum = input_img.getConstPixels(0, 0, input_img.columns(), input_img.rows());
+		bool hasAlpha = input_img.alpha();
 		size_t width = input_img.columns();
 		size_t height = input_img.rows();
 		for (size_t i = 0; i < width * height; i++) {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
 			Magick::ColorRGB output_pix = mapped_img.pixelColor(col, row);
-			bool is_transparent = (quantum[4 * i + 3] == 0.0f);
+			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).quantumAlpha() == 0.0f);
 			std::optional<MapColorCode> colorCode;
 			if (is_transparent) {
 				colorCode = 0;
