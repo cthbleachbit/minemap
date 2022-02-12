@@ -11,7 +11,6 @@
 #include <filesystem>
 #include <optional>
 #include <libnbtp.h>
-#include "common.h"
 #include "constants.h"
 
 #ifndef MINEMAP_PALETTE_DIR

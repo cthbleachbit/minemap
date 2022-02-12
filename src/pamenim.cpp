@@ -9,7 +9,6 @@
 #include <cstring>
 
 #include "libminemap.h"
-#include "common.h"
 #include "ColorMap.h"
 #include "VersionSpec.h"
 #include "constants.h"

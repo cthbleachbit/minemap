@@ -4,7 +4,6 @@ add_library(libminemap SHARED
         Map.cpp
         VersionSpec.cpp
         libminemap.cpp
-        common.h
         constants.h
         GZStream.h
         VersionSpec.h

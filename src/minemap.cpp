@@ -12,7 +12,6 @@
 #include <inttypes.h>
 
 #include "libminemap.h"
-#include "common.h"
 #include "Map.h"
 #include "VersionSpec.h"
 #include "ColorMap.h"
