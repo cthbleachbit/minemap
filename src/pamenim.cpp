@@ -120,26 +120,13 @@ int main(int argc, char **argv) {
 	if (bytes_tag->typeCode() != NBTP::TagType::BYTES) {
 		throw std::invalid_argument("Color data is not a byte array. Is this a map nbt file?");
 	}
-	auto colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
+	NBTP::ListTag::List colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
 
-	// We only care about the first 128*128 bytes
-	double pixelStore[16384 * 4];
-	for (int i = 0; i < 16384; i++) {
-		MapColorCode colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
-		auto rgb = palette_lookup_table->lookup(colorIndex);
+	// Convert
+	std::unique_ptr<std::array<double, 16384 * 4>> pixelStore = nullptr;
+	pixelStore = Minemap::tag_to_pixelstore(colors_list, palette_lookup_table);
 
-		if (!rgb.has_value()) {
-			std::cerr << "Is this a map nbt file? Color code is out of range: " << (uint16_t) colorIndex << std::endl;
-			exit(1);
-		}
-
-		pixelStore[i * 4] = rgb->r;
-		pixelStore[i * 4 + 1] = rgb->g;
-		pixelStore[i * 4 + 2] = rgb->b;
-		pixelStore[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
-	}
-
-	Magick::Image output_img(128, 128, "RGBA", DOUBLEPIXEL, pixelStore);
+	Magick::Image output_img(128, 128, "RGBA", DOUBLEPIXEL, pixelStore->data());
 	output_img.write(output_path);
 
 	return 0;

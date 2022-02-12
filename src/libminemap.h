@@ -6,6 +6,8 @@
 #define MINEMAP_LIBMINEMAP_H
 
 #include <optional>
+#include <nbtp/tags/BytesTag.h>
+#include <nbtp/tags/ListTag.h>
 
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
@@ -21,9 +23,6 @@
 
 namespace Magick {
 	class Image;
-}
-namespace NBTP {
-	class BytesTag;
 }
 
 namespace Minemap {
@@ -43,9 +42,14 @@ namespace Minemap {
 	 *        NBTP::BytesTag to store the mapped pixels
 	 * @return
 	 */
-	void mapped_to_tag(const Magick::Image &input_img, const Magick::Image &mapped_img,
-	                         const std::shared_ptr<ColorMap> &palette_lookup_table,
-	                         NBTP::BytesTag *colors_tag);
+	void mapped_to_tag(const Magick::Image &input_img,
+	                   const Magick::Image &mapped_img,
+	                   const std::shared_ptr<ColorMap> &palette_lookup_table,
+	                   NBTP::BytesTag *colors_tag);
+
+	std::unique_ptr<std::array<double, 16384 * 4>>
+	tag_to_pixelstore(const NBTP::ListTag::List &colors_tag,
+	                  const std::shared_ptr<ColorMap> &palette_lookup_table);
 }
 
 #endif //MINEMAP_LIBMINEMAP_H
