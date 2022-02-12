@@ -12,7 +12,8 @@ namespace Minemap {
 		printf("Application version %s\n", MINEMAP_APP_VER);
 	}
 
-	int mapped_to_tag(const Magick::Image &input_img, const Magick::Image &mapped_img,
+	__MINEMAP_CLONE__
+	void _clone_mapped_to_tag(const Magick::Image &input_img, const Magick::Image &mapped_img,
 	                  const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                  NBTP::BytesTag *colors_tag) {
 		const Magick::Quantum *quantum = input_img.getConstPixels(0, 0, input_img.columns(), input_img.rows());
@@ -35,6 +36,11 @@ namespace Minemap {
 			}
 			colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
 		}
-		return 0;
+	}
+
+	void mapped_to_tag(const Magick::Image &input_img, const Magick::Image &mapped_img,
+	                  const std::shared_ptr<ColorMap> &palette_lookup_table,
+	                  NBTP::BytesTag *colors_tag) {
+		_clone_mapped_to_tag(input_img, mapped_img, palette_lookup_table, colors_tag);
 	}
 }
