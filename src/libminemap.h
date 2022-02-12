@@ -7,9 +7,6 @@
 
 #include <optional>
 
-#include "Map.h"
-#include "ColorMap.h"
-
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
 # define __MINEMAP_CLONE__ __attribute((target_clones("default", "sse2", "sse3", "sse4.1", "sse4.2", "popcnt", "avx", "avx2")))
@@ -22,7 +19,16 @@
 #define __MINEMAP_CLONE__
 #endif
 
+namespace Magick {
+	class Image;
+}
+namespace NBTP {
+	class BytesTag;
+}
+
 namespace Minemap {
+	class ColorMap;
+
 	void print_version() noexcept;
 
 	/**

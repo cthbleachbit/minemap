@@ -2,14 +2,18 @@
 // Created by cth451 on 2021/9/15.
 //
 
+#include <fmt/format.h>
+#include <iostream>
+#include <Magick++.h>
+#include <memory>
 #include "libminemap.h"
+#include "Map.h"
+#include "ColorMap.h"
 
 namespace Minemap {
 	void print_version() noexcept {
-#if defined(_MSC_VER)
-		printf("Executable built at %s %s\n", __DATE__, __TIME__);
-#endif
-		printf("Application version %s\n", MINEMAP_APP_VER);
+		std::string version_string = fmt::format("Application version {}\n", MINEMAP_APP_VER);
+		std::cout << version_string << std::endl;
 	}
 
 	__MINEMAP_CLONE__
