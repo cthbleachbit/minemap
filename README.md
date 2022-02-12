@@ -2,7 +2,7 @@
 
 Command line utilities for manipulating Minecraft Map item so that we can have this in Minecraft:
 
-![Screenshot](Screenshot.png)
+![Screenshot](Screenshot.jpg)
 
 This repository contains two command line utilities, "minemap" to convert images to map items, the other "pamenim" to do the reverse. Run the utilities themselves with no arguments to view usage information and supported minecraft versions.
 
