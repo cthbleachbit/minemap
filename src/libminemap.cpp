@@ -21,14 +21,22 @@ namespace Minemap {
 	                          const Magick::Image &mapped_img,
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                          NBTP::BytesTag *colors_tag) {
+#ifndef USE_GM
 		bool hasAlpha = input_img.alpha();
+#endif
 		size_t width = input_img.columns();
 		size_t height = input_img.rows();
 		for (size_t i = 0; i < width * height; i++) {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
 			Magick::ColorRGB output_pix = mapped_img.pixelColor(col, row);
+#ifdef USE_GM
+			// WTF? Alpha in GM is exactly opposite - alpha = 65535 <=> transparent
+			bool is_transparent = (input_img.pixelColor(col, row).alphaQuantum() != 0);
+#else
+			// alpha = 0 <=> transparent
 			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).quantumAlpha() == 0.0f);
+#endif
 			std::optional<MapColorCode> colorCode;
 			if (is_transparent) {
 				colorCode = 0;
