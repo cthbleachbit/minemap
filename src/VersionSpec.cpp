@@ -10,7 +10,7 @@
 #ifdef WIN32
 #include <libloaderapi.h>
 #include <windows.h>
-#include <WinError.h>cd
+#include <WinError.h>
 #else
 #include <locale>
 #include <codecvt>
