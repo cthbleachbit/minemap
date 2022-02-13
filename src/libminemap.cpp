@@ -77,7 +77,11 @@ namespace Minemap {
 			pixel_array[i * 4] = rgb->r;
 			pixel_array[i * 4 + 1] = rgb->g;
 			pixel_array[i * 4 + 2] = rgb->b;
+#ifdef USE_GM
+			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 65535.0;
+#else
 			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
+#endif
 		}
 		return pixel_store;
 	}
