@@ -17,7 +17,7 @@ option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" OFF)
 
 find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
-find_package(fmt REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 
 if (USE_GRAPHICSMAGICK)
     if (VCPKG_TARGET_TRIPLET)
