@@ -20,12 +20,6 @@
 #include <stdlib.h>
 #endif
 
-#ifdef USE_GM
-#define DOUBLEPIXEL Magick::DoublePixel
-#else
-#define DOUBLEPIXEL MagickCore::DoublePixel
-#endif
-
 void usage() {
 	printf("pamenim <options>\n");
 	printf("\t-i, --input INPUT\n");
@@ -134,7 +128,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	Magick::Image output_img(128, 128, "RGBA", DOUBLEPIXEL, pixelStore->data());
+	Magick::Image output_img(128, 128, "RGBA", Magick::DoublePixel, pixelStore->data());
 	output_img.write(output_path);
 
 	return 0;
