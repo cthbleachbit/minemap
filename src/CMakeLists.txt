@@ -8,6 +8,8 @@ add_library(libminemap SHARED
         GZStream.h
         VersionSpec.h
         libminemap.h)
+add_dependencies(libminemap gen_h_palettes)
+target_include_directories(libminemap PRIVATE "${MINEMAP_COLORMAP_INCLUDES}")
 set_target_properties(libminemap PROPERTIES OUTPUT_NAME minemap)
 set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
 if (WIN32)

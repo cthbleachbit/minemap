@@ -64,8 +64,8 @@ else ()
     include_directories(INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/nbtp/include)
 endif ()
 
-# Source files
-add_subdirectory(src)
-
 # Resources
 add_subdirectory(misc)
+
+# Source files
+add_subdirectory(src)

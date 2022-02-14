@@ -55,9 +55,7 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
 	printf("\t\tSelect from the following values: \n");
-	for (const auto &itr: Minemap::SUPPORTED_VERSIONS) {
-		printf("\t\t\t%8s for game version %s\n", itr.name, itr.versionRange);
-	}
+	Minemap::prettyPrintSupportedVersions();
 	printf("\t\tPalette directory: " MINEMAP_PALETTE_DIR "\n");
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-v, --verbose\n");
@@ -126,8 +124,6 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	palette_path = absolute(verSpecToPalettePath(mc_ver)).string();
-
 	// Create Template Map Payload
 	struct Map::MapGeometry geometry;
 	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
@@ -143,7 +139,7 @@ int main(int argc, char **argv) {
 		Magick::Image input_img;
 		Magick::Image output_img;
 		try {
-			palette_img.read(palette_path);
+			palette_img = verspec_to_image(verSpecToPaletteData(mc_ver));
 		}
 		catch (Magick::Exception &e) {
 			std::cerr << e.what() << std::endl;

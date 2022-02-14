@@ -9,6 +9,11 @@
 #include <tags/BytesTag.h>
 #include <tags/ListTag.h>
 
+#include <Magick++.h>
+
+#include "Magick++/Include.h"
+#include "VersionSpec.h"
+
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
 # define __MINEMAP_CLONE__ __attribute((target_clones("default", "sse2", "sse3", "sse4.1", "sse4.2", "popcnt", "avx", "avx2")))
@@ -58,6 +63,12 @@ namespace Minemap {
 	std::unique_ptr<std::array<double, 16384 * 4>>
 	tag_to_pixelstore(const NBTP::ListTag::List &colors_tag,
 	                  const std::shared_ptr<ColorMap> &palette_lookup_table);
+
+	const inline Magick::Image verspec_to_image(const VersionSpec version) {
+		auto data = version.paletteData;
+		Magick::Image image(4, version.paletteHeight, "RGBA", Magick::StorageType::CharPixel, data);
+		return image;
+	}
 }
 
 #endif //MINEMAP_LIBMINEMAP_H

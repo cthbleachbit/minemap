@@ -4,14 +4,15 @@
 
 #include "../ColorMap.h"
 #include "../VersionSpec.h"
+#include "libminemap.h"
 
 #include <algorithm>
 #include <cstdio>
 
 void test_colormap() {
 	Magick::Image palette_img;
-	auto palette_path = Minemap::verSpecToPalettePath(Minemap::Version::MC_1_16);
-	palette_img.read(palette_path);
+	auto palette_data = Minemap::verSpecToPaletteData(Minemap::Version::MC_1_16);
+	palette_img = Minemap::verspec_to_image(palette_data);
 	auto palette_lookup_table = Minemap::loadColorMapFromPalette(palette_img);
 	// Make sure every color is retrievable
 	uint8_t size = palette_lookup_table->size();

@@ -29,9 +29,7 @@ void usage() {
 	printf("\t-g, --game VER\n");
 	printf("\t\tRequired, Minecraft game version this map is exported from\n");
 	printf("\t\tSelect from the following values: \n");
-	for (const auto &itr: Minemap::SUPPORTED_VERSIONS) {
-		printf("\t\t\t%8s for game version %s\n", itr.name, itr.versionRange);
-	}
+	Minemap::prettyPrintSupportedVersions();
 	printf("\t\tPalette directory: " MINEMAP_PALETTE_DIR "\n");
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-o, --output OUTPUT\n");
@@ -84,9 +82,7 @@ int main(int argc, char **argv) {
 
 	// Start by getting bimap for color mapping
 	Magick::InitializeMagick(*argv);
-	palette_path = absolute(verSpecToPalettePath(mc_ver)).string();
-	std::cout << "Using palette GIF " << palette_path << std::endl;
-	auto palette_lookup_table = loadColorMapFromPalette(Magick::Image(palette_path));
+	auto palette_lookup_table = loadColorMapFromPalette(verspec_to_image(verSpecToPaletteData(mc_ver)));
 
 	// Get input color array ready
 	std::shared_ptr<NBTP::Tag> root_tag;

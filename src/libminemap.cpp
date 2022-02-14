@@ -4,7 +4,6 @@
 
 #include <fmt/format.h>
 #include <iostream>
-#include <Magick++.h>
 #include <memory>
 #include "libminemap.h"
 #include "Map.h"

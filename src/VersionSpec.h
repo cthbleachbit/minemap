@@ -18,11 +18,12 @@
 #endif
 
 // Quick hand for defining a version spec
-#define DEFINE_VERSION_SPEC(ver_start, ver_end, dv) \
+#define DEFINE_VERSION_SPEC(ver_start, ver_end, ident, dv) \
 VersionSpec{ \
     (ver_start), \
     "[" ver_start ", " ver_end ")", \
-    "rgba-" ver_start ".gif", \
+    ident ## _DATA, \
+	ident ## _HEIGHT, \
     (dv) \
 }
 
@@ -43,18 +44,15 @@ namespace Minemap {
 		const char name[5] = "NONE";
 		// Human-readable range of game version this VersionSpec can be used in
 		const char versionRange[20] = "NONE";
-		// Palette file name
-		const char palettePath[20] = "Invalid";
+		// Palette data (flat array, generated)
+		const uint8_t *paletteData = {};
+		// Palette height (in pixels, generated)
+		const size_t paletteHeight = 0;
 		// Corresponding data version tag of this version
 		const std::optional<NBTP::IntTag::V> dataVersion = std::nullopt;
 	};
 
-	constexpr std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
-			DEFINE_VERSION_SPEC("1.8", "1.12", std::nullopt), // 1.8.1-pre1
-			DEFINE_VERSION_SPEC("1.12", "1.16", 1128), // 1.12-17w17a
-			DEFINE_VERSION_SPEC("1.16", "1.17", 2562), // 1.16-pre-6
-			DEFINE_VERSION_SPEC("1.17", "+oo", 2699), // 21w10a and 1.17
-	};
+	extern const std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS;
 
 	/**
 	 * Match a version from human readable string
@@ -68,9 +66,18 @@ namespace Minemap {
 	 * The directory where the palette GIFs reside is defined in MINEMAP_PALETTE_DIR
 	 * @param ver version number
 	 * @throws std::runtime_error(INVALID_GAME_VER) if version is invalid
-	 * @return absolute path to the palette file
+	 * @return a VersionSpec structure containing palette data
 	 */
-	std::filesystem::path verSpecToPalettePath(Version ver);
+	const VersionSpec verSpecToPaletteData(Version ver);
+
+	/**
+	 * Pretty print all supported Minecraft versions of this program to stdout.
+	*/
+	inline constexpr void prettyPrintSupportedVersions() {
+		for (const VersionSpec &ver : SUPPORTED_VERSIONS) {
+			printf("\t\t\t%8s for game version %s\n", ver.name, ver.versionRange);
+		}
+	}
 
 	/**
 	 * Insert the data version tag depending on the game version this map is intended for
