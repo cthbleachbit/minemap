@@ -29,6 +29,7 @@ namespace Minemap {
 		SetLastError(NO_ERROR);
 		int ret = GetModuleFileName(nullptr, buf, 2048);
 		int error_code = GetLastError();
+		std::cerr << "Warning: Cannot determine executable location" << std::endl;
 		return (error_code != NO_ERROR) ? std::nullopt : std::make_optional(std::wstring(buf));
 #else
 		// Apparently this doesn't work on Mac OS but I don't give shet
