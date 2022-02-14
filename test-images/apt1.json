@@ -1,0 +1,5 @@
+{
+  "input_image": "apt1.png",
+  "output_nbt": "apt1.nbt",
+  "expect_color_codes": [0, 0, 0, 0]
+}
