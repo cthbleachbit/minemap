@@ -7,19 +7,7 @@
 
 #include "color_maps.gen.h"
 
-#include <fmt/core.h>
-#include <fmt/format.h>
-#include <iostream>
-
-#ifdef WIN32
-#include <libloaderapi.h>
-#include <windows.h>
-#include <WinError.h>
-#else
-#include <locale>
-#include <codecvt>
-#include <unistd.h>
-#endif
+#include <memory>
 
 namespace Minemap {
 
@@ -31,9 +19,9 @@ namespace Minemap {
 	};
 
 	/**
-	 * Returns absolute path to a valid palette
+	 * Fetch VersionSpec for external usage
 	 * @param ver   Version number
-	 * @return
+	 * @return corresponding VersionSpec structure, or throws error if the version is invalid
 	 */
 	const VersionSpec verSpecToPaletteData(Version ver) {
 		switch (ver) {

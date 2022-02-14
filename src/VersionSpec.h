@@ -6,16 +6,10 @@
 #define MINEMAP_VERSIONSPEC_H
 
 #include <string>
-#include <utility>
 #include <array>
-#include <filesystem>
 #include <optional>
 #include <libnbtp.h>
 #include "constants.h"
-
-#ifndef MINEMAP_PALETTE_DIR
-#define MINEMAP_PALETTE_DIR "/usr/share/minemap/palettes"
-#endif
 
 // Quick hand for defining a version spec
 #define DEFINE_VERSION_SPEC(ver_start, ver_end, ident, dv) \
@@ -62,11 +56,9 @@ namespace Minemap {
 	Version verSpecFromString(const std::string &verString) noexcept;
 
 	/**
-	 * Convert a version to an absolute palette path.
-	 * The directory where the palette GIFs reside is defined in MINEMAP_PALETTE_DIR
-	 * @param ver version number
-	 * @throws std::runtime_error(INVALID_GAME_VER) if version is invalid
-	 * @return a VersionSpec structure containing palette data
+	 * Fetch VersionSpec for external usage
+	 * @param ver   Version number
+	 * @return corresponding VersionSpec structure, or throws error if the version is invalid
 	 */
 	const VersionSpec verSpecToPaletteData(Version ver);
 
