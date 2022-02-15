@@ -30,7 +30,6 @@ void usage() {
 	printf("\t\tRequired, Minecraft game version this map is exported from\n");
 	printf("\t\tSelect from the following values: \n");
 	Minemap::prettyPrintSupportedVersions();
-	printf("\t\tPalette directory: " MINEMAP_PALETTE_DIR "\n");
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-o, --output OUTPUT\n");
 	printf("\t\tRequired, output picture\n");
@@ -42,7 +41,6 @@ int main(int argc, char **argv) {
 	// Argument parsing
 	using namespace Minemap;
 	Version mc_ver = Version::INVALID;
-	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
 	bool no_gz = false;

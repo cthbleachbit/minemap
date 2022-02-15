@@ -56,7 +56,6 @@ void usage() {
 	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
 	printf("\t\tSelect from the following values: \n");
 	Minemap::prettyPrintSupportedVersions();
-	printf("\t\tPalette directory: " MINEMAP_PALETTE_DIR "\n");
 	printf("\t\tOlder versions are not supported.\n");
 	printf("\t-v, --verbose\n");
 	printf("\t\tOptional, Turn on verbose output\n");
@@ -69,7 +68,6 @@ int main(int argc, char **argv) {
 
 	// Task properties
 	Version mc_ver = Version::INVALID;
-	std::string palette_path;
 	std::string input_path;
 	std::string output_path;
 	std::string export_path;
@@ -145,8 +143,6 @@ int main(int argc, char **argv) {
 			std::cerr << e.what() << std::endl;
 			return 1;
 		}
-
-		std::cout << "Using palette GIF " << palette_path << std::endl;
 
 		try {
 			input_img.read(input_path);
