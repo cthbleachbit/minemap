@@ -152,13 +152,16 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 
-		output_img = input_img;
-		output_img.modifyImage();
+		input_img.modifyImage();
 		// Scale input to width x width
 		Magick::Geometry resize_geometry;
+		resize_geometry.aspect(false);
 		resize_geometry.width(geometry.width);
 		resize_geometry.height(geometry.height);
-		output_img.sample(resize_geometry);
+		input_img.sample(resize_geometry);
+		// Apply dithering only to a copy of the input
+		output_img = input_img;
+		output_img.modifyImage();
 		// Execute remap
 #ifndef USE_GM
 		output_img.quantizeDitherMethod(dithering);
