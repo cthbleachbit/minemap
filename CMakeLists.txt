@@ -13,7 +13,7 @@ else ()
 endif ()
 
 add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
-option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" OFF)
+option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" ON)
 
 find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
