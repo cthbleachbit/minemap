@@ -9,7 +9,6 @@
 #include <string>
 #include <iostream>
 #include <Magick++.h>
-#include <inttypes.h>
 
 #include "libminemap.h"
 #include "Map.h"
@@ -22,16 +21,6 @@
 #if defined(_WIN32) || defined(_WIN64)
 #define WIN32_LEAN_AND_MEAN
 #include <stdlib.h>
-#endif
-
-#ifdef USE_GM
-namespace Magick {
-	enum DitherMethod {
-		NoDitherMethod,
-		RiemersmaDitherMethod,
-		FloydSteinbergDitherMethod
-	};
-};
 #endif
 
 int main(int argc, char **argv);
