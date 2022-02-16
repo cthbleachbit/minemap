@@ -1,8 +1,7 @@
 from typing import List
-from gen_color_map import read_color_map, parse_color_map
+from gen_color_map import read_color_map
 
 import sys
-import os
 
 
 def generate_color_book_header(prefix: str):
@@ -16,7 +15,7 @@ Columns: 4
 def generate_color_book_inner(data: List[int]) -> str:
     output = ''
     index = 0
-    for i in range(0, len(data), 4):
+    for i in range(16, len(data), 4):
         tuples = data[i:i+3]  # skip the 4th column
         formatted = ["{:>3}".format(str(j)) for j in tuples]
         output += f"{' '.join(formatted)} #{index}\n"
@@ -27,6 +26,7 @@ def generate_color_book_inner(data: List[int]) -> str:
 def main():
     if len(sys.argv) != 3:
         print(f"Usage: {sys.argv[0]} <INPUT> <OUTPUT_PREFIX>")
+        print(f"Note: Indices 0-3 are reserved for transparency and excluded from the palette")
         return
     input_file = sys.argv[1]
     output_prefix = sys.argv[2]
