@@ -57,8 +57,6 @@ void usage() {
 	printf("\t\tSelect from the following values: \n");
 	Minemap::prettyPrintSupportedVersions();
 	printf("\t\tOlder versions are not supported.\n");
-	printf("\t-v, --verbose\n");
-	printf("\t\tOptional, Turn on verbose output\n");
 	printf("\n");
 	Minemap::print_version();
 }
@@ -71,7 +69,6 @@ int main(int argc, char **argv) {
 	std::string input_path;
 	std::string output_path;
 	std::string export_path;
-	bool verbose = false;
 	bool no_gz = false;
 	Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
 
@@ -97,8 +94,6 @@ int main(int argc, char **argv) {
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			output_path = argv[i];
-		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--verbose") == 0) {
-			verbose = true;
 		} else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
 			i++;
 			export_path = argv[i];
