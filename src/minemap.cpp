@@ -75,17 +75,29 @@ int main(int argc, char **argv) {
 	while (i < argc) {
 		if (strcmp(argv[i], "-g") == 0 || strcmp(argv[i], "--game") == 0) {
 			i++;
+			if (i >= argc) {
+				break;
+			}
 			mc_ver = verSpecFromString(argv[i]);
 		} else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--input") == 0) {
 			i++;
+			if (i >= argc) {
+				break;
+			}
 			input_path = argv[i];
 		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			dithering = true;
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
+			if (i >= argc) {
+				break;
+			}
 			output_path = argv[i];
 		} else if (strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "--export") == 0) {
 			i++;
+			if (i >= argc) {
+				break;
+			}
 			export_path = argv[i];
 		} else if (strcmp(argv[i], "--no-gz") == 0) {
 			no_gz = true;
