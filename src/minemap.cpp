@@ -163,9 +163,6 @@ int main(int argc, char **argv) {
 		output_img = input_img;
 		output_img.modifyImage();
 		// Execute remap
-#ifndef USE_GM
-		output_img.quantizeDitherMethod(dithering);
-#endif
 		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
 		if (!export_path.empty()) {
 			output_img.write(export_path);
