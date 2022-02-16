@@ -40,10 +40,8 @@ void usage();
 
 void usage() {
 	printf("minemap <options>\n");
-	printf("\t-d, --dithering ALGORITHM\n");
-	printf("\t\tOptional, turn on dithering, available algorithms as follows\n");
-	printf("\t\t\triemersma\n");
-	printf("\t\t\tfloydsteinberg\n");
+	printf("\t-d, --dithering\n");
+	printf("\t\tOptional, turn on Floyd-Steinberg dithering\n");
 	printf("\t-i, --input INPUT\n");
 	printf("\t\tRequired, image input\n");
 	printf("\t--no-gz\n");
@@ -70,7 +68,7 @@ int main(int argc, char **argv) {
 	std::string output_path;
 	std::string export_path;
 	bool no_gz = false;
-	Magick::DitherMethod dithering = Magick::DitherMethod::NoDitherMethod;
+	bool dithering = false;
 
 	// Parse Parameters
 	int i = 1;
@@ -82,15 +80,7 @@ int main(int argc, char **argv) {
 			i++;
 			input_path = argv[i];
 		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
-			i++;
-			if (strcmp(argv[i], "riemersma") == 0) {
-				dithering = Magick::DitherMethod::RiemersmaDitherMethod;
-			} else if (strcmp(argv[i], "floydsteinberg") == 0) {
-				dithering = Magick::DitherMethod::FloydSteinbergDitherMethod;
-			} else {
-				std::cerr << "Unknown dithering method" << std::endl;
-				exit(1);
-			}
+			dithering = true;
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			output_path = argv[i];
@@ -158,7 +148,7 @@ int main(int argc, char **argv) {
 		output_img = input_img;
 		output_img.modifyImage();
 		// Execute remap
-		output_img.map(palette_img, dithering != Magick::DitherMethod::NoDitherMethod);
+		output_img.map(palette_img, dithering);
 		if (!export_path.empty()) {
 			output_img.write(export_path);
 		}
