@@ -13,5 +13,9 @@
 
 #define MAP_NOT_COMPOUND "The map data tag is not a compound but a {}. Is this a map nbt file?"
 #define COLORS_NOT_BYTES "Color data is not a byte array. Is this a map nbt file?"
+#define COLOR_MISMATCH "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
+#define COLOR_OUT_OF_RANGE "Color code {} at offset {} is out of range!"
+
+#define VERSION_MESSAGE "Application version " MINEMAP_APP_VER
 
 #endif //CONSTANTS_H

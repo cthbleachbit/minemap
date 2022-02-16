@@ -11,8 +11,7 @@
 
 namespace Minemap {
 	void print_version() noexcept {
-		std::string version_string = fmt::format("Application version {}\n", MINEMAP_APP_VER);
-		std::cout << version_string << std::endl;
+		std::cout << VERSION_MESSAGE << std::endl;
 	}
 
 	__MINEMAP_CLONE__
@@ -44,7 +43,7 @@ namespace Minemap {
 			} else {
 				colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
 				if (!colorCode.has_value()) {
-					std::string no_match = fmt::format("Error: No color match for pixel at ({}, {})", col, row);
+					std::string no_match = fmt::format(COLOR_MISMATCH, col, row);
 					throw std::runtime_error(no_match);
 				}
 			}
@@ -70,8 +69,7 @@ namespace Minemap {
 			auto rgb = palette_lookup_table->lookup(colorIndex);
 
 			if (!rgb.has_value()) {
-				std::string error_string = fmt::format("Color code {} at offset {} is out of range!",
-				                                       (uint16_t) colorIndex, i);
+				std::string error_string = fmt::format(COLOR_OUT_OF_RANGE, (uint16_t) colorIndex, i);
 				throw std::runtime_error(error_string);
 			}
 
