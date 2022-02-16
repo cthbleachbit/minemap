@@ -20,7 +20,9 @@ namespace Minemap {
 	                          const Magick::Image &mapped_img,
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                          NBTP::BytesTag *colors_tag) {
-#ifndef USE_GM
+#ifdef USE_GM
+		bool hasAlpha = input_img.matte();
+#else
 		bool hasAlpha = input_img.alpha();
 #endif
 		size_t width = input_img.columns();
@@ -30,8 +32,8 @@ namespace Minemap {
 			ssize_t row = i / height;
 			Magick::ColorRGB output_pix = mapped_img.pixelColor(col, row);
 #ifdef USE_GM
-			// WTF? Alpha in GM is exactly opposite - alpha = 65535 <=> transparent
-			bool is_transparent = (input_img.pixelColor(col, row).alphaQuantum() != 0);
+			// WTF? Alpha in GM is exactly opposite - alpha = 65535 under 16b <=> transparent
+			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).alphaQuantum() == MaxRGB);
 #else
 			// alpha = 0 <=> transparent
 			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).quantumAlpha() == 0.0f);
@@ -77,9 +79,9 @@ namespace Minemap {
 			pixel_array[i * 4 + 1] = rgb->g;
 			pixel_array[i * 4 + 2] = rgb->b;
 #ifdef USE_GM
-			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 65535.0;
+			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : MaxRGBDouble;
 #else
-			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 1;
+			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 1.0;
 #endif
 		}
 		return pixel_store;
