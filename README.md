@@ -8,7 +8,7 @@ This repository contains two command line utilities, "minemap" to convert images
 
 Building is handled by CMake. As of version 0.4.0, boost is no longer required neither at compile time nor run time. Please make sure you have the following dependencies:
 
-* Magick++ 7, part of Imagemagick, OR GraphicsMagick if you are building on Windows or a platform that doesn't have ImageMagick.
+* GraphicsMagick - preferred over ImageMagick due to a bug in IM's dithering routines
 * zlib, used to compress / decompress NBT data stream
 * nbtp, used to manipulate NBT data structure (as a git submodule or use existing library)
 
@@ -36,12 +36,7 @@ It's dangerous to go alone! Take these steps to compile your own copy on Windows
 4. Set environment variable in your MinGW64 prompt:
     - export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
     - export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
-5. Install the following dependencies with `./vcpkg.exe install <packages>`:
-    - `fmt`
-    - `zlib`
-    - `jbigkit`
-    - `graphicsmagick`
-6. Go to `/home/user/vcpkg/ports/graphicsmagick`, and apply this patch:
+5. Go to `ports/graphicsmagick`, and apply this patch:
 ```diff
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7e6be2992..9f0edcb00 100644
@@ -57,9 +52,11 @@ index 7e6be2992..9f0edcb00 100644
  
  if (MSVC)
 ```
-7. Back out and reinstall `graphicsmagick`:
-    - `./vcpkg.exe remove graphicsmagick`
-    - `./vcpkg.exe install graphicsmagick`
+6. Back out and install the following dependencies with `./vcpkg.exe install <packages>`:
+   - `fmt`
+   - `zlib`
+   - `jbigkit`
+   - `graphicsmagick`
 
 ##### Actual building
 
