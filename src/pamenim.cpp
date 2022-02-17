@@ -14,6 +14,7 @@
 #include "constants.h"
 
 #include "GZStream.h"
+#include "Map.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define WIN32_LEAN_AND_MEAN
@@ -105,22 +106,13 @@ int main(int argc, char **argv) {
 		root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
 	}
 
-	if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
-		std::cout << MISSING_GAME_VER << std::endl;
-		usage();
-		exit(1);
-	}
-	NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root_tag.get())->getPayload()["data"].get();
-	if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
-		std::cout << fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[data_tag->typeCode()]) << std::endl;
-		exit(1);
-	}
-	NBTP::Tag *bytes_tag = ((NBTP::CompoundTag *) data_tag)->getPayload()["colors"].get();
-	if (bytes_tag->typeCode() != NBTP::TagType::BYTES) {
-		std::cout << COLORS_NOT_BYTES << std::endl;
-		exit(1);
-	}
-	NBTP::ListTag::List colors_list = ((NBTP::BytesTag *) bytes_tag)->getPayload();
+	NBTP::ListTag::List colors_list;
+    try {
+        colors_list = Minemap::Map::getModifiableColors(root_tag)->getPayload();
+    } catch (const std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        exit(1);
+    }
 
 	// Convert
 	std::unique_ptr<std::array<double, 16384 * 4>> pixelStore = nullptr;

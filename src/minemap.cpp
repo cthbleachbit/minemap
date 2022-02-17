@@ -111,8 +111,13 @@ int main(int argc, char **argv) {
 	// Create Template Map Payload
 	struct Map::MapGeometry geometry;
 	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
-	NBTP::CompoundTag *data_tag = (NBTP::CompoundTag *) map_tag->getPayload()["data"].get();
-	NBTP::BytesTag *colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
+    NBTP::BytesTag *colors_tag;
+    try {
+        colors_tag = Minemap::Map::getModifiableColors(map_tag);
+    } catch (const std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        exit(1);
+    }
 
 	{
 		// Init Magick Core

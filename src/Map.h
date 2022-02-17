@@ -47,6 +47,13 @@ namespace Minemap {
 		 */
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver, const struct MapGeometry &geometry);
 
+        /**
+         * Obtain modifiable pointer to the colors array contained in a map
+         * @param root_ptr          pointer to a populated map tag
+         * @throw runtime_error     if the map is malformed or doesn't look like a map item
+         */
+        NBTP::BytesTag *getModifiableColors(std::shared_ptr<NBTP::Tag> root_ptr);
+
 		/**
 		 * Constructs a root tag according for specified version of minecraft with default geometry
 		 * @param ver          Minecraft version specification
