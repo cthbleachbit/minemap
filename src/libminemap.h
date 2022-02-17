@@ -25,6 +25,12 @@
 #define __MINEMAP_CLONE__
 #endif
 
+#define CREATE_ENUM(name) \
+    F_##name,
+
+#define CREATE_STRINGS(name) \
+    #name,
+
 namespace Magick {
 	class Image;
 }

@@ -9,7 +9,9 @@ add_library(libminemap SHARED
         constants.h
         GZStream.h
         VersionSpec.h
-        libminemap.h)
+        libminemap.h
+        Marker.cpp
+        Marker.h)
 add_dependencies(libminemap gen_h_palettes)
 target_include_directories(libminemap PRIVATE "${MINEMAP_COLORMAP_INCLUDES}")
 set_target_properties(libminemap PROPERTIES OUTPUT_NAME minemap)
