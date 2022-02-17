@@ -1,4 +1,6 @@
 # Common functionality
+set(PROGRAMS minemap pamenim minemarker)
+
 add_library(libminemap SHARED
         ColorMap.cpp
         Map.cpp
@@ -35,34 +37,19 @@ target_link_libraries(libminemap PUBLIC ${ImageMagick_LIBRARIES})
 target_compile_options(libminemap PUBLIC ${ImageMagick_CFLAGS})
 target_include_directories(libminemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
 
-###### Minemap main executable
-add_executable(minemap minemap.cpp)
-target_link_libraries(minemap PRIVATE libminemap)
-if (WIN32)
-    target_link_libraries(minemap PRIVATE fmt::fmt-header-only)
-endif()
-target_link_libraries(minemap PUBLIC ZLIB::ZLIB)
-target_include_directories(minemap PUBLIC ${ImageMagick_INCLUDE_DIRS})
-if(WIN32)
-    install(TARGETS minemap DESTINATION ${PORTABLE_INSTALL_DIR})
-else()
-    install(TARGETS minemap DESTINATION ${CMAKE_INSTALL_BINDIR})
-endif()
-
-###### Pamenim main executable
-if (BUILD_PAMENIM)
-    add_executable(pamenim pamenim.cpp)
-    target_link_libraries(pamenim PRIVATE libminemap)
+foreach(PROGRAM IN LISTS PROGRAMS)
+    add_executable(${PROGRAM} ${PROGRAM}.cpp)
+    target_link_libraries(${PROGRAM} PRIVATE libminemap)
     if (WIN32)
-        target_link_libraries(pamenim PRIVATE fmt::fmt-header-only)
+        target_link_libraries(${PROGRAM} PRIVATE fmt::fmt-header-only)
     endif()
-    target_link_libraries(pamenim PUBLIC ZLIB::ZLIB)
-    target_include_directories(pamenim PUBLIC ${ImageMagick_INCLUDE_DIRS})
+    target_link_libraries(${PROGRAM} PUBLIC ZLIB::ZLIB)
+    target_include_directories(${PROGRAM} PUBLIC ${ImageMagick_INCLUDE_DIRS})
     if(WIN32)
-        install(TARGETS pamenim DESTINATION ${PORTABLE_INSTALL_DIR})
+        install(TARGETS ${PROGRAM} DESTINATION ${PORTABLE_INSTALL_DIR})
     else()
-        install(TARGETS pamenim DESTINATION ${CMAKE_INSTALL_BINDIR})
+        install(TARGETS ${PROGRAM} DESTINATION ${CMAKE_INSTALL_BINDIR})
     endif()
-endif ()
+endforeach()
 
 add_subdirectory(tests)

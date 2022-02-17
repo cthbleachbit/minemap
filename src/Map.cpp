@@ -123,5 +123,28 @@ namespace Minemap {
             }
             return (NBTP::BytesTag *) bytes_tag;
         }
+
+        NBTP::ListTag *getModifiableBanners(std::shared_ptr<NBTP::Tag> root_ptr) {
+            NBTP::Tag *root = root_ptr.get();
+            if (root->typeCode() != NBTP::TagType::COMPOUND) {
+                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root->typeCode()]));
+            }
+            NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root)->getPayload()["data"].get();
+            if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
+                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_ptr->typeCode()]));
+            }
+            NBTP::Tag *banners_tag = ((NBTP::CompoundTag *) data_tag)->lookup("banners").get();
+            if (banners_tag == nullptr) {
+                throw std::runtime_error(BANNERS_MISSING);
+            }
+            if (banners_tag->typeCode() != NBTP::TagType::LIST) {
+                throw std::runtime_error(BANNERS_MALFORM);
+            }
+            NBTP::ListTag *banners_list = (ListTag*) banners_tag;
+            if (banners_list->size() != 0 && banners_list->getContentType() == COMPOUND) {
+                throw std::runtime_error(BANNERS_MALFORM);
+            }
+            return (NBTP::BytesTag *) banners_list;
+        }
     }
 }

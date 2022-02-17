@@ -54,6 +54,13 @@ namespace Minemap {
          */
         NBTP::BytesTag *getModifiableColors(std::shared_ptr<NBTP::Tag> root_ptr);
 
+        /**
+         * Obtain modifiable pointer to the banners array contained in a map (1.16+ only)
+         * @param root_ptr          pointer to a populated map tag
+         * @throw runtime_error     if the tag doesn't look like a map item or doesn't have banners tag
+         */
+        NBTP::ListTag *getModifiableBanners(std::shared_ptr<NBTP::Tag> root_ptr);
+
 		/**
 		 * Constructs a root tag according for specified version of minecraft with default geometry
 		 * @param ver          Minecraft version specification
