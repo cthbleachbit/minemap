@@ -31,7 +31,7 @@ namespace Minemap {
     c(red)        \
     c(black)
 
-	constexpr const char* bannerColors[] {
+	constexpr const char *bannerColors[]{
 			BANNERCOLOR(CREATE_STRINGS)
 	};
 	static_assert(sizeof(bannerColors) / sizeof(bannerColors[0]) == 16);
@@ -42,15 +42,48 @@ namespace Minemap {
 	 * @return       true if color is valid
 	 */
 	inline bool validateBannerColor(const std::string &color) {
-		return std::any_of(bannerColors, bannerColors + 16, [color](const char* i){return color == i;});
+		return std::any_of(bannerColors, bannerColors + 16, [color](const char *i) { return color == i; });
 	}
 
 	struct MarkerPosition {
+		// Marker position relative to (xOffset, 0, zOffset)
 		NBTP::IntTag::V x = 0;
 		NBTP::IntTag::V y = 64;
 		NBTP::IntTag::V z = 0;
+		// Map center coordinates - set to 0 to indicate absolute position
 		NBTP::IntTag::V xOffset = 0;
 		NBTP::IntTag::V zOffset = 0;
+
+		/**
+		 * Create a marker position object based
+		 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
+		 * @param xOffset    xOffset from map
+		 * @param zOffset    yOffset from map
+		 */
+		MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset);
+
+		/**
+		 * Compare two position (taking offset into account)
+		 * @param pos
+		 * @return
+		 */
+		std::partial_ordering operator<=>(const MarkerPosition &pos) const noexcept;
+
+		/**
+		 * Equivalence short hand
+		 * @param pos
+		 * @return
+		 */
+		bool operator==(const MarkerPosition &pos) const noexcept {
+			return std::is_eq(*this <=> pos);
+		}
+
+		/**
+		 * Inequivalence short hand
+		 * @param pos
+		 * @return
+		 */
+		bool operator!=(const MarkerPosition &pos) const noexcept = default;
 	};
 
 	struct Banner {
