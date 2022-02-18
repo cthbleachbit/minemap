@@ -69,20 +69,24 @@ int main(int argc, char **argv) {
 				output_path = argv[i];
 			} else if (strcmp(argv[i], "--no-gz") == 0) {
 				no_gz = true;
+			} else {
+				std::cerr << fmt::format(INVALID_ARGUMENT, argv[i]) << std::endl;
+				usage();
+				exit(1);
 			}
 			i++;
 		}
 
 		if (mc_ver == Version::INVALID) {
-			std::cout << MISSING_GAME_VER << std::endl;
+			std::cerr << MISSING_GAME_VER << std::endl;
 			usage();
 			exit(1);
 		} else if (input_path.empty()) {
-			std::cout << MISSING_IN_FILE << std::endl;
+			std::cerr << MISSING_IN_FILE << std::endl;
 			usage();
 			exit(1);
 		} else if (output_path.empty()) {
-			std::cout << MISSING_OUT_FILE << std::endl;
+			std::cerr << MISSING_OUT_FILE << std::endl;
 			usage();
 			exit(1);
 		}
