@@ -39,19 +39,14 @@ void test_colormap() {
 
 void test_pos_parser() {
 	Minemap::MarkerPosition pos1("abs:10:-20:30", 0, 0);
-	Minemap::MarkerPosition pos2("rel:21:-20:40", -10, -10);
-	if (pos1 == pos2) {
-		exit(10);
-	}
-	try {
-		Minemap::MarkerPosition fail_pos("bleh:f", 0, 0);
-	} catch (const std::invalid_argument &e) {
-		printf("%s\n", e.what());
-	}
+	Minemap::Banner banner{.position = pos1, .color = "red"};
+	auto tag = banner.toCompound();
+	tag->textOutput(std::cout, 0);
+	std::cout << fmt::format("{:a}", banner) << std::endl;
 }
 
 int main(int argc, char **argv) {
-	test_colormap();
+	// test_colormap();
 	test_pos_parser();
 	return 0;
 }

@@ -42,4 +42,24 @@ namespace Minemap {
 		}
 		return std::partial_ordering::unordered;
 	}
+
+	std::shared_ptr<NBTP::CompoundTag> MarkerPosition::toCompound() const noexcept {
+		auto tag = std::make_shared<NBTP::CompoundTag>();
+		auto &payload = tag->getPayload();
+		payload["X"] = std::make_shared<NBTP::IntTag>(this->x + this->xOffset);
+		payload["Y"] = std::make_shared<NBTP::IntTag>(this->y);
+		payload["Z"] = std::make_shared<NBTP::IntTag>(this->z + this->zOffset);
+		return tag;
+	}
+
+	std::shared_ptr<NBTP::CompoundTag> Banner::toCompound() const noexcept {
+		auto tag = std::make_shared<NBTP::CompoundTag>();
+		auto &payload = tag->getPayload();
+		if (this->name) {
+			payload["Name"] = std::make_shared<NBTP::StringTag>(*this->name);
+		}
+		payload["Color"] = std::make_shared<NBTP::StringTag>(this->color);
+		payload["Pos"] = this->position.toCompound();
+		return tag;
+	}
 }

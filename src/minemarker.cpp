@@ -44,6 +44,8 @@ void usage() {
 	printf("\t\tDelete all banner marker at absolute Y but XZ relative to map center\n");
 	printf("\tbanner rm idx:<index>\n");
 	printf("\t\tDelete banner at specified index\n");
+#if 0
+	// It seems that frame markers are not protected on a locked map
 	printf("Where frame operation may be one of\n");
 	printf("\tframe ls\n");
 	printf("\t\tPrint a numbered list of banners contained in the map\n");
@@ -57,6 +59,7 @@ void usage() {
 	printf("\t\tDelete all frame marker at absolute Y but XZ relative to map center\n");
 	printf("\tframe rm entity:<index>\n");
 	printf("\t\tDelete the frame marker with specific entity ID\n");
+#endif
 	printf("\t");
 	printf("\n");
 	Minemap::print_version();

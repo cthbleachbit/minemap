@@ -84,12 +84,25 @@ namespace Minemap {
 		 * @return
 		 */
 		bool operator!=(const MarkerPosition &pos) const noexcept = default;
+
+		/**
+		 * Generate a compound tag from this position
+		 * Note that this merges offset and create a tag with absolute offset
+		 * @return
+		 */
+		std::shared_ptr<NBTP::CompoundTag> toCompound() const noexcept;
 	};
 
 	struct Banner {
 		MarkerPosition position;
 		std::string color;
 		std::optional<std::string> name = std::nullopt;
+		/**
+		 * Generate a compound tag from this banner
+		 * Note that this merges offset and create a tag with absolute offset
+		 * @return
+		 */
+		std::shared_ptr<NBTP::CompoundTag> toCompound() const noexcept;
 	};
 
 	struct Frame {
@@ -98,5 +111,46 @@ namespace Minemap {
 		MarkerPosition position;
 	};
 }
+
+template<>
+struct fmt::formatter<Minemap::MarkerPosition> {
+	// presentation mode - a = absolute, r = relative
+	char presentation = 'a';
+
+	constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) {
+		auto it = ctx.begin(), end = ctx.end();
+		if (it != end && (*it == 'a' || *it == 'r')) presentation = *it++;
+		if (it != end && *it != '}') throw format_error("invalid format");
+		return it;
+	}
+
+	template<typename FormatContext>
+	auto format(const Minemap::MarkerPosition &p, FormatContext &ctx) -> decltype(ctx.out()) {
+		return presentation == 'a' ?
+		       format_to(ctx.out(), "abs:{}:{}:{}", p.x + p.xOffset, p.y, p.z + p.zOffset) :
+		       format_to(ctx.out(), "rel:{}:{}:{}", p.x, p.y, p.z);
+	}
+};
+
+template<>
+struct fmt::formatter<Minemap::Banner> {
+	// presentation mode - a = absolute, r = relative
+	char presentation = 'a';
+
+	constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) {
+		auto it = ctx.begin(), end = ctx.end();
+		if (it != end && (*it == 'a' || *it == 'r')) presentation = *it++;
+		if (it != end && *it != '}') throw format_error("invalid format");
+		return it;
+	}
+
+	template<typename FormatContext>
+	auto format(const Minemap::Banner &b, FormatContext &ctx) -> decltype(ctx.out()) {
+		std::string n = b.name.has_value() ? b.name.value() : "";
+		return presentation == 'a' ?
+		       format_to(ctx.out(), "{:a} {}:{}", b.position, b.color, n) :
+		       format_to(ctx.out(), "{:r} {}:{}", b.position, b.color, n);
+	}
+};
 
 #endif //MINEMAP_MARKER_H
