@@ -15,14 +15,22 @@
 #include <tags/CompoundTag.h>
 #include "libminemap.h"
 #include "GZStream.h"
+#include "Map.h"
+#include "Marker.h"
 
 void usage();
 
 int main(int argc, char **argv);
 
-void handleFrame(int argc, char **argv, std::shared_ptr<NBTP::Tag> root_ptr);
+bool handleFrame(int argc, char **argv,
+                 std::shared_ptr<NBTP::Tag> root_ptr,
+                 NBTP::IntTag::V xOffset,
+                 NBTP::IntTag::V zOffset);
 
-void handleBanner(int argc, char **argv, std::shared_ptr<NBTP::Tag> root_ptr);
+bool handleBanner(int argc, char **argv,
+                  std::shared_ptr<NBTP::Tag> root_ptr,
+                  NBTP::IntTag::V xOffset,
+                  NBTP::IntTag::V zOffset);
 
 void usage() {
 	printf("minemarkers <options> [operation]\n");
@@ -42,7 +50,7 @@ void usage() {
 	printf("\t\tDelete all banner marker at absolute XYZ coordinates\n");
 	printf("\tbanner rm rel:<x>:<y>:<z>\n");
 	printf("\t\tDelete all banner marker at absolute Y but XZ relative to map center\n");
-	printf("\tbanner rm idx:<index>\n");
+	printf("\tbanner rmidx <index>\n");
 	printf("\t\tDelete banner at specified index\n");
 #if 0
 	// It seems that frame markers are not protected on a locked map
@@ -83,7 +91,6 @@ namespace Minemap {
 int main(int argc, char **argv) {
 	using namespace Minemap;
 	std::string input_path;
-	MarkerOps ops = MarkerOps::INVALID;
 	MarkerType type = MarkerType::INVALID;
 
 	char **subargv = nullptr;
@@ -140,17 +147,53 @@ int main(int argc, char **argv) {
 		root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
 	}
 
+	NBTP::IntTag::V xOffset = 0;
+	NBTP::IntTag::V zOffset = 0;
+	{
+		if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
+			throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
+		}
+		NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root_tag.get())->getPayload()["data"].get();
+		if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
+			throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
+		}
+		auto data = (NBTP::CompoundTag *) data_tag;
+		auto xOffset_tag = data->lookup("xCenter");
+		auto zOffset_tag = data->lookup("zCenter");
+		if (xOffset_tag && xOffset_tag->typeCode() == NBTP::INT) {
+			xOffset = ((NBTP::IntTag *) xOffset_tag.get())->getPayload();
+		}
+		if (zOffset_tag && zOffset_tag->typeCode() == NBTP::INT) {
+			zOffset = ((NBTP::IntTag *) zOffset_tag.get())->getPayload();
+		}
+	}
+
+	bool changed;
+
 	switch (type) {
 		case MarkerType::FRAME:
-			handleFrame(subargc, subargv, root_tag);
+			changed = handleFrame(subargc, subargv, root_tag, xOffset, zOffset);
 			break;
 		case MarkerType::BANNER:
-			handleBanner(subargc, subargv, root_tag);
+			changed = handleBanner(subargc, subargv, root_tag, xOffset, zOffset);
 			break;
 		default:
 			std::cerr << MISSING_MARKER << std::endl;
 			usage();
 			exit(1);
+	}
+
+	if (changed) {
+		// Write out the map
+		std::unique_ptr<std::ostream> os;
+		if (no_gz) {
+			os = std::make_unique<std::ofstream>(input_path, std::ios::binary);
+		} else {
+			os = std::make_unique<Minemap::oGZStream>(input_path.c_str());
+		}
+
+		Map::saveMap(*os, *((NBTP::CompoundTag*) root_tag.get()));
+		os->flush();
 	}
 	return 0;
 }
@@ -161,8 +204,15 @@ int main(int argc, char **argv) {
  * @param argv
  * @param root_ptr
  */
-void handleFrame(int argc, char **argv, std::shared_ptr<NBTP::Tag> root_ptr) {
-	// TODO
+bool handleFrame(int argc, char **argv,
+                 std::shared_ptr<NBTP::Tag> root_ptr,
+                 NBTP::IntTag::V xOffset,
+                 NBTP::IntTag::V zOffset) {
+	// FIXME: Not implemented
+	// Frame markers are not protected even in locked maps. Manually added frame markers may disappear as chunks update
+	// themselves.
+	std::cout << "NOT IMPLEMENTED YET" << std::endl;
+	return false;
 }
 
 /**
@@ -170,7 +220,40 @@ void handleFrame(int argc, char **argv, std::shared_ptr<NBTP::Tag> root_ptr) {
  * @param argc
  * @param argv
  * @param root_ptr
+ * @return true if the map was modified
  */
-void handleBanner(int argc, char **argv, std::shared_ptr<NBTP::Tag> root_ptr) {
-	// TODO
+bool handleBanner(int argc, char **argv,
+                  std::shared_ptr<NBTP::Tag> root_ptr,
+                  NBTP::IntTag::V xOffset,
+                  NBTP::IntTag::V zOffset) {
+	auto banners_tag = Minemap::Map::getModifiableBanners(root_ptr);
+	auto &banners_list = banners_tag->getPayload();
+	if (argc < 2) {
+		std::cerr << MISSING_MARKER << std::endl;
+		return false;
+	}
+	if (strcmp("ls", argv[1]) == 0) { // argc = 2
+		for (auto itr = banners_list.cbegin(); itr < banners_list.cend(); itr++) {
+			Minemap::Banner banner(*itr);
+			std::cout << fmt::format("{:08}\t{}", itr - banners_list.cbegin(), banner) << std::endl;
+		}
+		return false;
+	} else if (strcmp("mk", argv[1]) == 0) { // argc = 4, argv[2] = pos, argv[3] = banner spec
+		if (argc < 4) {
+			std::cerr << MISSING_MARKER << std::endl;
+			return false;
+		}
+		Minemap::MarkerPosition position(argv[2], xOffset, zOffset);
+		Minemap::Banner banner(argv[3], position);
+		banners_list.push_back(banner.toCompound());
+		return true;
+	} else if (strcmp("rm", argv[1]) == 0) { // argc = 3, argv[2] = rel:x:y:z or abs:x:y:z
+		// TODO
+		return true;
+	} else if (strcmp("rmidx", argv[1]) == 0) { // argc = 3, argv[2] = index
+		// TODO
+		return true;
+	} else {
+		return false;
+	}
 }

@@ -138,12 +138,14 @@ namespace Minemap {
                 throw std::runtime_error(BANNERS_MISSING);
             }
             if (banners_tag->typeCode() != NBTP::TagType::LIST) {
-                throw std::runtime_error(BANNERS_MALFORM);
+                throw std::runtime_error(BANNERS_MALFORMED);
             }
             NBTP::ListTag *banners_list = (ListTag*) banners_tag;
-            if (banners_list->size() != 0 && banners_list->getContentType() == COMPOUND) {
-                throw std::runtime_error(BANNERS_MALFORM);
-            }
+            if (banners_list->size() != 0 && banners_list->getContentType() != COMPOUND) {
+                throw std::runtime_error(BANNERS_MALFORMED);
+            } else if (banners_list->size() == 0) {
+				banners_list->setContentType(COMPOUND);
+			}
             return (NBTP::BytesTag *) banners_list;
         }
     }

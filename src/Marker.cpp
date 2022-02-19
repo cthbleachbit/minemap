@@ -40,6 +40,30 @@ namespace Minemap {
 		}
 	}
 
+	/**
+	 * Create a marker position object from CompoundTag
+	 * @param position      compound tag containing three int tags X, Y and Z
+	 * @throw runtime_error if this tag does not represent a set of 3D coordinates
+	 */
+	MarkerPosition::MarkerPosition(const std::shared_ptr<NBTP::Tag>& _position) {
+		if (!_position || _position->typeCode() != NBTP::COMPOUND) {
+			throw std::runtime_error(POSITION_MALFORMED);
+		}
+		auto *position = (NBTP::CompoundTag *) _position.get();
+		auto xt = position->lookup("X");
+		auto yt = position->lookup("Y");
+		auto zt = position->lookup("Z");
+		if (xt == nullptr || yt == nullptr || zt == nullptr) {
+			throw std::runtime_error(POSITION_MALFORMED);
+		}
+		if (xt->typeCode() != NBTP::INT || yt->typeCode() != NBTP::INT || zt->typeCode() != NBTP::INT) {
+			throw std::runtime_error(POSITION_MALFORMED);
+		}
+		x = ((NBTP::IntTag*) xt.get())->getPayload();
+		y = ((NBTP::IntTag*) yt.get())->getPayload();
+		z = ((NBTP::IntTag*) zt.get())->getPayload();
+	}
+
 	std::partial_ordering MarkerPosition::operator<=>(const MarkerPosition &pos) const noexcept {
 		if (x + xOffset == pos.x + pos.xOffset && y == pos.y && z + zOffset == pos.z + pos.zOffset) {
 			return std::partial_ordering::equivalent;
@@ -67,22 +91,40 @@ namespace Minemap {
 		return tag;
 	}
 
-	Banner::Banner(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset) {
-		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), SPACE, -1}, last;
+	Banner::Banner(const std::string &spec, const MarkerPosition &position) : position(position) {
+		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), COLON, -1}, last;
 		std::vector<std::string> tokens{begin, last};
-		if (tokens.size() != 2) {
-			throw std::invalid_argument(INVALID_BANNER);
-		}
-		position = MarkerPosition(tokens[0], xOffset, zOffset);
-		std::sregex_token_iterator b_begin{tokens[1].cbegin(), tokens[1].cend(), COLON, -1}, b_last;
-		std::vector<std::string> b_tokens{b_begin, b_last};
-		if (b_tokens.size() == 1) {
-			this->color = b_tokens[0];
-		} else if (b_tokens.size() == 2) {
-			this->color = b_tokens[0];
-			this->name = b_tokens[1];
+		if (tokens.size() == 1) {
+			this->color = tokens[0];
+		} else if (tokens.size() == 2) {
+			this->color = tokens[0];
+			this->name = tokens[1];
 		} else {
 			throw std::invalid_argument(INVALID_BANNER);
+		}
+	}
+
+	Banner::Banner(const std::shared_ptr<NBTP::Tag> _banner) {
+		if (!_banner || _banner->typeCode() != NBTP::COMPOUND) {
+			throw std::runtime_error(BANNERS_MALFORMED);
+		}
+		auto *banner = (NBTP::CompoundTag *) _banner.get();
+		auto color_tag = banner->lookup("Color");
+		auto name_tag = banner->lookup("Name");
+		auto position_tag = banner->lookup("Pos");
+		if (color_tag == nullptr || position_tag == nullptr) {
+			throw std::runtime_error(BANNERS_MALFORMED);
+		}
+		if (color_tag->typeCode() != NBTP::STRING || position_tag->typeCode() != NBTP::COMPOUND) {
+			throw std::runtime_error(BANNERS_MALFORMED);
+		}
+		if (name_tag && name_tag->typeCode() != NBTP::STRING) {
+			throw std::runtime_error(BANNERS_MALFORMED);
+		}
+		color = ((NBTP::StringTag *) color_tag.get())->getPayload();
+		position = MarkerPosition(position_tag);
+		if (name_tag) {
+			name = ((NBTP::StringTag *) name_tag.get())->getPayload();
 		}
 	}
 }

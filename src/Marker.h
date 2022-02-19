@@ -66,9 +66,16 @@ namespace Minemap {
 		MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset = 0, NBTP::IntTag::V zOffset = 0);
 
 		/**
+		 * Create a marker position object from CompoundTag
+		 * @param position      compound tag containing three int tags X, Y and Z
+		 * @throw runtime_error if this tag does not represent a set of 3D coordinates
+		 */
+		explicit MarkerPosition(const std::shared_ptr<NBTP::Tag>& position);
+
+		/**
 		 * Compare two position (taking offset into account)
 		 * @param pos
-		 * @return
+		 * @return equivalent only if absolute position is equal
 		 */
 		std::partial_ordering operator<=>(const MarkerPosition &pos) const noexcept;
 
@@ -77,7 +84,7 @@ namespace Minemap {
 		 * @param pos
 		 * @return
 		 */
-		bool operator==(const MarkerPosition &pos) const noexcept {
+		bool inline operator==(const MarkerPosition &pos) const noexcept {
 			return std::is_eq(*this <=> pos);
 		}
 
@@ -86,7 +93,7 @@ namespace Minemap {
 		 * @param pos
 		 * @return
 		 */
-		bool operator!=(const MarkerPosition &pos) const noexcept = default;
+		bool inline operator!=(const MarkerPosition &pos) const noexcept = default;
 
 		/**
 		 * Generate a compound tag from this position
@@ -101,10 +108,23 @@ namespace Minemap {
 		std::string color;
 		std::optional<std::string> name = std::nullopt;
 
+		/**
+		 * Create a banner directly with values
+		 * @param position
+		 * @param color
+		 * @param name
+		 */
 		Banner(const MarkerPosition position,
 		       const std::string &color,
 		       std::optional<std::string> name = std::nullopt)
 		noexcept: position(position), color(color), name(std::move(name)) {};
+
+		/**
+		 * Create a banner object from CompoundTag
+		 * @param _banner      compound tag containing three int tags X, Y and Z
+		 * @throw runtime_error if this tag does not represent a banner
+		 */
+		explicit Banner(const std::shared_ptr<NBTP::Tag> _banner);
 
 		/**
 		 * Generate a compound tag from this banner
@@ -114,12 +134,11 @@ namespace Minemap {
 		std::shared_ptr<NBTP::CompoundTag> toCompound() const noexcept;
 
 		/**
-		 * Create a banner from "<position>
-		 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
-		 * @param xOffset    xOffset from map
-		 * @param zOffset    yOffset from map
+		 * Create a banner from spec
+		 * @param spec       "color:name"
+		 * @param position   position information
 		 */
-		Banner(const std::string &spec, NBTP::IntTag::V xOffset = 0, NBTP::IntTag::V zOffset = 0);
+		Banner(const std::string &spec, const MarkerPosition &position);
 	};
 
 	struct Frame {
