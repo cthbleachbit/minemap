@@ -14,6 +14,7 @@
 
 #define INVALID_ARGUMENT "Invalid argument passed: {}"
 #define INVALID_POSITION "Invalid position string"
+#define INVALID_BANNER "Invalid banner specifier"
 #define POSITION_OUT_OF_RANGE "Coordinates out of range"
 
 #define MAP_NOT_COMPOUND "The map data tag is not a compound but a {}. Is this a map nbt file?"

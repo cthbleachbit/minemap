@@ -54,13 +54,16 @@ namespace Minemap {
 		NBTP::IntTag::V xOffset = 0;
 		NBTP::IntTag::V zOffset = 0;
 
+		MarkerPosition(NBTP::IntTag::V x, NBTP::IntTag::V y, NBTP::IntTag::V z, NBTP::IntTag::V xOffset,
+		               NBTP::IntTag::V zOffset) noexcept: x(x), y(y), z(z), xOffset(xOffset), zOffset(zOffset) {};
+
 		/**
 		 * Create a marker position object based
 		 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
 		 * @param xOffset    xOffset from map
 		 * @param zOffset    yOffset from map
 		 */
-		MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset);
+		MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset = 0, NBTP::IntTag::V zOffset = 0);
 
 		/**
 		 * Compare two position (taking offset into account)
@@ -94,15 +97,29 @@ namespace Minemap {
 	};
 
 	struct Banner {
-		MarkerPosition position;
+		MarkerPosition position{0, 0, 0, 0, 0};
 		std::string color;
 		std::optional<std::string> name = std::nullopt;
+
+		Banner(const MarkerPosition position,
+		       const std::string &color,
+		       std::optional<std::string> name = std::nullopt)
+		noexcept: position(position), color(color), name(std::move(name)) {};
+
 		/**
 		 * Generate a compound tag from this banner
 		 * Note that this merges offset and create a tag with absolute offset
 		 * @return
 		 */
 		std::shared_ptr<NBTP::CompoundTag> toCompound() const noexcept;
+
+		/**
+		 * Create a banner from "<position>
+		 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
+		 * @param xOffset    xOffset from map
+		 * @param zOffset    yOffset from map
+		 */
+		Banner(const std::string &spec, NBTP::IntTag::V xOffset = 0, NBTP::IntTag::V zOffset = 0);
 	};
 
 	struct Frame {

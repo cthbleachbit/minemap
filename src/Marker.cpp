@@ -6,6 +6,10 @@
 #include "Marker.h"
 
 namespace Minemap {
+
+	static const std::regex COLON(":");
+	static const std::regex SPACE(" +");
+
 	/**
 	 * Create a marker position object based
 	 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
@@ -13,8 +17,8 @@ namespace Minemap {
 	 * @param zOffset    yOffset from map
 	 */
 	MarkerPosition::MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset) {
-		static const std::regex re(":");
-		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), re, -1}, last;
+
+		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), COLON, -1}, last;
 		std::vector<std::string> tokens{begin, last};
 		if (tokens.size() != 4) {
 			throw std::invalid_argument(INVALID_POSITION);
@@ -61,5 +65,24 @@ namespace Minemap {
 		payload["Color"] = std::make_shared<NBTP::StringTag>(this->color);
 		payload["Pos"] = this->position.toCompound();
 		return tag;
+	}
+
+	Banner::Banner(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset) {
+		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), SPACE, -1}, last;
+		std::vector<std::string> tokens{begin, last};
+		if (tokens.size() != 2) {
+			throw std::invalid_argument(INVALID_BANNER);
+		}
+		position = MarkerPosition(tokens[0], xOffset, zOffset);
+		std::sregex_token_iterator b_begin{tokens[1].cbegin(), tokens[1].cend(), COLON, -1}, b_last;
+		std::vector<std::string> b_tokens{b_begin, b_last};
+		if (b_tokens.size() == 1) {
+			this->color = b_tokens[0];
+		} else if (b_tokens.size() == 2) {
+			this->color = b_tokens[0];
+			this->name = b_tokens[1];
+		} else {
+			throw std::invalid_argument(INVALID_BANNER);
+		}
 	}
 }

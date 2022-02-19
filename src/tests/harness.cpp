@@ -39,7 +39,8 @@ void test_colormap() {
 
 void test_pos_parser() {
 	Minemap::MarkerPosition pos1("abs:10:-20:30", 0, 0);
-	Minemap::Banner banner{.position = pos1, .color = "red"};
+	Minemap::Banner banner(pos1, "red");
+	banner = Minemap::Banner("abs:10:-30:50 purple:bleh");
 	auto tag = banner.toCompound();
 	tag->textOutput(std::cout, 0);
 	std::cout << fmt::format("{:a}", banner) << std::endl;
