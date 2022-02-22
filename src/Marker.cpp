@@ -6,10 +6,6 @@
 #include "Marker.h"
 
 namespace Minemap {
-
-	static const std::regex COLON(":");
-	static const std::regex SPACE(" +");
-
 	/**
 	 * Create a marker position object based
 	 * @param spec       "rel:<x>:<y>:<z>" or "abs:<x>:<y>:<z>"
@@ -17,7 +13,7 @@ namespace Minemap {
 	 * @param zOffset    yOffset from map
 	 */
 	MarkerPosition::MarkerPosition(const std::string &spec, NBTP::IntTag::V xOffset, NBTP::IntTag::V zOffset) {
-
+		static const std::regex COLON(":");
 		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), COLON, -1}, last;
 		std::vector<std::string> tokens{begin, last};
 		if (tokens.size() != 4) {
