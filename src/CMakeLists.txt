@@ -1,5 +1,9 @@
 # Common functionality
-set(PROGRAMS minemap pamenim minemarker)
+if (BUILD_MINEMARKER OR CMAKE_BUILD_TYPE EQUAL Debug)
+    set(PROGRAMS minemap pamenim minemarker)
+else ()
+    set(PROGRAMS minemap pamenim)
+endif()
 
 add_library(libminemap SHARED
         ColorMap.cpp
