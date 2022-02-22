@@ -91,20 +91,7 @@ namespace Minemap {
 		return tag;
 	}
 
-	Banner::Banner(const std::string &spec, const MarkerPosition &position) : position(position) {
-		std::sregex_token_iterator begin{spec.cbegin(), spec.cend(), COLON, -1}, last;
-		std::vector<std::string> tokens{begin, last};
-		if (tokens.size() == 1) {
-			this->color = tokens[0];
-		} else if (tokens.size() == 2) {
-			this->color = tokens[0];
-			this->name = tokens[1];
-		} else {
-			throw std::invalid_argument(INVALID_BANNER);
-		}
-	}
-
-	Banner::Banner(const std::shared_ptr<NBTP::Tag> _banner) {
+    Banner::Banner(const std::shared_ptr<NBTP::Tag> _banner) {
 		if (!_banner || _banner->typeCode() != NBTP::COMPOUND) {
 			throw std::runtime_error(BANNERS_MALFORMED);
 		}
