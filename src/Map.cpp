@@ -108,45 +108,45 @@ namespace Minemap {
 			NBTP::TagIO::writeRoot(os, tag);
 		}
 
-        NBTP::BytesTag *getModifiableColors(std::shared_ptr<Tag> root_ptr) {
-            NBTP::Tag *root = root_ptr.get();
-            if (root->typeCode() != NBTP::TagType::COMPOUND) {
-                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root->typeCode()]));
-            }
-            NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root)->getPayload()["data"].get();
-            if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
-                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_ptr->typeCode()]));
-            }
-            NBTP::Tag *bytes_tag = ((NBTP::CompoundTag *) data_tag)->lookup("colors").get();
-            if (bytes_tag == nullptr || bytes_tag->typeCode() != NBTP::TagType::BYTES) {
-                throw std::runtime_error(COLORS_NOT_BYTES);
-            }
-            return (NBTP::BytesTag *) bytes_tag;
-        }
+		NBTP::BytesTag *getModifiableColors(std::shared_ptr<Tag> root_ptr) {
+			NBTP::Tag *root = root_ptr.get();
+			if (root->typeCode() != NBTP::TagType::COMPOUND) {
+				throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root->typeCode()]));
+			}
+			NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root)->getPayload()["data"].get();
+			if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
+				throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_ptr->typeCode()]));
+			}
+			NBTP::Tag *bytes_tag = ((NBTP::CompoundTag *) data_tag)->lookup("colors").get();
+			if (bytes_tag == nullptr || bytes_tag->typeCode() != NBTP::TagType::BYTES) {
+				throw std::runtime_error(COLORS_NOT_BYTES);
+			}
+			return (NBTP::BytesTag *) bytes_tag;
+		}
 
-        NBTP::ListTag *getModifiableBanners(std::shared_ptr<NBTP::Tag> root_ptr) {
-            NBTP::Tag *root = root_ptr.get();
-            if (root->typeCode() != NBTP::TagType::COMPOUND) {
-                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root->typeCode()]));
-            }
-            NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root)->getPayload()["data"].get();
-            if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
-                throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_ptr->typeCode()]));
-            }
-            NBTP::Tag *banners_tag = ((NBTP::CompoundTag *) data_tag)->lookup("banners").get();
-            if (banners_tag == nullptr) {
-                throw std::runtime_error(BANNERS_MISSING);
-            }
-            if (banners_tag->typeCode() != NBTP::TagType::LIST) {
-                throw std::runtime_error(BANNERS_MALFORMED);
-            }
-            NBTP::ListTag *banners_list = (ListTag*) banners_tag;
-            if (banners_list->size() != 0 && banners_list->getContentType() != COMPOUND) {
-                throw std::runtime_error(BANNERS_MALFORMED);
-            } else if (banners_list->size() == 0) {
+		NBTP::ListTag *getModifiableBanners(std::shared_ptr<NBTP::Tag> root_ptr) {
+			NBTP::Tag *root = root_ptr.get();
+			if (root->typeCode() != NBTP::TagType::COMPOUND) {
+				throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root->typeCode()]));
+			}
+			NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root)->getPayload()["data"].get();
+			if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
+				throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_ptr->typeCode()]));
+			}
+			NBTP::Tag *banners_tag = ((NBTP::CompoundTag *) data_tag)->lookup("banners").get();
+			if (banners_tag == nullptr) {
+				throw std::runtime_error(BANNERS_MISSING);
+			}
+			if (banners_tag->typeCode() != NBTP::TagType::LIST) {
+				throw std::runtime_error(BANNERS_MALFORMED);
+			}
+			NBTP::ListTag *banners_list = (ListTag *) banners_tag;
+			if (banners_list->size() != 0 && banners_list->getContentType() != COMPOUND) {
+				throw std::runtime_error(BANNERS_MALFORMED);
+			} else if (banners_list->size() == 0) {
 				banners_list->setContentType(COMPOUND);
 			}
-            return (NBTP::BytesTag *) banners_list;
-        }
-    }
+			return (NBTP::BytesTag *) banners_list;
+		}
+	}
 }

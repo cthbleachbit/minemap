@@ -41,7 +41,7 @@ namespace Minemap {
 	 * @param position      compound tag containing three int tags X, Y and Z
 	 * @throw runtime_error if this tag does not represent a set of 3D coordinates
 	 */
-	MarkerPosition::MarkerPosition(const std::shared_ptr<NBTP::Tag>& _position) {
+	MarkerPosition::MarkerPosition(const std::shared_ptr<NBTP::Tag> &_position) {
 		if (!_position || _position->typeCode() != NBTP::COMPOUND) {
 			throw std::runtime_error(POSITION_MALFORMED);
 		}
@@ -55,9 +55,9 @@ namespace Minemap {
 		if (xt->typeCode() != NBTP::INT || yt->typeCode() != NBTP::INT || zt->typeCode() != NBTP::INT) {
 			throw std::runtime_error(POSITION_MALFORMED);
 		}
-		x = ((NBTP::IntTag*) xt.get())->getPayload();
-		y = ((NBTP::IntTag*) yt.get())->getPayload();
-		z = ((NBTP::IntTag*) zt.get())->getPayload();
+		x = ((NBTP::IntTag *) xt.get())->getPayload();
+		y = ((NBTP::IntTag *) yt.get())->getPayload();
+		z = ((NBTP::IntTag *) zt.get())->getPayload();
 	}
 
 	std::partial_ordering MarkerPosition::operator<=>(const MarkerPosition &pos) const noexcept {
@@ -87,7 +87,7 @@ namespace Minemap {
 		return tag;
 	}
 
-    Banner::Banner(const std::shared_ptr<NBTP::Tag> _banner) {
+	Banner::Banner(const std::shared_ptr<NBTP::Tag> _banner) {
 		if (!_banner || _banner->typeCode() != NBTP::COMPOUND) {
 			throw std::runtime_error(BANNERS_MALFORMED);
 		}

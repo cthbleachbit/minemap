@@ -17,7 +17,7 @@ VersionSpec{ \
     (ver_start), \
     "[" ver_start ", " ver_end ")", \
     ident ## _DATA, \
-	ident ## _HEIGHT, \
+    ident ## _HEIGHT, \
     (dv) \
 }
 
@@ -66,7 +66,7 @@ namespace Minemap {
 	 * Pretty print all supported Minecraft versions of this program to stdout.
 	*/
 	inline constexpr void prettyPrintSupportedVersions() {
-		for (const VersionSpec &ver : SUPPORTED_VERSIONS) {
+		for (const VersionSpec &ver: SUPPORTED_VERSIONS) {
 			printf("\t\t\t%8s for game version %s\n", ver.name, ver.versionRange);
 		}
 	}

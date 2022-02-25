@@ -111,12 +111,12 @@ int main(int argc, char **argv) {
 	}
 
 	NBTP::ListTag::List colors_list;
-    try {
-        colors_list = Minemap::Map::getModifiableColors(root_tag)->getPayload();
-    } catch (const std::runtime_error &e) {
-        std::cerr << e.what() << std::endl;
-        exit(1);
-    }
+	try {
+		colors_list = Minemap::Map::getModifiableColors(root_tag)->getPayload();
+	} catch (const std::runtime_error &e) {
+		std::cerr << e.what() << std::endl;
+		exit(1);
+	}
 
 	// Convert
 	std::unique_ptr<std::array<double, 16384 * 4>> pixelStore = nullptr;
