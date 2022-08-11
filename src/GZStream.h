@@ -44,7 +44,7 @@ namespace Minemap {
 // Internal classes to implement gzstream. See below for user classes.
 // ----------------------------------------------------------------------------
 
-	class GZStreamBuf: public std::streambuf {
+	class GZStreamBuf : public std::streambuf {
 	private:
 		static const int bufferSize = 47 + 256;    // size of data buff
 		// totals 512 bytes under g++ for iGZStream at the end.
@@ -67,7 +67,7 @@ namespace Minemap {
 
 	public:
 		GZStreamBuf()
-			: file(nullptr), opened(0), mode(0) {
+				: file(nullptr), opened(0), mode(0) {
 			setp(buffer, buffer + (bufferSize - 1));
 			setg(buffer + 4,     // beginning of putback area
 			     buffer + 4,     // read position
@@ -90,7 +90,7 @@ namespace Minemap {
 			mode = open_mode;
 			// no append nor read/write mode
 			if ((mode & std::ios::ate) || (mode & std::ios::app)
-				|| ((mode & std::ios::in) && (mode & std::ios::out))) {
+			    || ((mode & std::ios::in) && (mode & std::ios::out))) {
 				return nullptr;
 			}
 			char fmode[10];
@@ -167,19 +167,22 @@ namespace Minemap {
 		}
 	};
 
-	class GZStreamBase: virtual public std::ios {
+	class GZStreamBase : virtual public std::ios {
 	protected:
 		GZStreamBuf buf;
 	public:
 
 		GZStreamBase() { init(&buf); }
+
 		GZStreamBase(const char *name, int mode) {
 			init(&buf);
 			open(name, mode);
 		}
+
 		~GZStreamBase() override {
 			buf.close();
 		}
+
 		virtual void open(const char *name, int open_mode) {
 			if (!buf.open(name, open_mode))
 				clear(rdstate() | std::ios::badbit);
@@ -190,6 +193,7 @@ namespace Minemap {
 				if (!buf.close())
 					clear(rdstate() | std::ios::badbit);
 		}
+
 		virtual GZStreamBuf *rdbuf() { return &buf; }
 	};
 
@@ -199,25 +203,31 @@ namespace Minemap {
 // function interface of the zlib. Files are compatible with gzip compression.
 // ----------------------------------------------------------------------------
 
-	class iGZStream: public GZStreamBase, public std::istream {
+	class iGZStream : public GZStreamBase, public std::istream {
 	public:
 		iGZStream()
-			: std::istream(&buf) {}
+				: std::istream(&buf) {}
+
 		explicit iGZStream(const char *name)
-			: GZStreamBase(name, std::ios::in), std::istream(&buf) {}
+				: GZStreamBase(name, std::ios::in), std::istream(&buf) {}
+
 		GZStreamBuf *rdbuf() override { return GZStreamBase::rdbuf(); }
+
 		void open(const char *name) {
 			GZStreamBase::open(name, std::ios::in);
 		}
 	};
 
-	class oGZStream: public GZStreamBase, public std::ostream {
+	class oGZStream : public GZStreamBase, public std::ostream {
 	public:
 		oGZStream()
-			: std::ostream(&buf) {}
+				: std::ostream(&buf) {}
+
 		explicit oGZStream(const char *name)
-			: GZStreamBase(name, std::ios::out), std::ostream(&buf) {}
+				: GZStreamBase(name, std::ios::out), std::ostream(&buf) {}
+
 		GZStreamBuf *rdbuf() override { return GZStreamBase::rdbuf(); }
+
 		void open(const char *name) {
 			GZStreamBase::open(name, std::ios::out);
 		}

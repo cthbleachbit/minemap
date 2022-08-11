@@ -14,6 +14,7 @@ endif ()
 
 add_compile_definitions(MINEMAP_APP_VER=\"${CMAKE_PROJECT_VERSION}\")
 option(USE_GRAPHICSMAGICK "Use GraphicsMagick instead of ImageMagick" ON)
+option(GLIBCXX_ASSERTIONS "Enable assertions in glibc++ standard library (For debugging use)" OFF)
 
 find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -41,6 +42,10 @@ endif ()
 set(CMAKE_CXX_STANDARD 20)
 set(warnings "-g -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings} -fPIC")
+if (GLIBCXX_ASSERTIONS)
+    add_compile_definitions(_GLIBCXX_ASSERTIONS)
+endif()
+
 
 option(BUILD_TESTS "Build library test harness" OFF)
 option(BUILD_PAMENIM "Build Pamenim" ON)

@@ -41,7 +41,7 @@ namespace Minemap {
 	}
 
 	TupleRGB::TupleRGB(const Magick::ColorRGB &color) noexcept
-		: r(color.red()), g(color.green()), b(color.blue()) {}
+			: r(color.red()), g(color.green()), b(color.blue()) {}
 
 	TupleRGB::operator Magick::ColorRGB() const noexcept {
 		Magick::ColorRGB rgb;

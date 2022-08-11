@@ -90,20 +90,24 @@ int main(int argc, char **argv) {
 			export_path = argv[i];
 		} else if (strcmp(argv[i], "--no-gz") == 0) {
 			no_gz = true;
+		} else {
+			std::cerr << fmt::format(INVALID_ARGUMENT, argv[i]) << std::endl;
+			usage();
+			exit(1);
 		}
 		i++;
 	}
 
 	if (mc_ver == Version::INVALID) {
-		std::cout << MISSING_GAME_VER << std::endl;
+		std::cerr << MISSING_GAME_VER << std::endl;
 		usage();
 		exit(1);
 	} else if (input_path.empty()) {
-		std::cout << MISSING_IN_FILE << std::endl;
+		std::cerr << MISSING_IN_FILE << std::endl;
 		usage();
 		exit(1);
 	} else if (output_path.empty()) {
-		std::cout << MISSING_OUT_FILE << std::endl;
+		std::cerr << MISSING_OUT_FILE << std::endl;
 		usage();
 		exit(1);
 	}
@@ -111,8 +115,13 @@ int main(int argc, char **argv) {
 	// Create Template Map Payload
 	struct Map::MapGeometry geometry;
 	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
-	NBTP::CompoundTag *data_tag = (NBTP::CompoundTag *) map_tag->getPayload()["data"].get();
-	NBTP::BytesTag *colors_tag = (NBTP::BytesTag *) data_tag->getPayload()["colors"].get();
+	NBTP::BytesTag *colors_tag;
+	try {
+		colors_tag = Minemap::Map::getModifiableColors(map_tag);
+	} catch (const std::runtime_error &e) {
+		std::cerr << e.what() << std::endl;
+		exit(1);
+	}
 
 	{
 		// Init Magick Core

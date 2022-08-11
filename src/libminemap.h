@@ -17,14 +17,19 @@
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
 # define __MINEMAP_CLONE__ __attribute((target_clones("default", "sse2", "sse3", "sse4.1", "sse4.2", "popcnt", "avx", "avx2")))
-# elif (defined(__aarch64__))
-# define __MINEMAP_CLONE__ __attribute((target_clones("default", "simd", "sve2")))
 # elif (defined(__PPC64__))
 # define __MINEMAP_CLONE__ __attribute__((target_clones("default","cpu=power9")))
 # endif
 #else
+#pragma message( "Warning: No target clone support" )
 #define __MINEMAP_CLONE__
 #endif
+
+#define CREATE_ENUM(name) \
+    F_##name,
+
+#define CREATE_STRINGS(name) \
+    #name,
 
 namespace Magick {
 	class Image;
