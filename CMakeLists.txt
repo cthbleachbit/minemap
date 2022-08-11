@@ -49,6 +49,7 @@ endif()
 
 option(BUILD_TESTS "Build library test harness" OFF)
 option(BUILD_PAMENIM "Build Pamenim" ON)
+option(BUILD_MINEMARKER "Build Minemarker (experimental)" OFF)
 option(BUILD_GIMP_GPL "Generate and install palette data for GIMP" ON)
 
 if (BUILD_GIMP_GPL)

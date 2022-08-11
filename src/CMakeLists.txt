@@ -1,5 +1,5 @@
 # Common functionality
-if (BUILD_MINEMARKER OR CMAKE_BUILD_TYPE EQUAL Debug)
+if (BUILD_MINEMARKER)
     set(PROGRAMS minemap pamenim minemarker)
 else ()
     set(PROGRAMS minemap pamenim)
