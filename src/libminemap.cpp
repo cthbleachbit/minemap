@@ -19,13 +19,16 @@ namespace Minemap {
 	                          const Magick::Image &mapped_img,
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                          NBTP::BytesTag *colors_tag) {
+		size_t width = input_img.columns();
+		size_t height = input_img.rows();
 #ifdef USE_GM
+		// FIXME: GraphicsMagick Image::pixelColor() for some reason does not contain alpha channel
 		bool has_alpha = input_img.matte();
+		// FIXME: Have to map low level access
+		const Magick::PixelPacket *input_img_cache = input_img.getConstPixels(0, 0, width, height);
 #else
 		bool has_alpha = input_img.alpha();
 #endif
-		size_t width = input_img.columns();
-		size_t height = input_img.rows();
 
 		// Count partially transparent pixels
 		int partially_transparent_count = 0;
@@ -34,11 +37,11 @@ namespace Minemap {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
 			Magick::Color mapped_pix = mapped_img.pixelColor(col, row);
-			Magick::Color input_pix = input_img.pixelColor(col, row);
 #ifdef USE_GM
+			const Magick::PixelPacket *input_pix = input_img_cache + i;
 			// WTF? Alpha in GM is exactly opposite - alpha = 65535 under 16b <=> transparent
 			//                                        alpha = 0     <=> completely opaque
-			double quantum_alpha = input_pix.alphaQuantum();
+			double quantum_alpha = input_pix->opacity;
 			if (quantum_alpha < TransparentOpacity && quantum_alpha != OpaqueOpacity) {
 				partially_transparent_count++;
 			}
@@ -46,12 +49,12 @@ namespace Minemap {
 			bool is_transparent_input = quantum_alpha != 0;
 			bool is_transparent = has_alpha && is_transparent_input;
 #else
+			Magick::Color input_pix = input_img.pixelColor(col, row);
 			// Imagemagick 7: alpha = 0 <=> transparent
 			//                alpha = QuantumRange = 65535 <=> fully opaque
 			auto quantum_alpha = input_img.pixelColor(col, row).quantumAlpha();
 			if (quantum_alpha < QuantumRange && quantum_alpha > 0.0f) {
 				partially_transparent_count++;
-				std::cerr << quantum_alpha << std::endl;
 			}
 			// Pixels that are not fully opaque are forced to be fully transparent
 			bool is_transparent_input = (quantum_alpha != QuantumRange);
@@ -84,7 +87,8 @@ namespace Minemap {
 	}
 
 	__MINEMAP_CLONE__
-	std::unique_ptr<std::array<double, 16384 * 4>>
+			std::unique_ptr<std::array<double, 16384 * 4>>
+
 	_clone_tag_to_pixelstore(const NBTP::ListTag::List &colors_list,
 	                         const std::shared_ptr<ColorMap> &palette_lookup_table) {
 		auto pixel_store = std::make_unique<std::array<double, 16384 * 4>>();
