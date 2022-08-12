@@ -26,17 +26,39 @@ namespace Minemap {
 #endif
 		size_t width = input_img.columns();
 		size_t height = input_img.rows();
+
+		// Count partially transparent pixels
+		int partially_transparent_count = 0;
+
 		for (size_t i = 0; i < width * height; i++) {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
-			Magick::ColorRGB output_pix = mapped_img.pixelColor(col, row);
+			Magick::Color output_pix = mapped_img.pixelColor(col, row);
+			Magick::Color input_pix = input_img.pixelColor(col, row);
 #ifdef USE_GM
 			// WTF? Alpha in GM is exactly opposite - alpha = 65535 under 16b <=> transparent
-			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).alphaQuantum() == MaxRGB);
+			//                                        alpha = 0     <=> completely opaque
+			double quantum_alpha = input_pix.alphaQuantum();
+			if (quantum_alpha < TransparentOpacity && quantum_alpha != OpaqueOpacity) {
+				partially_transparent_count++;
+			}
+			std::cerr << col << "," << row << "," << quantum_alpha << std::endl;
+			// Pixels that are not fully opaque are forced to be fully transparent
+			bool is_transparent_input = quantum_alpha != 0;
+			bool is_transparent = hasAlpha && is_transparent_input;
 #else
-			// alpha = 0 <=> transparent
-			bool is_transparent = hasAlpha && (input_img.pixelColor(col, row).quantumAlpha() == 0.0f);
+			// Imagemagick 7: alpha = 0 <=> transparent
+			//                alpha = QuantumRange = 65535 <=> fully opaque
+			auto quantum_alpha = input_img.pixelColor(col, row).quantumAlpha();
+			if (quantum_alpha < QuantumRange && quantum_alpha > 0.0f) {
+				partially_transparent_count++;
+				std::cerr << quantum_alpha << std::endl;
+			}
+			// Pixels that are not fully opaque are forced to be fully transparent
+			bool is_transparent_input = (quantum_alpha != QuantumRange);
+			bool is_transparent = hasAlpha && is_transparent_input;
 #endif
+
 			std::optional<MapColorCode> colorCode;
 			if (is_transparent) {
 				colorCode = 0;
@@ -48,6 +70,10 @@ namespace Minemap {
 				}
 			}
 			colors_tag->insert(std::make_shared<NBTP::ByteTag>(colorCode.value()));
+		}
+
+		if (partially_transparent_count) {
+			std::cerr << fmt::format(COLOR_PARTIALLY_TRANSPARENT, partially_transparent_count) << std::endl;
 		}
 	}
 

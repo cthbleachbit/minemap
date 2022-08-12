@@ -7,7 +7,7 @@
 namespace Minemap {
 
 	/**
-	 * Constructs a bijective map between every color in the palette and corresponding colro code in game. This data
+	 * Constructs a bijective map between every color in the palette and corresponding color code in game. This data
 	 * structure allows fast lookup into both representations.
 	 *
 	 * @param img       Loaded Magick image

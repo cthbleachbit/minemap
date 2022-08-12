@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 		// Loading Image
 		Magick::Image palette_img;
 		Magick::Image input_img;
-		Magick::Image output_img;
+		Magick::Image mapped_img;
 		try {
 			palette_img = verspec_to_image(verSpecToPaletteData(mc_ver));
 		}
@@ -155,16 +155,16 @@ int main(int argc, char **argv) {
 		resize_geometry.height(geometry.height);
 		input_img.sample(resize_geometry);
 		// Apply dithering only to a copy of the input
-		output_img = input_img;
-		output_img.modifyImage();
+		mapped_img = input_img;
+		mapped_img.modifyImage();
 		// Execute remap
-		output_img.map(palette_img, dithering);
+		mapped_img.map(palette_img, dithering);
 		if (!export_path.empty()) {
-			output_img.write(export_path);
+			mapped_img.write(export_path);
 		}
 
 		try {
-			Minemap::mapped_to_tag(input_img, output_img, loadColorMapFromPalette(palette_img), colors_tag);
+			Minemap::mapped_to_tag(input_img, mapped_img, loadColorMapFromPalette(palette_img), colors_tag);
 		} catch (std::runtime_error &e) {
 			std::cerr << e.what() << std::endl;
 			exit(1);
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
 
 		// Write Result image
 		if (!export_path.empty()) {
-			output_img.write(export_path);
+			mapped_img.write(export_path);
 		}
 	}
 

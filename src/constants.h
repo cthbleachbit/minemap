@@ -23,6 +23,7 @@
 #define BANNERS_MALFORMED "Banners in this map is malformed"
 #define POSITION_MALFORMED "Position coordinates in this marker is malformed"
 #define COLOR_MISMATCH "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
+#define COLOR_PARTIALLY_TRANSPARENT "Warning: {} partially transparent pixels are rendered as fully transparent!"
 #define COLOR_OUT_OF_RANGE "Color code {} at offset {} is out of range!"
 
 #define VERSION_MESSAGE "Application version " MINEMAP_APP_VER
