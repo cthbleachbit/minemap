@@ -4,7 +4,7 @@ include(GNUInstallDirs)
 
 set(Minemap_VERSION_MAJOR 0)
 set(Minemap_VERSION_MINOR 5)
-set(Minemap_VERSION_PATCH 0)
+set(Minemap_VERSION_PATCH 1)
 
 if (${Minemap_VERSION_PATCH} EQUAL 0)
     set(CMAKE_PROJECT_VERSION ${Minemap_VERSION_MAJOR}.${Minemap_VERSION_MINOR})
