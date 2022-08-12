@@ -57,6 +57,8 @@ namespace std {
 namespace Minemap {
 	typedef uint8_t MapColorCode;
 
+	struct VersionSpec;
+
 	/**
 	 * Replaces boost::bimap. This maps minecraft map color code between RGB tuples.
 	 */
@@ -112,13 +114,13 @@ namespace Minemap {
 	};
 
 	/**
-	 * Constructs a bijective map between every color in the palette and corresponding colro code in game. This data
+	 * Constructs a bijective map between every color in the palette and corresponding color code in game. This data
 	 * structure allows fast lookup into both representations.
 	 *
-	 * @param img       Loaded Magick image
+	 * @param ver       Version
 	 * @return          the said bijective map
 	 */
-	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &img);
+	std::shared_ptr<ColorMap> loadColorMapFromVersion(const VersionSpec &ver);
 }
 
 

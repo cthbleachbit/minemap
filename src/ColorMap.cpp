@@ -3,6 +3,7 @@
 //
 
 #include "ColorMap.h"
+#include "VersionSpec.h"
 
 namespace Minemap {
 
@@ -10,35 +11,21 @@ namespace Minemap {
 	 * Constructs a bijective map between every color in the palette and corresponding color code in game. This data
 	 * structure allows fast lookup into both representations.
 	 *
-	 * @param img       Loaded Magick image
+	 * @param ver       Version
 	 * @return          the said bijective map
 	 */
-	std::shared_ptr<ColorMap> loadColorMapFromPalette(const Magick::Image &palette_img) {
-		ssize_t palette_width = palette_img.size().width();
-		ssize_t palette_height = palette_img.size().height();
-		ssize_t palette_pixels = palette_width * palette_height;
+	std::shared_ptr<ColorMap> loadColorMapFromVersion(const VersionSpec &ver) {
+		MapColorCode maxCode = std::min((int) (4 * ver.paletteHeight), UINT8_MAX);
 
-		MapColorCode maxCode = std::min(palette_pixels, (ssize_t) UINT8_MAX);
+		auto color_map = std::make_unique<ColorMap>(maxCode);
 
-		auto color_map = std::make_shared<ColorMap>(maxCode);
 		for (MapColorCode j = 0; j < maxCode; j++) {
-			ssize_t palette_col = j % palette_width;
-			ssize_t palette_row = j / palette_width;
-			// This should have been palette_img.pixelColor, but visual studio refuses to link to it
-#ifdef USE_GM
-			auto p_inf = palette_img.pixelColor(palette_col, palette_row);
-#else
-			auto q = palette_img.getConstPixels(palette_col, palette_row, 1, 1);
-			Magick::PixelInfo p_inf;
-			MagickCore::GetPixelInfoPixel(palette_img.constImage(), q, &p_inf);
-#endif
-			Magick::ColorRGB palette_pix = Magick::Color(p_inf);
-
-			// Insert the pixel into the color map
-			color_map->insert(Minemap::TupleRGB(palette_pix), static_cast<MapColorCode>(j));
+			Minemap::TupleRGB pix((double) ver.paletteData[4 * j] / 255.0, (double) ver.paletteData[4 * j + 1] / 255.0, (double) ver.paletteData[4 * j + 2] / 255.0);
+			color_map->insert(pix, static_cast<MapColorCode>(j));
 		}
 		return color_map;
 	}
+
 
 	TupleRGB::TupleRGB(const Magick::ColorRGB &color) noexcept
 			: r(color.red()), g(color.green()), b(color.blue()) {}

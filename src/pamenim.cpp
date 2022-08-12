@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 
 	// Start by getting bimap for color mapping
 	Magick::InitializeMagick(*argv);
-	auto palette_lookup_table = loadColorMapFromPalette(verspec_to_image(verSpecToPaletteData(mc_ver)));
+	auto palette_lookup_table = loadColorMapFromVersion(verSpecToPaletteData(mc_ver));
 
 	// Get input color array ready
 	std::shared_ptr<NBTP::Tag> root_tag;

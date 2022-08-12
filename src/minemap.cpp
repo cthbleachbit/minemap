@@ -7,6 +7,7 @@
 #include <cstring>
 
 #include <string>
+#include <cassert>
 #include <iostream>
 #include <Magick++.h>
 
@@ -164,7 +165,8 @@ int main(int argc, char **argv) {
 		}
 
 		try {
-			Minemap::mapped_to_tag(input_img, mapped_img, loadColorMapFromPalette(palette_img), colors_tag);
+			auto color_map_from_data = loadColorMapFromVersion(verSpecToPaletteData(mc_ver));
+			Minemap::mapped_to_tag(input_img, mapped_img, color_map_from_data, colors_tag);
 		} catch (std::runtime_error &e) {
 			std::cerr << e.what() << std::endl;
 			exit(1);

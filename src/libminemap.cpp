@@ -20,9 +20,9 @@ namespace Minemap {
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
 	                          NBTP::BytesTag *colors_tag) {
 #ifdef USE_GM
-		bool hasAlpha = input_img.matte();
+		bool has_alpha = input_img.matte();
 #else
-		bool hasAlpha = input_img.alpha();
+		bool has_alpha = input_img.alpha();
 #endif
 		size_t width = input_img.columns();
 		size_t height = input_img.rows();
@@ -33,7 +33,7 @@ namespace Minemap {
 		for (size_t i = 0; i < width * height; i++) {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
-			Magick::Color output_pix = mapped_img.pixelColor(col, row);
+			Magick::Color mapped_pix = mapped_img.pixelColor(col, row);
 			Magick::Color input_pix = input_img.pixelColor(col, row);
 #ifdef USE_GM
 			// WTF? Alpha in GM is exactly opposite - alpha = 65535 under 16b <=> transparent
@@ -42,10 +42,9 @@ namespace Minemap {
 			if (quantum_alpha < TransparentOpacity && quantum_alpha != OpaqueOpacity) {
 				partially_transparent_count++;
 			}
-			std::cerr << col << "," << row << "," << quantum_alpha << std::endl;
 			// Pixels that are not fully opaque are forced to be fully transparent
 			bool is_transparent_input = quantum_alpha != 0;
-			bool is_transparent = hasAlpha && is_transparent_input;
+			bool is_transparent = has_alpha && is_transparent_input;
 #else
 			// Imagemagick 7: alpha = 0 <=> transparent
 			//                alpha = QuantumRange = 65535 <=> fully opaque
@@ -56,14 +55,14 @@ namespace Minemap {
 			}
 			// Pixels that are not fully opaque are forced to be fully transparent
 			bool is_transparent_input = (quantum_alpha != QuantumRange);
-			bool is_transparent = hasAlpha && is_transparent_input;
+			bool is_transparent = has_alpha && is_transparent_input;
 #endif
 
 			std::optional<MapColorCode> colorCode;
 			if (is_transparent) {
 				colorCode = 0;
 			} else {
-				colorCode = palette_lookup_table->lookup(TupleRGB(output_pix));
+				colorCode = palette_lookup_table->lookup(TupleRGB(mapped_pix));
 				if (!colorCode.has_value()) {
 					std::string no_match = fmt::format(COLOR_MISMATCH, col, row);
 					throw std::runtime_error(no_match);

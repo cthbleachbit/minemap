@@ -69,9 +69,18 @@ namespace Minemap {
 	tag_to_pixelstore(const NBTP::ListTag::List &colors_tag,
 	                  const std::shared_ptr<ColorMap> &palette_lookup_table);
 
+	/**
+	 * Load a version-specified palette into a Magick Image for use as dithering color candidates
+	 *
+	 * Note that the first row (i.e. first 4 colors) are stripped off - color codes 0-3 are transparent in-game.
+	 * An opaque pixel should never map to color code 0-3.
+	 * @param version
+	 * @return
+	 */
 	const inline Magick::Image verspec_to_image(const VersionSpec version) {
 		auto data = version.paletteData;
-		Magick::Image image(4, version.paletteHeight, "RGBA", Magick::StorageType::CharPixel, data);
+		// Skip 1 row, i.e. 16 bytes for 4x RGBA
+		Magick::Image image(4, version.paletteHeight - 1, "RGBA", Magick::StorageType::CharPixel, data + 16);
 		return image;
 	}
 }
