@@ -26,6 +26,11 @@
 #define COLOR_PARTIALLY_TRANSPARENT "Warning: {} partially transparent pixels are rendered as fully transparent!"
 #define COLOR_OUT_OF_RANGE "Color code {} at offset {} is out of range!"
 
-#define VERSION_MESSAGE "Application version " MINEMAP_APP_VER
+#ifdef USE_GM
+#define MINEMAP_MAGICK_IMPLEMENTATION "GraphicsMagick"
+#else
+#define MINEMAP_MAGICK_IMPLEMENTATION "ImageMagick"
+#endif
+#define VERSION_MESSAGE "Application version " MINEMAP_APP_VER " with " MINEMAP_MAGICK_IMPLEMENTATION
 
 #endif //CONSTANTS_H
