@@ -65,7 +65,7 @@ index 7e6be2992..9f0edcb00 100644
 ```
 cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DSYSTEM_NBTP=OFF \
-         -DUSE_GRPHICSMAGICK=ON \
+         -DUSE_GRAPHICSMAGICK=ON \
          -DCMAKE_TOOLCHAIN_FILE=/home/user/vcpkg/scripts/buildsystems/vcpkg.cmake
          -DVCPKG_TARGET_TRIPLET=x64-mingw-static
 ```
