@@ -1,0 +1,13 @@
+diff --git a/ports/graphicsmagick/CMakeLists.txt b/ports/graphicsmagick/CMakeLists.txt
+index c71495951..6ee7be177 100644
+--- a/ports/graphicsmagick/CMakeLists.txt
++++ b/ports/graphicsmagick/CMakeLists.txt
+@@ -12,6 +12,8 @@ add_definitions(-D_MAGICKLIB_ -D_WANDLIB_ -DMAGICK_IMPLEMENTATION)
+ 
+ if (BUILD_SHARED_LIBS)
+     add_definitions(-D_DLL -DDLL)
++else ()
++    add_definitions(-D_LIB)
+ endif ()
+ 
+ if (MSVC)
