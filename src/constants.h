@@ -51,6 +51,7 @@ inline void initializeLocale() {
 #define POSITION_OUT_OF_RANGE _("Coordinates out of range")
 #define PAMENIM_ISTREAM_FAIL _("Cannot open input stream")
 #define PAMENIM_PARSE_FAIL _("Cannot parse input NBT file")
+#define MINEMAP_PARSE_FAIL _("Cannot parse NBT map file to modify - will generate from scratch and overwrite")
 
 #define MAP_NOT_COMPOUND _("The map data tag is not a compound but a {}. This file is probably not a map nbt.")
 #define COLORS_NOT_BYTES _("Color data is not a byte array. This file is probably not a map nbt.")
@@ -71,6 +72,8 @@ inline void initializeLocale() {
 "\t\tOptional, do not gzip generated NBT file (for human inspection)\n" \
 "\t-o, --output FILE\n" \
 "\t\tRequired, output file in NBT format\n" \
+"\t-r, --replace\n" \
+"\t\tOptional, replace map contents preserving markers if the output file already exists\n" \
 "\t-e, --export FILE\n" \
 "\t\tOptional, export the result of color reduction in png format\n" \
 "\t-g, --game VER\n" \

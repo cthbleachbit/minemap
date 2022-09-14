@@ -10,6 +10,7 @@
 #include <cassert>
 #include <iostream>
 #include <Magick++.h>
+#include <filesystem>
 
 #include "libminemap.h"
 #include "Map.h"
@@ -46,6 +47,7 @@ int main(int argc, char **argv) {
 	std::string export_path;
 	bool no_gz = false;
 	bool dithering = false;
+	bool replace_if_exist = false;
 
 	// Parse Parameters
 	int i = 1;
@@ -64,6 +66,8 @@ int main(int argc, char **argv) {
 			input_path = argv[i];
 		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dithering") == 0) {
 			dithering = true;
+		} else if (strcmp(argv[i], "-r") == 0 || strcmp(argv[i], "--replace") == 0) {
+			replace_if_exist = true;
 		} else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
 			i++;
 			if (i >= argc) {
@@ -102,7 +106,41 @@ int main(int argc, char **argv) {
 
 	// Create Template Map Payload
 	struct Map::MapGeometry geometry;
-	auto map_tag = Map::makeMapRoot(mc_ver, geometry);
+	std::shared_ptr<NBTP::Tag> map_tag = nullptr;
+	{
+		// Check if we need to read existing nbt for replacement
+		auto stat = std::filesystem::status(output_path);
+		bool output_exist = is_regular_file(stat);
+
+		if (output_exist & replace_if_exist) {
+			// Read existing map
+			std::unique_ptr<std::istream> existing;
+			if (no_gz) {
+				existing = std::make_unique<std::ifstream>(output_path, std::ios::binary);
+			} else {
+				existing = std::make_unique<iGZStream>(output_path.c_str());
+			}
+			ssize_t parsed_bytes;
+
+			// Catch invalid input files
+			try {
+				map_tag = NBTP::TagIO::parseRoot(*existing, parsed_bytes);
+				if (map_tag->typeCode() != NBTP::COMPOUND) {
+					throw NBTP::TagParseException(0, localizedFormat(MAP_NOT_COMPOUND, NBTP::TypeNames[map_tag->typeCode()]));
+				}
+				// Overwrite dataversion tag
+				insertDataVersion(dynamic_cast<NBTP::CompoundTag &>(*map_tag), mc_ver);
+			} catch (const NBTP::TagParseException &e) {
+				std::cerr << e.what() << std::endl;
+				std::cerr << MINEMAP_PARSE_FAIL << std::endl;
+				map_tag = Map::makeMapRoot(mc_ver, geometry);
+			}
+		} else {
+			map_tag = Map::makeMapRoot(mc_ver, geometry);
+		}
+	}
+
+	// At this point we have a valid map tag structure to work with
 	NBTP::BytesTag *colors_tag;
 	try {
 		colors_tag = Minemap::Map::getModifiableColors(map_tag);
@@ -174,7 +212,7 @@ int main(int argc, char **argv) {
 			os = std::make_unique<oGZStream>(output_path.c_str());
 		}
 
-		Map::saveMap(*os, *map_tag);
+		Map::saveMap(*os, dynamic_cast<NBTP::CompoundTag &>(*map_tag));
 		os->flush();
 	}
 
