@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 10:42-0400\n"
-"PO-Revision-Date: 2022-09-14 10:44-0400\n"
+"POT-Creation-Date: 2022-09-14 11:34-0400\n"
+"PO-Revision-Date: 2022-09-14 11:36-0400\n"
 "Last-Translator: Tianhao Chai <cth451@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -58,46 +58,54 @@ msgstr "横幅格式无效"
 msgid "Coordinates out of range"
 msgstr "坐标超出有效范围"
 
+#: constants.h:52
+msgid "Cannot open input stream"
+msgstr "无法打开输入数据流"
+
 #: constants.h:53
+msgid "Cannot parse input NBT file"
+msgstr "无法解析输入 NBT 文件"
+
+#: constants.h:55
 msgid ""
 "The map data tag is not a compound but a {}. This file is probably not a map "
 "nbt."
 msgstr "地图 data 标签不是 compound 而是 {}。此文件可能不是地图 NBT。"
 
-#: constants.h:54
+#: constants.h:56
 msgid "Color data is not a byte array. This file is probably not a map nbt."
 msgstr "颜色数据不是字节数组。此文件可能不是地图 NBT。"
 
-#: constants.h:55
+#: constants.h:57
 msgid ""
 "The map does not supports banners - update to a newer Minecraft version and "
 "try again"
 msgstr "此地图文件不支持放置横幅图钉 - 请更新 Minecraft 版本后重试"
 
-#: constants.h:56
+#: constants.h:58
 msgid "Banners in this map is malformed"
-msgstr "此地图文件中的横幅标记格式不正确"
+msgstr "此地图文件中的横幅图钉格式不正确"
 
-#: constants.h:57
+#: constants.h:59
 msgid "Position coordinates in this marker is malformed"
 msgstr "此图钉的坐标格式不正确"
 
-#: constants.h:58
+#: constants.h:60
 msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
 msgstr "BUG：无法找到与 ({}, {}) 匹配的色表编码。请提交 BUG 报告。"
 
-#: constants.h:59
+#: constants.h:61
 msgid ""
 "Warning: Had to render {} partially transparent pixels into fully "
 "transparent ones. Your output might look incorrect."
 msgstr ""
 "警告：被迫将 {} 个半透明像素渲染为全透明像素。您的输出看起来可能不正确。"
 
-#: constants.h:60
+#: constants.h:62
 msgid "Color code {} at offset {} is out of range!"
 msgstr "位于 {1} 的色表编码 {0} 在有效范围外！"
 
-#: constants.h:63
+#: constants.h:65
 msgid ""
 "minemap <options>\n"
 "\t-d, --dithering\n"
@@ -129,7 +137,7 @@ msgstr ""
 "\t\t必需，此地图所在存档的 Minecraft 版本\n"
 "\t\t可从以下值选择：\n"
 
-#: constants.h:79
+#: constants.h:81
 msgid ""
 "pamenim <options>\n"
 "\t-i, --input INPUT\n"
@@ -153,11 +161,11 @@ msgstr ""
 "\t\t必需，此地图所在存档的 Minecraft 版本\n"
 "\t\t可从以下值选择：\n"
 
-#: constants.h:91
+#: constants.h:93
 msgid "\t\t\t{:>8} for game version from {} to {}\n"
 msgstr "\t\t\t{:>8} 可用于游戏版本 {} 到 {}\n"
 
-#: constants.h:92
+#: constants.h:94
 msgid ""
 "\t\tOlder versions are not supported.\n"
 "\n"
