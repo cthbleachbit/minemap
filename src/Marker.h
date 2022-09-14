@@ -9,6 +9,7 @@
 #include <tags/IntTag.h>
 #include <cinttypes>
 #include <optional>
+#include <compare>
 #include "libminemap.h"
 
 namespace Minemap {
@@ -85,7 +86,7 @@ namespace Minemap {
 		 * @return
 		 */
 		bool inline operator==(const MarkerPosition &pos) const noexcept {
-			return std::is_eq(*this <=> pos);
+			return (*this <=> pos) == std::partial_ordering::equivalent;
 		}
 
 		/**
