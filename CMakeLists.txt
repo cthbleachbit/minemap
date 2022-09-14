@@ -62,6 +62,7 @@ endif()
 
 if (USE_GETTEXT)
     add_compile_definitions(_USE_GETTEXT)
+    add_compile_definitions(_TEXT_DOMAIN="${PROJECT_NAME}")
     add_compile_definitions(_LOCALE_DIR="${CMAKE_INSTALL_FULL_LOCALEDIR}")
 endif()
 
@@ -86,3 +87,8 @@ add_subdirectory(misc)
 
 # Source files
 add_subdirectory(src)
+
+# Translations
+if (USE_GETTEXT)
+    add_subdirectory(po)
+endif()

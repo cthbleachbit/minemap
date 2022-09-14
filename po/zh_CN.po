@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: minemap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-14 01:24-0400\n"
+"PO-Revision-Date: 2022-09-14 01:25-0400\n"
+"Last-Translator: Tianhao Chai <cth451@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ../src\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: constants.h:39
+msgid "Invalid Minecraft Version Specifier"
+msgstr "指定的 Minecraft 版本无效"
+
+#: constants.h:41
+msgid "No game version or invalid version specified"
+msgstr "未指定游戏版本号或指定了无效的版本号"
+
+#: constants.h:42
+msgid "No input file specified"
+msgstr "未指定输入文件"
+
+#: constants.h:43
+msgid "No output file specified"
+msgstr "未指定输出文件"
+
+#: constants.h:44
+msgid "Missing marker type / operation"
+msgstr "缺少图钉类型或要进行的操作"
+
+#: constants.h:46
+msgid "Invalid argument passed: {}"
+msgstr "传递的参数无效：{}"
+
+#: constants.h:47
+msgid "Invalid position string"
+msgstr "坐标无效"
+
+#: constants.h:48
+msgid "Invalid banner specifier"
+msgstr "横幅格式无效"
+
+#: constants.h:49
+msgid "Coordinates out of range"
+msgstr "坐标超出有效范围"
+
+#: constants.h:51
+msgid ""
+"The map data tag is not a compound but a {}. This file is probably not a map "
+"nbt."
+msgstr "地图 data 标签不是 compound 而是 {}。此文件可能不是地图 NBT。"
+
+#: constants.h:52
+msgid "Color data is not a byte array. This file is probably not a map nbt."
+msgstr "颜色数据不是字节数组。此文件可能不是地图 NBT。"
+
+#: constants.h:53
+msgid ""
+"The map does not supports banners - update to a newer Minecraft version and "
+"try again"
+msgstr "此地图文件不支持放置横幅图钉 - 请更新 Minecraft 版本后重试"
+
+#: constants.h:54
+msgid "Banners in this map is malformed"
+msgstr "此地图文件中的横幅标记格式不正确"
+
+#: constants.h:55
+msgid "Position coordinates in this marker is malformed"
+msgstr "此图钉的坐标格式不正确"
+
+#: constants.h:56
+msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
+msgstr "BUG：无法找到与 ({}, {}) 匹配的色表编码。请提交 BUG 报告。"
+
+#: constants.h:57
+msgid ""
+"Warning: Had to render {} partially transparent pixels into fully "
+"transparent ones. Your output might look incorrect."
+msgstr ""
+"警告：被迫将 {} 个半透明像素渲染为全透明像素。您的输出看起来可能不正确。"
+
+#: constants.h:58
+msgid "Color code {} at offset {} is out of range!"
+msgstr "位于 {1} 的色表编码 {0} 在有效范围外！"
+
+#: constants.h:61
+msgid ""
+"minemap <options>\n"
+"\t-d, --dithering\n"
+"\t\tOptional, turn on Floyd-Steinberg dithering\n"
+"\t-i, --input INPUT\n"
+"\t\tRequired, image input\n"
+"\t--no-gz\n"
+"\t\tOptional, do not gzip generated NBT file (for human inspection)\n"
+"\t-o, --output FILE\n"
+"\t\tRequired, output file in NBT format\n"
+"\t-e, --export FILE\n"
+"\t\tOptional, export the result of color reduction in png format\n"
+"\t-g, --game VER\n"
+"\t\tRequired, MINIMUM game version this map can be used in\n"
+"\t\tSelect from the following values: \n"
+msgstr ""
+"minemap <选项>\n"
+"\t-d, --dithering\n"
+"\t\t可选，启用 Floyd-Steinberg 递色算法\n"
+"\t-i, --input 输入文件\n"
+"\t\t必需，图像输入\n"
+"\t--no-gz\n"
+"\t\t可选，不压缩输出文件以便手动检查\n"
+"\t-o, --output 输出文件\n"
+"\t\t必需，NBT 输出\n"
+"\t-e, --export 导出图像\n"
+"\t\t可选，导出色表映射后的图像到 PNG\n"
+"\t-g, --game 版本号\n"
+"\t\t必需，此地图所在存档的 Minecraft 版本\n"
+"\t\t可从以下值选择：\n"
+
+#: constants.h:77
+msgid ""
+"pamenim <options>\n"
+"\t-i, --input INPUT\n"
+"\t\tRequired, nbt input\n"
+"\t--no-gz\n"
+"\t\tOptional, indicates that the input file is uncompressed\n"
+"\t-o, --output OUTPUT\n"
+"\t\tRequired, output picture\n"
+"\t-g, --game VER\n"
+"\t\tRequired, Minecraft game version this map is exported from\n"
+"\t\tSelect from the following values: \n"
+msgstr ""
+"pamenim <选项>\n"
+"\t-i, --input 输入文件\n"
+"\t\t必需，NBT 输入\n"
+"\t--no-gz\n"
+"\t\t可选，表示输入文件未经过压缩\n"
+"\t-o, --output 输出文件\n"
+"\t\t必需，图像输出\n"
+"\t-g, --game 版本号\n"
+"\t\t必需，此地图所在存档的 Minecraft 版本\n"
+"\t\t可从以下值选择：\n"
+
+#: constants.h:89
+#, c-format
+msgid "\t\t\t%8s for game version %s\n"
+msgstr "\t\t\t%8s 可用于游戏版本 %s\n"
+
+#: constants.h:90
+msgid ""
+"\t\tOlder versions are not supported.\n"
+"\n"
+msgstr ""
+"\t\t不支持更早之前的游戏版本。\n"
+"\n"

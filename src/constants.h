@@ -10,9 +10,11 @@
 #include <libintl.h>
 #include <fmt/format.h>
 
-#define MINEMAP_TEXTDOMAIN "minemap"
 #ifndef _LOCALE_DIR
 #define _LOCALE_DIR "/usr/local/share/locale/"
+#endif
+#ifndef _TEXT_DOMAIN
+#define _TEXT_DOMAIN "Minemap"
 #endif
 #define _(x) gettext (x)
 
@@ -29,8 +31,8 @@ inline auto localizedFormat(std::string_view fmt, T &&... args) {
 inline void initializeLocale() {
 #ifdef _USE_GETTEXT
 	setlocale(LC_ALL, "");
-	bindtextdomain(MINEMAP_TEXTDOMAIN, _LOCALE_DIR);
-	textdomain(MINEMAP_TEXTDOMAIN);
+	bindtextdomain(_TEXT_DOMAIN, _LOCALE_DIR);
+	textdomain(_TEXT_DOMAIN);
 #else
 	return;
 #endif
