@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 12:10-0400\n"
-"PO-Revision-Date: 2022-09-14 12:11-0400\n"
+"POT-Creation-Date: 2022-09-14 17:23-0400\n"
+"PO-Revision-Date: 2022-09-14 17:26-0400\n"
 "Last-Translator: Tianhao Chai <cth451@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -66,7 +66,13 @@ msgstr "入力ストリームを開くことができません"
 msgid "Cannot parse input NBT file"
 msgstr "入力された NBT ファイルをパースできません"
 
-#: constants.h:55
+#: constants.h:54
+msgid ""
+"Cannot parse NBT map file to modify - will generate from scratch and "
+"overwrite"
+msgstr "変更する NBT 地図ファイルをパースできません - 生成して上書きします"
+
+#: constants.h:56
 msgid ""
 "The map data tag is not a compound but a {}. This file is probably not a map "
 "nbt."
@@ -74,13 +80,13 @@ msgstr ""
 "地図の data タグは compound ではなく、{} tag です。このファイルはおそらく地"
 "図 nbt ではありません。"
 
-#: constants.h:56
+#: constants.h:57
 msgid "Color data is not a byte array. This file is probably not a map nbt."
 msgstr ""
 "カラーデータは byte array ではありません。このファイルはおそらく地図 nbt では"
 "ありません。"
 
-#: constants.h:57
+#: constants.h:58
 msgid ""
 "The map does not supports banners - update to a newer Minecraft version and "
 "try again"
@@ -88,20 +94,20 @@ msgstr ""
 "この地図はバナーには対応していません - 新しい Minecraft のバージョンにアップ"
 "デートして再度お試しください"
 
-#: constants.h:58
+#: constants.h:59
 msgid "Banners in this map is malformed"
 msgstr "この地図のバナーは不正です"
 
-#: constants.h:59
+#: constants.h:60
 msgid "Position coordinates in this marker is malformed"
 msgstr "このマーカーの位置座標が不正です"
 
-#: constants.h:60
+#: constants.h:61
 msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
 msgstr ""
 "BUG: ({}, {}) にあるピクセルの色が一致しない。不具合報告をお寄せください。"
 
-#: constants.h:61
+#: constants.h:62
 msgid ""
 "Warning: Had to render {} partially transparent pixels into fully "
 "transparent ones. Your output might look incorrect."
@@ -109,11 +115,11 @@ msgstr ""
 "警告：{} 個の部分透過ピクセルを完全透過ピクセルに変換する必要がありました。出"
 "力が正しくないと思われるかもしれません。"
 
-#: constants.h:62
+#: constants.h:63
 msgid "Color code {} at offset {} is out of range!"
 msgstr "オフセット {1} のカラーコード {0} が範囲外です！"
 
-#: constants.h:65
+#: constants.h:66
 msgid ""
 "Usage: minemap <options>\n"
 "\t-d, --dithering\n"
@@ -124,6 +130,9 @@ msgid ""
 "\t\tOptional, do not gzip generated NBT file (for human inspection)\n"
 "\t-o, --output FILE\n"
 "\t\tRequired, output file in NBT format\n"
+"\t-r, --replace\n"
+"\t\tOptional, replace map contents preserving markers if the output file "
+"already exists\n"
 "\t-e, --export FILE\n"
 "\t\tOptional, export the result of color reduction in png format\n"
 "\t-g, --game VER\n"
@@ -139,13 +148,16 @@ msgstr ""
 "\t\t任意、生成された NBT ファイルを gzip 圧縮しない（手動検査用）\n"
 "\t-o, --output OUTPUT\n"
 "\t\t必要、nbt 出力 \n"
+"\t-r, --replace\n"
+"\t\t任意、出力ファイルが既に存在する場合、マーカを保存したまま地図内容を置き"
+"換える\n"
 "\t-e, --export FILE\n"
 "\t\t任意、減色結果を png 形式で書き出し\n"
 "\t-g, --game VER\n"
 "\t\t必要、この地図が使用できる最小限のゲームバージョン\n"
 "\t\t以下の値から選択してください。\n"
 
-#: constants.h:81
+#: constants.h:84
 msgid ""
 "Usage: pamenim <options>\n"
 "\t-i, --input INPUT\n"
@@ -169,11 +181,11 @@ msgstr ""
 "\t\t必要、この地図がエクスポートされた Minecraft のゲームバージョン\n"
 "\t\t以下の値から選択してください。\n"
 
-#: constants.h:93
+#: constants.h:96
 msgid "\t\t\t{:>8} for game version from {} to {}\n"
 msgstr "\t\t\t{:>8} は {} から {} まで対応しています\n"
 
-#: constants.h:94
+#: constants.h:97
 msgid ""
 "\t\tOlder versions are not supported.\n"
 "\n"

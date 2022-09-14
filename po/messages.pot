@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 12:10-0400\n"
+"POT-Creation-Date: 2022-09-14 17:20-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,39 +65,43 @@ msgstr ""
 msgid "Cannot parse input NBT file"
 msgstr ""
 
-#: constants.h:55
-msgid "The map data tag is not a compound but a {}. This file is probably not a map nbt."
+#: constants.h:54
+msgid "Cannot parse NBT map file to modify - will generate from scratch and overwrite"
 msgstr ""
 
 #: constants.h:56
-msgid "Color data is not a byte array. This file is probably not a map nbt."
+msgid "The map data tag is not a compound but a {}. This file is probably not a map nbt."
 msgstr ""
 
 #: constants.h:57
-msgid "The map does not supports banners - update to a newer Minecraft version and try again"
+msgid "Color data is not a byte array. This file is probably not a map nbt."
 msgstr ""
 
 #: constants.h:58
-msgid "Banners in this map is malformed"
+msgid "The map does not supports banners - update to a newer Minecraft version and try again"
 msgstr ""
 
 #: constants.h:59
-msgid "Position coordinates in this marker is malformed"
+msgid "Banners in this map is malformed"
 msgstr ""
 
 #: constants.h:60
-msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
+msgid "Position coordinates in this marker is malformed"
 msgstr ""
 
 #: constants.h:61
-msgid "Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look incorrect."
+msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
 msgstr ""
 
 #: constants.h:62
+msgid "Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look incorrect."
+msgstr ""
+
+#: constants.h:63
 msgid "Color code {} at offset {} is out of range!"
 msgstr ""
 
-#: constants.h:65
+#: constants.h:66
 msgid ""
 "Usage: minemap <options>\n"
 "\t-d, --dithering\n"
@@ -108,6 +112,8 @@ msgid ""
 "\t\tOptional, do not gzip generated NBT file (for human inspection)\n"
 "\t-o, --output FILE\n"
 "\t\tRequired, output file in NBT format\n"
+"\t-r, --replace\n"
+"\t\tOptional, replace map contents preserving markers if the output file already exists\n"
 "\t-e, --export FILE\n"
 "\t\tOptional, export the result of color reduction in png format\n"
 "\t-g, --game VER\n"
@@ -115,7 +121,7 @@ msgid ""
 "\t\tSelect from the following values: \n"
 msgstr ""
 
-#: constants.h:81
+#: constants.h:84
 msgid ""
 "Usage: pamenim <options>\n"
 "\t-i, --input INPUT\n"
@@ -129,11 +135,11 @@ msgid ""
 "\t\tSelect from the following values: \n"
 msgstr ""
 
-#: constants.h:93
+#: constants.h:96
 msgid "\t\t\t{:>8} for game version from {} to {}\n"
 msgstr ""
 
-#: constants.h:94
+#: constants.h:97
 msgid ""
 "\t\tOlder versions are not supported.\n"
 "\n"
