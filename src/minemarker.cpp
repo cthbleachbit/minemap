@@ -89,6 +89,8 @@ namespace Minemap {
 }
 
 int main(int argc, char **argv) {
+	initializeLocale();
+
 	using namespace Minemap;
 	std::string input_path;
 	MarkerType type = MarkerType::INVALID;
@@ -115,7 +117,7 @@ int main(int argc, char **argv) {
 				type = Minemap::MarkerType::BANNER;;
 				break;
 			} else {
-				std::cerr << fmt::format(INVALID_ARGUMENT, argv[i]) << std::endl;
+				std::cerr << localizedFormat(INVALID_ARGUMENT, argv[i]) << std::endl;
 				usage();
 				exit(1);
 			}
@@ -151,11 +153,11 @@ int main(int argc, char **argv) {
 	NBTP::IntTag::V zOffset = 0;
 	{
 		if (root_tag->typeCode() != NBTP::TagType::COMPOUND) {
-			throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
+			throw std::runtime_error(localizedFormat(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
 		}
 		NBTP::Tag *data_tag = ((NBTP::CompoundTag *) root_tag.get())->getPayload()["data"].get();
 		if (data_tag->typeCode() != NBTP::TagType::COMPOUND) {
-			throw std::runtime_error(fmt::format(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
+			throw std::runtime_error(localizedFormat(MAP_NOT_COMPOUND, NBTP::TypeNames[root_tag->typeCode()]));
 		}
 		auto data = (NBTP::CompoundTag *) data_tag;
 		auto xOffset_tag = data->lookup("xCenter");

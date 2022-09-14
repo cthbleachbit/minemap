@@ -39,6 +39,9 @@ void usage() {
 }
 
 int main(int argc, char **argv) {
+
+	initializeLocale();
+
 	// Argument parsing
 	using namespace Minemap;
 	Version mc_ver = Version::INVALID;
@@ -70,7 +73,7 @@ int main(int argc, char **argv) {
 			} else if (strcmp(argv[i], "--no-gz") == 0) {
 				no_gz = true;
 			} else {
-				std::cerr << fmt::format(INVALID_ARGUMENT, argv[i]) << std::endl;
+				std::cerr << localizedFormat(INVALID_ARGUMENT, argv[i]) << std::endl;
 				usage();
 				exit(1);
 			}

@@ -67,7 +67,7 @@ namespace Minemap {
 			} else {
 				colorCode = palette_lookup_table->lookup(TupleRGB(mapped_pix));
 				if (!colorCode.has_value()) {
-					std::string no_match = fmt::format(COLOR_MISMATCH, col, row);
+					std::string no_match = localizedFormat(COLOR_MISMATCH, col, row);
 					throw std::runtime_error(no_match);
 				}
 			}
@@ -75,7 +75,7 @@ namespace Minemap {
 		}
 
 		if (partially_transparent_count) {
-			std::cerr << fmt::format(COLOR_PARTIALLY_TRANSPARENT, partially_transparent_count) << std::endl;
+			std::cerr << localizedFormat(COLOR_PARTIALLY_TRANSPARENT, partially_transparent_count) << std::endl;
 		}
 	}
 
@@ -98,7 +98,7 @@ namespace Minemap {
 			auto rgb = palette_lookup_table->lookup(colorIndex);
 
 			if (!rgb.has_value()) {
-				std::string error_string = fmt::format(COLOR_OUT_OF_RANGE, (uint16_t) colorIndex, i);
+				std::string error_string = localizedFormat(COLOR_OUT_OF_RANGE, (uint16_t) colorIndex, i);
 				throw std::runtime_error(error_string);
 			}
 
