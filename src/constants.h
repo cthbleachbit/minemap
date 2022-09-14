@@ -48,13 +48,13 @@ inline void initializeLocale() {
 #define INVALID_BANNER _("Invalid banner specifier")
 #define POSITION_OUT_OF_RANGE _("Coordinates out of range")
 
-#define MAP_NOT_COMPOUND _("The map data tag is not a compound but a {}. Is this a map nbt file?")
-#define COLORS_NOT_BYTES _("Color data is not a byte array. Is this a map nbt file?")
+#define MAP_NOT_COMPOUND _("The map data tag is not a compound but a {}. This file is probably not a map nbt.")
+#define COLORS_NOT_BYTES _("Color data is not a byte array. This file is probably not a map nbt.")
 #define BANNERS_MISSING _("The map does not supports banners - update to a newer Minecraft version and try again")
 #define BANNERS_MALFORMED _("Banners in this map is malformed")
 #define POSITION_MALFORMED _("Position coordinates in this marker is malformed")
 #define COLOR_MISMATCH _("BUG: No color match for pixel at ({}, {}). Please submit a bug report.")
-#define COLOR_PARTIALLY_TRANSPARENT _("Warning: {} partially transparent pixels are rendered as fully transparent!")
+#define COLOR_PARTIALLY_TRANSPARENT _("Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look incorrect.")
 #define COLOR_OUT_OF_RANGE _("Color code {} at offset {} is out of range!")
 
 // Usage Text
@@ -85,6 +85,9 @@ inline void initializeLocale() {
 "\t\tRequired, Minecraft game version this map is exported from\n" \
 "\t\tSelect from the following values: \n" \
 )
+
+#define VERSION_RANGE _("\t\t\t%8s for game version %s\n")
+#define VERSION_OLDER_UNSUPPORTED _("\t\tOlder versions are not supported.\n\n")
 
 #ifdef USE_GM
 #define MINEMAP_MAGICK_IMPLEMENTATION "GraphicsMagick"
