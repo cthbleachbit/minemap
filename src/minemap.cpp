@@ -29,7 +29,7 @@ int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf(MINEMAP_USAGE);
+	std::cout << MINEMAP_USAGE;
 	Minemap::prettyPrintSupportedVersions();
 	Minemap::print_version();
 }

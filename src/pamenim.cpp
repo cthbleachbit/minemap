@@ -22,7 +22,7 @@
 #endif
 
 void usage() {
-	printf(PAMENIM_USAGE);
+	std::cout << PAMENIM_USAGE;
 	Minemap::prettyPrintSupportedVersions();
 	Minemap::print_version();
 }

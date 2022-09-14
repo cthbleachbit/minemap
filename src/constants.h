@@ -88,7 +88,7 @@ inline void initializeLocale() {
 "\t\tSelect from the following values: \n" \
 )
 
-#define VERSION_RANGE _("\t\t\t%8s for game version %s\n")
+#define VERSION_RANGE _("\t\t\t{:>8} for game version {}\n")
 #define VERSION_OLDER_UNSUPPORTED _("\t\tOlder versions are not supported.\n\n")
 
 #ifdef USE_GM

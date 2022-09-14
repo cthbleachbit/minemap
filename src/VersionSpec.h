@@ -65,11 +65,11 @@ namespace Minemap {
 	/**
 	 * Pretty print all supported Minecraft versions of this program to stdout.
 	*/
-	inline constexpr void prettyPrintSupportedVersions() {
+	inline void prettyPrintSupportedVersions() {
 		for (const VersionSpec &ver: SUPPORTED_VERSIONS) {
-			printf(VERSION_RANGE, ver.name, ver.versionRange);
+			std::cout << localizedFormat(VERSION_RANGE, ver.name, ver.versionRange);
 		}
-		printf(VERSION_OLDER_UNSUPPORTED);
+		std::cout << VERSION_OLDER_UNSUPPORTED;
 	}
 
 	/**
