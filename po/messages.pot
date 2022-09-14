@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 01:24-0400\n"
+"POT-Creation-Date: 2022-09-14 02:01-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,75 +21,75 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: constants.h:39
+#: constants.h:41
 msgid "Invalid Minecraft Version Specifier"
 msgstr ""
 
-#: constants.h:41
+#: constants.h:43
 msgid "No game version or invalid version specified"
 msgstr ""
 
-#: constants.h:42
+#: constants.h:44
 msgid "No input file specified"
 msgstr ""
 
-#: constants.h:43
+#: constants.h:45
 msgid "No output file specified"
 msgstr ""
 
-#: constants.h:44
+#: constants.h:46
 msgid "Missing marker type / operation"
 msgstr ""
 
-#: constants.h:46
+#: constants.h:48
 msgid "Invalid argument passed: {}"
 msgstr ""
 
-#: constants.h:47
+#: constants.h:49
 msgid "Invalid position string"
 msgstr ""
 
-#: constants.h:48
+#: constants.h:50
 msgid "Invalid banner specifier"
 msgstr ""
 
-#: constants.h:49
+#: constants.h:51
 msgid "Coordinates out of range"
 msgstr ""
 
-#: constants.h:51
+#: constants.h:53
 msgid "The map data tag is not a compound but a {}. This file is probably not a map nbt."
 msgstr ""
 
-#: constants.h:52
+#: constants.h:54
 msgid "Color data is not a byte array. This file is probably not a map nbt."
 msgstr ""
 
-#: constants.h:53
+#: constants.h:55
 msgid "The map does not supports banners - update to a newer Minecraft version and try again"
 msgstr ""
 
-#: constants.h:54
+#: constants.h:56
 msgid "Banners in this map is malformed"
 msgstr ""
 
-#: constants.h:55
+#: constants.h:57
 msgid "Position coordinates in this marker is malformed"
 msgstr ""
 
-#: constants.h:56
+#: constants.h:58
 msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
 msgstr ""
 
-#: constants.h:57
+#: constants.h:59
 msgid "Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look incorrect."
 msgstr ""
 
-#: constants.h:58
+#: constants.h:60
 msgid "Color code {} at offset {} is out of range!"
 msgstr ""
 
-#: constants.h:61
+#: constants.h:63
 msgid ""
 "minemap <options>\n"
 "\t-d, --dithering\n"
@@ -107,7 +107,7 @@ msgid ""
 "\t\tSelect from the following values: \n"
 msgstr ""
 
-#: constants.h:77
+#: constants.h:79
 msgid ""
 "pamenim <options>\n"
 "\t-i, --input INPUT\n"
@@ -121,12 +121,11 @@ msgid ""
 "\t\tSelect from the following values: \n"
 msgstr ""
 
-#: constants.h:89
-#, c-format
-msgid "\t\t\t%8s for game version %s\n"
+#: constants.h:91
+msgid "\t\t\t{:>8} for game version {}\n"
 msgstr ""
 
-#: constants.h:90
+#: constants.h:92
 msgid ""
 "\t\tOlder versions are not supported.\n"
 "\n"
