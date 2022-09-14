@@ -62,7 +62,7 @@ inline void initializeLocale() {
 #define COLOR_OUT_OF_RANGE _("Color code {} at offset {} is out of range!")
 
 // Usage Text
-#define MINEMAP_USAGE _( "minemap <options>\n" \
+#define MINEMAP_USAGE _( "Usage: minemap <options>\n" \
 "\t-d, --dithering\n" \
 "\t\tOptional, turn on Floyd-Steinberg dithering\n" \
 "\t-i, --input INPUT\n" \
@@ -78,7 +78,7 @@ inline void initializeLocale() {
 "\t\tSelect from the following values: \n" \
 )
 
-#define PAMENIM_USAGE _( "pamenim <options>\n" \
+#define PAMENIM_USAGE _( "Usage: pamenim <options>\n" \
 "\t-i, --input INPUT\n" \
 "\t\tRequired, nbt input\n" \
 "\t--no-gz\n" \
