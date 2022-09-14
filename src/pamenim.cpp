@@ -106,7 +106,15 @@ int main(int argc, char **argv) {
 			is = std::make_unique<iGZStream>(input_path.c_str());
 		}
 		ssize_t parsed_bytes;
-		root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
+
+		// Catch invalid input files
+		try {
+			root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
+		} catch (const NBTP::TagParseException &e) {
+			std::cerr << e.what() << std::endl;
+			std::cerr << PAMENIM_PARSE_FAIL << std::endl;
+			exit(1);
+		}
 	}
 
 	NBTP::ListTag::List colors_list;

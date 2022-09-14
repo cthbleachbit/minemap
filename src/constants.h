@@ -50,6 +50,7 @@ inline void initializeLocale() {
 #define INVALID_BANNER _("Invalid banner specifier")
 #define POSITION_OUT_OF_RANGE _("Coordinates out of range")
 #define PAMENIM_ISTREAM_FAIL _("Cannot open input stream")
+#define PAMENIM_PARSE_FAIL _("Cannot parse input NBT file")
 
 #define MAP_NOT_COMPOUND _("The map data tag is not a compound but a {}. This file is probably not a map nbt.")
 #define COLORS_NOT_BYTES _("Color data is not a byte array. This file is probably not a map nbt.")
