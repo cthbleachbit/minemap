@@ -7,6 +7,7 @@
 #include <libnbtp.h>
 #include <iostream>
 #include <cstring>
+#include <filesystem>
 
 #include "libminemap.h"
 #include "ColorMap.h"
@@ -91,13 +92,19 @@ int main(int argc, char **argv) {
 	// Get input color array ready
 	std::shared_ptr<NBTP::Tag> root_tag;
 	{
+		// Check whether we can access the input
+		auto stat = std::filesystem::status(input_path);
+		if (!is_regular_file(stat)) {
+			std::cerr << PAMENIM_ISTREAM_FAIL << std::endl;
+			exit(1);
+		}
+
 		std::unique_ptr<std::istream> is;
 		if (no_gz) {
 			is = std::make_unique<std::ifstream>(input_path, std::ios::binary);
 		} else {
 			is = std::make_unique<iGZStream>(input_path.c_str());
 		}
-
 		ssize_t parsed_bytes;
 		root_tag = NBTP::TagIO::parseRoot(*is, parsed_bytes);
 	}
