@@ -9,13 +9,17 @@ import pynbtp
 
 
 def run(minemap_bin: str, test_info: Dict[str, object]) -> int:
-    result = sp.run(
-        [minemap_bin,
-         "-i", test_info["input_image"],
-         "-o", test_info["output_nbt"],
-         "-e", "/tmp/export.png",
-         "--no-gz", "-g",
-         "1.17"])
+    arg_list = [minemap_bin,
+                "-i", os.path.abspath(test_info["input_image"]),
+                "-o", os.path.abspath(test_info["output_nbt"]),
+                "-e", "/tmp/export.png",
+                "--no-gz", "-g",
+                "1.17"]
+    if "replace" in test_info.keys():
+        arg_list.append("--replace")
+    print("Command line: ")
+    print(" ".join(arg_list))
+    result = sp.run(arg_list)
     return result.returncode
 
 

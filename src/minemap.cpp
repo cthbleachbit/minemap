@@ -144,6 +144,7 @@ int main(int argc, char **argv) {
 	NBTP::BytesTag *colors_tag;
 	try {
 		colors_tag = Minemap::Map::getModifiableColors(map_tag);
+		colors_tag->getPayload().clear();
 	} catch (const std::runtime_error &e) {
 		std::cerr << e.what() << std::endl;
 		exit(1);
