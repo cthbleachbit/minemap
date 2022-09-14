@@ -12,10 +12,10 @@
 namespace Minemap {
 
 	constexpr std::array<VersionSpec, END_OF_VERSION> SUPPORTED_VERSIONS = {
-			DEFINE_VERSION_SPEC("1.8", "1.12", MC_1_8, std::nullopt), // 1.8.1-pre1
-			DEFINE_VERSION_SPEC("1.12", "1.16", MC_1_12, 1128), // 1.12-17w17a
-			DEFINE_VERSION_SPEC("1.16", "1.17", MC_1_16, 2562), // 1.16-pre-6
-			DEFINE_VERSION_SPEC("1.17", "+oo", MC_1_17, 2699), // 21w10a and 1.17
+			DEFINE_VERSION_SPEC("1.8",  "1.8.x",  "1.12.x", MC_1_8,  std::nullopt), // 1.8.1-pre1
+			DEFINE_VERSION_SPEC("1.12", "1.12.x", "1.16.x", MC_1_12, 1128), // 1.12-17w17a
+			DEFINE_VERSION_SPEC("1.16", "1.16.x", "1.17.x", MC_1_16, 2562), // 1.16-pre-6
+			DEFINE_VERSION_SPEC("1.17", "1.17.x", "+oo",    MC_1_17, 2699), // 21w10a and 1.17
 	};
 
 	/**

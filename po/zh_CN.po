@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 02:01-0400\n"
-"PO-Revision-Date: 2022-09-14 02:02-0400\n"
+"POT-Creation-Date: 2022-09-14 10:42-0400\n"
+"PO-Revision-Date: 2022-09-14 10:44-0400\n"
 "Last-Translator: Tianhao Chai <cth451@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -154,8 +154,8 @@ msgstr ""
 "\t\t可从以下值选择：\n"
 
 #: constants.h:91
-msgid "\t\t\t{:>8} for game version {}\n"
-msgstr "\t\t\t{:>8} 可用于游戏版本 {}\n"
+msgid "\t\t\t{:>8} for game version from {} to {}\n"
+msgstr "\t\t\t{:>8} 可用于游戏版本 {} 到 {}\n"
 
 #: constants.h:92
 msgid ""

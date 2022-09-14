@@ -12,10 +12,10 @@
 #include "constants.h"
 
 // Quick hand for defining a version spec
-#define DEFINE_VERSION_SPEC(ver_start, ver_end, ident, dv) \
+#define DEFINE_VERSION_SPEC(ver_name, ver_start, ver_end, ident, dv) \
 VersionSpec{ \
-    (ver_start), \
-    "[" ver_start ", " ver_end ")", \
+    (ver_name), \
+    ver_start, ver_end, \
     ident ## _DATA, \
     ident ## _HEIGHT, \
     (dv) \
@@ -35,9 +35,10 @@ namespace Minemap {
 
 	struct VersionSpec {
 		// Human-readable name of this version
-		const char name[5] = "NONE";
+		const char name[7] = "NONE";
 		// Human-readable range of game version this VersionSpec can be used in
-		const char versionRange[20] = "NONE";
+		const char versionFrom[15] = "NONE";
+		const char versionTo[15] = "NONE";
 		// Palette data (flat array, generated)
 		const uint8_t *paletteData = {};
 		// Palette height (in pixels, generated)
@@ -67,7 +68,7 @@ namespace Minemap {
 	*/
 	inline void prettyPrintSupportedVersions() {
 		for (const VersionSpec &ver: SUPPORTED_VERSIONS) {
-			std::cout << localizedFormat(VERSION_RANGE, ver.name, ver.versionRange);
+			std::cout << localizedFormat(VERSION_RANGE, ver.name, ver.versionFrom, ver.versionTo);
 		}
 		std::cout << VERSION_OLDER_UNSUPPORTED;
 	}
