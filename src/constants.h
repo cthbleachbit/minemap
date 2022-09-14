@@ -9,6 +9,7 @@
 
 #include <libintl.h>
 #include <fmt/format.h>
+
 #define MINEMAP_TEXTDOMAIN "minemap"
 #ifndef _LOCALE_DIR
 #define _LOCALE_DIR "/usr/local/share/locale/"
@@ -55,6 +56,35 @@ inline void initializeLocale() {
 #define COLOR_MISMATCH _("BUG: No color match for pixel at ({}, {}). Please submit a bug report.")
 #define COLOR_PARTIALLY_TRANSPARENT _("Warning: {} partially transparent pixels are rendered as fully transparent!")
 #define COLOR_OUT_OF_RANGE _("Color code {} at offset {} is out of range!")
+
+// Usage Text
+#define MINEMAP_USAGE _( "minemap <options>\n" \
+"\t-d, --dithering\n" \
+"\t\tOptional, turn on Floyd-Steinberg dithering\n" \
+"\t-i, --input INPUT\n" \
+"\t\tRequired, image input\n" \
+"\t--no-gz\n" \
+"\t\tOptional, do not gzip generated NBT file (for human inspection)\n" \
+"\t-o, --output FILE\n" \
+"\t\tRequired, output file in NBT format\n" \
+"\t-e, --export FILE\n" \
+"\t\tOptional, export the result of color reduction in png format\n" \
+"\t-g, --game VER\n" \
+"\t\tRequired, MINIMUM game version this map can be used in\n" \
+"\t\tSelect from the following values: \n" \
+)
+
+#define PAMENIM_USAGE _( "pamenim <options>\n" \
+"\t-i, --input INPUT\n" \
+"\t\tRequired, nbt input\n" \
+"\t--no-gz\n" \
+"\t\tOptional, indicates that the input file is uncompressed\n" \
+"\t-o, --output OUTPUT\n" \
+"\t\tRequired, output picture\n" \
+"\t-g, --game VER\n" \
+"\t\tRequired, Minecraft game version this map is exported from\n" \
+"\t\tSelect from the following values: \n" \
+)
 
 #ifdef USE_GM
 #define MINEMAP_MAGICK_IMPLEMENTATION "GraphicsMagick"

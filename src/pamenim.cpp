@@ -22,19 +22,8 @@
 #endif
 
 void usage() {
-	printf("pamenim <options>\n");
-	printf("\t-i, --input INPUT\n");
-	printf("\t\tRequired, nbt input\n");
-	printf("\t--no-gz\n");
-	printf("\t\tOptional, indicates that the input file is uncompressed\n");
-	printf("\t-g, --game VER\n");
-	printf("\t\tRequired, Minecraft game version this map is exported from\n");
-	printf("\t\tSelect from the following values: \n");
+	printf(PAMENIM_USAGE);
 	Minemap::prettyPrintSupportedVersions();
-	printf("\t\tOlder versions are not supported.\n");
-	printf("\t-o, --output OUTPUT\n");
-	printf("\t\tRequired, output picture\n");
-	printf("\n");
 	Minemap::print_version();
 }
 

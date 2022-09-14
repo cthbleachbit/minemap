@@ -29,23 +29,8 @@ int main(int argc, char **argv);
 void usage();
 
 void usage() {
-	printf("minemap <options>\n");
-	printf("\t-d, --dithering\n");
-	printf("\t\tOptional, turn on Floyd-Steinberg dithering\n");
-	printf("\t-i, --input INPUT\n");
-	printf("\t\tRequired, image input\n");
-	printf("\t--no-gz\n");
-	printf("\t\tOptional, do not gzip generated NBT file\n");
-	printf("\t-o, --output FILE\n");
-	printf("\t\tRequired, output file in NBT format\n");
-	printf("\t-e, --export FILE\n");
-	printf("\t\tOptional, export the result of color reduction in png format\n");
-	printf("\t-g, --game VER\n");
-	printf("\t\tRequired, MINIMUM game version this map can be used in\n");
-	printf("\t\tSelect from the following values: \n");
+	printf(MINEMAP_USAGE);
 	Minemap::prettyPrintSupportedVersions();
-	printf("\t\tOlder versions are not supported.\n");
-	printf("\n");
 	Minemap::print_version();
 }
 

@@ -69,6 +69,8 @@ namespace Minemap {
 		for (const VersionSpec &ver: SUPPORTED_VERSIONS) {
 			printf("\t\t\t%8s for game version %s\n", ver.name, ver.versionRange);
 		}
+		printf("\t\tOlder versions are not supported.\n"
+		       "\n");
 	}
 
 	/**
