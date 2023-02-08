@@ -1,6 +1,6 @@
-//
-// Created by cth451 on 2020/05/14.
-//
+/**
+ * @file Map item specifications.
+ */
 
 #ifndef MINEMAP_MAP_H
 #define MINEMAP_MAP_H
@@ -9,13 +9,16 @@
 #include "VersionSpec.h"
 #include <optional>
 
-// the default center coordinates should be close enough to the "borderlands" that players would not normally reach
-#define DEFAULT_X_CENTER 1 << 30
-#define DEFAULT_Z_CENTER 1 << 30
 
 namespace Minemap {
 	namespace Map {
 		struct MapGeometry {
+			/*
+			 * Default center coordinates - close enough to the "borderlands" that players would not normally reach
+			 */
+			static const int32_t DEFAULT_X_CENTER = 1 << 30;
+			static const int32_t DEFAULT_Z_CENTER = 1 << 30;
+
 			char scale = 1;
 			char dim = 1;
 			int16_t width = 128;
@@ -71,6 +74,11 @@ namespace Minemap {
 		 */
 		std::shared_ptr<NBTP::CompoundTag> makeMapRoot(Version ver);
 
+		/**
+		 * Save a map to an output stream
+		 * @param os  target output
+		 * @param tag tag to save
+		 */
 		void saveMap(std::ostream &os, NBTP::CompoundTag &tag);
 	}
 }

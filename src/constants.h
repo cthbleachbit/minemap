@@ -1,6 +1,6 @@
-//
-// Created by cth451 on 2020/05/15.
-//
+/**
+ * @file library numerical and string constants
+ */
 
 #ifndef MINEMAP_CONSTANTS_H
 #define MINEMAP_CONSTANTS_H
@@ -12,22 +12,40 @@
 
 #ifndef _LOCALE_DIR
 #define _LOCALE_DIR "/usr/local/share/locale/"
-#endif
+#endif /* ifndef _LOCALE_DIR */
 #ifndef _TEXT_DOMAIN
 #define _TEXT_DOMAIN "Minemap"
-#endif
+#endif /* ifndef _TEXT_DOMAIN */
+
+/*
+ * Give gettext an alias
+ */
 #define _(x) gettext (x)
 
+/**
+ * @brief Wrap fmt::format for use with translated string generated at runtime.
+ *
+ * @tparam T formatting arguments types
+ * @param fmt localized string
+ * @param args formatting arguments for this localized string
+ * @return formatted string
+ */
 template<typename ... T>
-inline auto localizedFormat(std::string_view fmt, T &&... args) {
+inline std::string localizedFormat(std::string_view fmt, T &&... args) {
 	return fmt::vformat(fmt, fmt::make_format_args(std::forward<T>(args)...));
 }
 
-#else
+#else /* ifdef _USE_GETTEXT */
+/*
+ * If gettext is not available or disabled, make _() and localizedFormat() short circuits.
+ */
 #define _(x) x
 #define localizedFormat fmt::format
-#endif
+#endif /* ifdef _USE_GETTEXT */
 
+/**
+ * @brief Initialize locale support. Does nothing if gettext is not available or disabled.
+ */
 inline void initializeLocale() {
 #ifdef _USE_GETTEXT
 	setlocale(LC_ALL, "");
@@ -37,6 +55,8 @@ inline void initializeLocale() {
 	return;
 #endif
 }
+
+/* Error Messages */
 
 #define INVALID_GAME_VER _("Invalid Minecraft Version Specifier")
 
@@ -62,7 +82,8 @@ inline void initializeLocale() {
 #define COLOR_PARTIALLY_TRANSPARENT _("Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look incorrect.")
 #define COLOR_OUT_OF_RANGE _("Color code {} at offset {} is out of range!")
 
-// Usage Text
+/* Usage Text */
+
 #define MINEMAP_USAGE _( "Usage: minemap <options>\n" \
 "\t-d, --dithering\n" \
 "\t\tOptional, turn on Floyd-Steinberg dithering\n" \
@@ -103,4 +124,4 @@ inline void initializeLocale() {
 #endif
 #define VERSION_MESSAGE "Application version " MINEMAP_APP_VER " with " MINEMAP_MAGICK_IMPLEMENTATION
 
-#endif //CONSTANTS_H
+#endif /* MINEMAP_CONSTANTS_H */

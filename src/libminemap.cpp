@@ -1,6 +1,6 @@
-//
-// Created by cth451 on 2021/9/15.
-//
+/**
+ * @file libminemap entry point function implementations
+ */
 
 #include <fmt/format.h>
 #include <iostream>
@@ -14,7 +14,7 @@ namespace Minemap {
 		std::cout << VERSION_MESSAGE << std::endl;
 	}
 
-	__MINEMAP_CLONE__
+	MINEMAP_CLONE
 	void _clone_mapped_to_tag(const Magick::Image &input_img,
 	                          const Magick::Image &mapped_img,
 	                          const std::shared_ptr<ColorMap> &palette_lookup_table,
@@ -86,9 +86,8 @@ namespace Minemap {
 		_clone_mapped_to_tag(input_img, mapped_img, palette_lookup_table, colors_tag);
 	}
 
-	__MINEMAP_CLONE__
-			std::unique_ptr<std::array<double, 16384 * 4>>
-
+	MINEMAP_CLONE
+	std::unique_ptr<std::array<double, 16384 * 4>>
 	_clone_tag_to_pixelstore(const NBTP::ListTag::List &colors_list,
 	                         const std::shared_ptr<ColorMap> &palette_lookup_table) {
 		auto pixel_store = std::make_unique<std::array<double, 16384 * 4>>();

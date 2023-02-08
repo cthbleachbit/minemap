@@ -1,6 +1,6 @@
-//
-// Created by cth451 on 2021/9/15.
-//
+/**
+ * @file libminemap entry point
+ */
 
 #ifndef MINEMAP_LIBMINEMAP_H
 #define MINEMAP_LIBMINEMAP_H
@@ -16,16 +16,16 @@
 
 #if __has_attribute(target_clones) && !defined(_WIN32)
 # if (defined(__amd64__) || defined(__x86_64__))
-#  define __MINEMAP_CLONE__ __attribute((target_clones("default", "sse2", "sse3", "sse4.1", "sse4.2", "popcnt", "avx", "avx2")))
+#  define MINEMAP_CLONE __attribute((target_clones("default", "sse2", "sse3", "sse4.1", "sse4.2", "popcnt", "avx", "avx2")))
 # elif (defined(__PPC64__))
-#  define __MINEMAP_CLONE__ __attribute__((target_clones("default","cpu=power9")))
+#  define MINEMAP_CLONE __attribute__((target_clones("default","cpu=power9")))
 # else
 #  pragma message( "Warning: Target clone not supported yet" )
-#  define __MINEMAP_CLONE__
+#  define MINEMAP_CLONE
 # endif
 #else
 #pragma message( "Warning: No target clone support" )
-#define __MINEMAP_CLONE__
+#define MINEMAP_CLONE
 #endif
 
 #define CREATE_ENUM(name) \
@@ -34,13 +34,25 @@
 #define CREATE_STRINGS(name) \
     #name,
 
+/**
+ * Forward declarations
+ */
 namespace Magick {
 	class Image;
 }
 
 namespace Minemap {
 	class ColorMap;
+}
 
+/**
+ * Main namespace
+ */
+namespace Minemap {
+
+	/**
+	 * Print version for the program - the version string is specified at compile time.
+	 */
 	void print_version() noexcept;
 
 	/**

@@ -1,6 +1,6 @@
-//
-// Created by cth451 on 2020/05/15.
-//
+/**
+ * @file Color map handles conversion between minecraft color codes and RGBA values
+ */
 
 #ifndef MINEMAP_COLORMAP_H
 #define MINEMAP_COLORMAP_H
