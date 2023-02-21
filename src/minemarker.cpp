@@ -33,43 +33,8 @@ bool handleBanner(int argc, char **argv,
                   NBTP::IntTag::V zOffset);
 
 void usage() {
-	printf("minemarkers <options> [operation]\n");
-	printf("Where <options> may be:\n");
-	printf("\t-i, --input INPUT\n");
-	printf("\t\tRequired, nbt input to modify\n");
-	printf("\t--no-gz\n");
-	printf("\t\tOptional, indicates that the input file is uncompressed\n");
-	printf("Where banner operation may be one of\n");
-	printf("\tbanner ls\n");
-	printf("\t\tPrint a numbered list of banners contained in the map\n");
-	printf("\tbanner mk abs:<x>:<y>:<z> <color> <name>\n");
-	printf("\t\tAdd/Replace a banner marker at absolute XYZ coordinates. name field is optional\n");
-	printf("\tbanner mk rel:<x>:<y>:<z> <color> <name>\n");
-	printf("\t\tAdd/Replace a banner marker at absolute Y but XZ relative to map center. name field is optional\n");
-	printf("\tbanner rm abs:<x>:<y>:<z>\n");
-	printf("\t\tDelete all banner marker at absolute XYZ coordinates\n");
-	printf("\tbanner rm rel:<x>:<y>:<z>\n");
-	printf("\t\tDelete all banner marker at absolute Y but XZ relative to map center\n");
-	printf("\tbanner rmidx <index>\n");
-	printf("\t\tDelete banner at specified index\n");
-#if 0
-	// It seems that frame markers are not protected on a locked map
-	printf("Where frame operation may be one of\n");
-	printf("\tframe ls\n");
-	printf("\t\tPrint a numbered list of banners contained in the map\n");
-	printf("\tframe mk abs:<x>:<y>:<z> <rotation>\n");
-	printf("\t\tAdd/Replace a frame marker at absolute XYZ coordinates\n");
-	printf("\tframe mk rel:<x>:<y>:<z> <rotation>\n");
-	printf("\t\tAdd/Replace a frame marker at absolute Y but XZ relative to map center\n");
-	printf("\tframe rm abs:<x>:<y>:<z>\n");
-	printf("\t\tDelete all frame marker at absolute XYZ coordinates\n");
-	printf("\tframe rm rel:<x>:<y>:<z>\n");
-	printf("\t\tDelete all frame marker at absolute Y but XZ relative to map center\n");
-	printf("\tframe rm entity:<index>\n");
-	printf("\t\tDelete the frame marker with specific entity ID\n");
-#endif
-	printf("\t");
-	printf("\n");
+	std::cout << MINEMARKER_USAGE;
+
 	Minemap::print_version();
 }
 

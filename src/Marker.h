@@ -6,7 +6,7 @@
 #define MINEMAP_MARKER_H
 
 #include <tags/CompoundTag.h>
-#include <tags/IntTag.h>
+#include <tags/SingleValuedTag.h>
 #include <cinttypes>
 #include <optional>
 #include <compare>

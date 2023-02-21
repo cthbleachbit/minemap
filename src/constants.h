@@ -114,6 +114,21 @@ inline void initializeLocale() {
 "\t\tSelect from the following values: \n" \
 )
 
+#define MINEMARKER_USAGE _( "Usage: minemarker <options> [operation]\n" \
+"Available operations:\n" \
+"\tedit\n" \
+"\t\tLaunch a text editor to edit banners in this map item\n" \
+"\tapply\n" \
+"\t\tRead banner descriptions from stdin and apply them to the map\n" \
+"\tdump\n" \
+"\t\tPrint banners in this map to stdout for manual editing\n" \
+"Available options:\n" \
+"\t-i, --input INPUT\n" \
+"\t\tRequired, nbt map file to modify\n" \
+"\t--no-gz\n" \
+"\t\tOptional, indicates that the input file is uncompressed\n" \
+)
+
 #define VERSION_RANGE _("\t\t\t{:>8} for game version from {} to {}\n")
 #define VERSION_OLDER_UNSUPPORTED _("\t\tOlder versions are not supported.\n\n")
 
