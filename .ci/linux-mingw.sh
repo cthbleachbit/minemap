@@ -23,6 +23,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -GNinja \
          -DCMAKE_INSTALL_PREFIX=/ \
          -DUSE_GRAPHICSMAGICK=ON \
          -DUSE_CCACHE=ON \
+         -DMINEMAP_ENABLE_LTO=ON \
          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}"/scripts/buildsystems/vcpkg.cmake \
          -DVCPKG_TARGET_TRIPLET=x64-mingw-static \
          -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="$PWD"/../cmake/MinGWCross.cmake

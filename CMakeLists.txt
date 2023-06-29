@@ -20,6 +20,7 @@ option(BUILD_TESTS "Build library test harness" OFF)
 option(BUILD_PAMENIM "Build Pamenim" ON)
 option(BUILD_MINEMARKER "Build Minemarker (experimental)" OFF)
 option(BUILD_GIMP_GPL "Generate and install palette data for GIMP" ON)
+option(MINEMAP_ENABLE_LTO "Enable link-time optimization" OFF)
 
 find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -54,10 +55,20 @@ endif ()
 
 # Compilation options
 set(CMAKE_CXX_STANDARD 20)
-set(warnings "-g -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings} -fPIC")
+set(CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+if (MSVC)
+    # /Zi - Output debugging information
+    add_compile_options(/W3 /WX /Zi)
+else()
+    add_compile_options(-g -Wall)
+endif()
 if (GLIBCXX_ASSERTIONS)
     add_compile_definitions(_GLIBCXX_ASSERTIONS)
+endif()
+
+if (MINEMAP_ENABLE_LTO)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 endif()
 
 if (USE_GETTEXT)
