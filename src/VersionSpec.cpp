@@ -7,6 +7,7 @@
 
 #include "color_maps.gen.h"
 
+#include <algorithm>
 #include <memory>
 
 namespace Minemap {
