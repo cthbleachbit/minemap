@@ -6,7 +6,6 @@
 #define MINEMAP_LIBMINEMAP_H
 
 #include <optional>
-#include <tags/BytesTag.h>
 #include <tags/ListTag.h>
 
 #include <Magick++.h>
