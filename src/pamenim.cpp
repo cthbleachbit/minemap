@@ -135,7 +135,13 @@ int main(int argc, char **argv) {
 	}
 
 	Magick::Image output_img(128, 128, "RGBA", Magick::DoublePixel, pixelStore->data());
-	output_img.write(output_path);
+	if (output_path == "-") {
+		Magick::Blob b;
+		output_img.write(&b, "png");
+		std::cout.write(static_cast<const char *>(b.data()), b.length());
+	} else {
+		output_img.write(output_path);
+	}
 
 	return 0;
 }

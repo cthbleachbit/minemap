@@ -7,111 +7,111 @@ msgid ""
 msgstr ""
 "Project-Id-Version: minemap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 17:21-0400\n"
-"PO-Revision-Date: 2022-09-14 17:23-0400\n"
+"POT-Creation-Date: 2024-01-12 00:24-0500\n"
+"PO-Revision-Date: 2024-01-12 00:28-0500\n"
 "Last-Translator: Tianhao Chai <cth451@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../src\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: constants.h:41
+#: constants.h:61
 msgid "Invalid Minecraft Version Specifier"
 msgstr "指定的 Minecraft 版本无效"
 
-#: constants.h:43
+#: constants.h:63
 msgid "No game version or invalid version specified"
 msgstr "未指定游戏版本号或指定了无效的版本号"
 
-#: constants.h:44
+#: constants.h:64
 msgid "No input file specified"
 msgstr "未指定输入文件"
 
-#: constants.h:45
+#: constants.h:65
 msgid "No output file specified"
 msgstr "未指定输出文件"
 
-#: constants.h:46
+#: constants.h:66
 msgid "Missing marker type / operation"
 msgstr "缺少图钉类型或要进行的操作"
 
-#: constants.h:48
+#: constants.h:68
 msgid "Invalid argument passed: {}"
 msgstr "传递的参数无效：{}"
 
-#: constants.h:49
+#: constants.h:69
 msgid "Invalid position string"
 msgstr "坐标无效"
 
-#: constants.h:50
+#: constants.h:70
 msgid "Invalid banner specifier"
 msgstr "横幅格式无效"
 
-#: constants.h:51
+#: constants.h:71
 msgid "Coordinates out of range"
 msgstr "坐标超出有效范围"
 
-#: constants.h:52
+#: constants.h:72
 msgid "Cannot open input stream"
 msgstr "无法打开输入数据流"
 
-#: constants.h:53
+#: constants.h:73
 msgid "Cannot parse input NBT file"
 msgstr "无法解析输入 NBT 文件"
 
-#: constants.h:54
+#: constants.h:74
 msgid ""
 "Cannot parse NBT map file to modify - will generate from scratch and "
 "overwrite"
 msgstr "无法解析要修改的 NBT 地图文件 - 将重新生成并覆盖"
 
-#: constants.h:56
+#: constants.h:76
 msgid ""
 "The map data tag is not a compound but a {}. This file is probably not a map "
 "nbt."
 msgstr "地图 data 标签不是 compound 而是 {}。此文件可能不是地图 NBT。"
 
-#: constants.h:57
+#: constants.h:77
 msgid "Color data is not a byte array. This file is probably not a map nbt."
 msgstr "颜色数据不是字节数组。此文件可能不是地图 NBT。"
 
-#: constants.h:58
+#: constants.h:78
 msgid ""
 "The map does not supports banners - update to a newer Minecraft version and "
 "try again"
 msgstr "此地图文件不支持放置横幅图钉 - 请更新 Minecraft 版本后重试"
 
-#: constants.h:59
+#: constants.h:79
 msgid "Banners in this map is malformed"
 msgstr "此地图文件中的横幅图钉格式不正确"
 
-#: constants.h:60
+#: constants.h:80
 msgid "Position coordinates in this marker is malformed"
 msgstr "此图钉的坐标格式不正确"
 
-#: constants.h:61
+#: constants.h:81
 msgid "BUG: No color match for pixel at ({}, {}). Please submit a bug report."
 msgstr "BUG：无法找到与 ({}, {}) 匹配的色表编码。请提交 BUG 报告。"
 
-#: constants.h:62
+#: constants.h:82
 msgid ""
 "Warning: Had to render {} partially transparent pixels into fully "
 "transparent ones. Your output might look incorrect."
 msgstr ""
 "警告：被迫将 {} 个半透明像素渲染为全透明像素。您的输出看起来可能不正确。"
 
-#: constants.h:63
+#: constants.h:83
 msgid "Color code {} at offset {} is out of range!"
 msgstr "位于 {1} 的色表编码 {0} 在有效范围外！"
 
-#: constants.h:66
+#: constants.h:87
 msgid ""
 "Usage: minemap <options>\n"
 "\t-d, --dithering\n"
@@ -148,7 +148,7 @@ msgstr ""
 "\t\t必需，该地图可用于的最小游戏版本\n"
 "\t\t可从以下值选择：\n"
 
-#: constants.h:84
+#: constants.h:105
 msgid ""
 "Usage: pamenim <options>\n"
 "\t-i, --input INPUT\n"
@@ -156,7 +156,7 @@ msgid ""
 "\t--no-gz\n"
 "\t\tOptional, indicates that the input file is uncompressed\n"
 "\t-o, --output OUTPUT\n"
-"\t\tRequired, output picture\n"
+"\t\tRequired, output picture, use '-' to write PNG to stdout\n"
 "\t-g, --game VER\n"
 "\t\tRequired, Minecraft game version this map is exported from\n"
 "\t\tSelect from the following values: \n"
@@ -167,16 +167,33 @@ msgstr ""
 "\t--no-gz\n"
 "\t\t可选，表示输入文件未经过压缩\n"
 "\t-o, --output 输出文件\n"
-"\t\t必需，图像输出\n"
+"\t\t必需，图像输出。使用“-”时将输出 PNG 二进制到标准输出。\n"
 "\t-g, --game 版本号\n"
 "\t\t必需，此地图所在存档的 Minecraft 版本\n"
 "\t\t可从以下值选择：\n"
 
-#: constants.h:96
+#: constants.h:117
+msgid ""
+"Usage: minemarker <options> [operation]\n"
+"Available operations:\n"
+"\tedit\n"
+"\t\tLaunch a text editor to edit banners in this map item\n"
+"\tapply\n"
+"\t\tRead banner descriptions from stdin and apply them to the map\n"
+"\tdump\n"
+"\t\tPrint banners in this map to stdout for manual editing\n"
+"Available options:\n"
+"\t-i, --input INPUT\n"
+"\t\tRequired, nbt map file to modify\n"
+"\t--no-gz\n"
+"\t\tOptional, indicates that the input file is uncompressed\n"
+msgstr ""
+
+#: constants.h:132
 msgid "\t\t\t{:>8} for game version from {} to {}\n"
 msgstr "\t\t\t{:>8} 可用于游戏版本 {} 到 {}\n"
 
-#: constants.h:97
+#: constants.h:133
 msgid ""
 "\t\tOlder versions are not supported.\n"
 "\n"

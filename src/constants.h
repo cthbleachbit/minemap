@@ -108,7 +108,7 @@ inline void initializeLocale() {
 "\t--no-gz\n" \
 "\t\tOptional, indicates that the input file is uncompressed\n" \
 "\t-o, --output OUTPUT\n" \
-"\t\tRequired, output picture\n" \
+"\t\tRequired, output picture, use '-' to write PNG to stdout\n" \
 "\t-g, --game VER\n" \
 "\t\tRequired, Minecraft game version this map is exported from\n" \
 "\t\tSelect from the following values: \n" \
