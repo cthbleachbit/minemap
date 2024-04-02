@@ -81,6 +81,10 @@ if (BUILD_GIMP_GPL)
     set(GIMP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/gimp/2.0/palettes CACHE STRING "Directory to place GIMP palettes")
 endif()
 
+if (BUILD_TESTS)
+    enable_testing()
+endif()
+
 # External
 option(SYSTEM_NBTP "Use system nbtp" ON)
 if (${SYSTEM_NBTP})
