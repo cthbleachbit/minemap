@@ -16,7 +16,7 @@ add_library(libminemap SHARED
         libminemap.h
         Marker.cpp
         Marker.h)
-add_dependencies(libminemap gen_h_palettes)
+add_dependencies(libminemap color_maps)
 target_include_directories(libminemap PRIVATE "${MINEMAP_COLORMAP_INCLUDES}")
 set_target_properties(libminemap PROPERTIES OUTPUT_NAME minemap)
 set_target_properties(libminemap PROPERTIES LIBRARY_SOVERSION 0)
