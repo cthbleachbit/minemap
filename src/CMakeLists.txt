@@ -46,8 +46,8 @@ if (USE_GETTEXT)
     target_include_directories(libminemap PUBLIC ${Intl_INCLUDE_DIRS})
     if (NOT Intl_IS_BUILT_IN)
         target_link_libraries(libminemap PUBLIC ${Intl_LIBRARY})
-    endif()
-endif()
+    endif ()
+endif ()
 
 foreach (PROGRAM IN LISTS PROGRAMS)
     add_executable(${PROGRAM} ${PROGRAM}.cpp)
@@ -69,11 +69,12 @@ add_subdirectory(tests)
 if (BUILD_TESTS)
     find_package(Python3 COMPONENTS Interpreter REQUIRED)
     file(GLOB TEST_FIXURES LIST_DIRECTORIES false "${CMAKE_CURRENT_SOURCE_DIR}/../test-images/*.json")
-    foreach(TEST_FIXURE IN LISTS TEST_FIXURES)
+    foreach (TEST_FIXURE IN LISTS TEST_FIXURES)
         if ("${TEST_FIXURE}" MATCHES "([^/]+)\\.json")
             add_test(NAME "${CMAKE_MATCH_1}"
-                COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/../test-images/verify.py" "$<TARGET_FILE:minemap>" "${TEST_FIXURE}"
+                    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/../test-images/verify.py" "$<TARGET_FILE:minemap>" "${TEST_FIXURE}"
+                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../test-images"
             )
         endif ()
-    endforeach()
+    endforeach ()
 endif ()

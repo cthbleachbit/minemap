@@ -91,6 +91,11 @@ else ()
     include_directories(INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/nbtp/include)
 endif ()
 
+# Test time dependencies
+if (BUILD_TESTS)
+    find_package(Python REQUIRED COMPONENTS Interpreter)
+endif ()
+
 # Resources
 add_subdirectory(misc)
 
