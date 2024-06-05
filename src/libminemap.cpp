@@ -21,14 +21,11 @@ namespace Minemap {
 	                          NBTP::BytesTag *colors_tag) {
 		size_t width = input_img.columns();
 		size_t height = input_img.rows();
-#ifdef USE_GM
+
 		// FIXME: GraphicsMagick Image::pixelColor() for some reason does not contain alpha channel
 		bool has_alpha = input_img.matte();
 		// FIXME: Have to map low level access
 		const Magick::PixelPacket *input_img_cache = input_img.getConstPixels(0, 0, width, height);
-#else
-		bool has_alpha = input_img.alpha();
-#endif
 
 		// Count partially transparent pixels
 		int partially_transparent_count = 0;
@@ -37,10 +34,10 @@ namespace Minemap {
 			ssize_t col = i % width;
 			ssize_t row = i / height;
 			Magick::Color mapped_pix = mapped_img.pixelColor(col, row);
-#ifdef USE_GM
+
 			const Magick::PixelPacket *input_pix = input_img_cache + i;
-			// WTF? Alpha in GM is exactly opposite - alpha = 65535 under 16b <=> transparent
-			//                                        alpha = 0     <=> completely opaque
+			// GraphicsMagick - alpha = 65535 under 16b <=> transparent
+			//                  alpha = 0               <=> completely opaque
 			double quantum_alpha = input_pix->opacity;
 			if (quantum_alpha < TransparentOpacity && quantum_alpha != OpaqueOpacity) {
 				partially_transparent_count++;
@@ -48,18 +45,6 @@ namespace Minemap {
 			// Pixels that are not fully opaque are forced to be fully transparent
 			bool is_transparent_input = quantum_alpha != 0;
 			bool is_transparent = has_alpha && is_transparent_input;
-#else
-			Magick::Color input_pix = input_img.pixelColor(col, row);
-			// Imagemagick 7: alpha = 0 <=> transparent
-			//                alpha = QuantumRange = 65535 <=> fully opaque
-			auto quantum_alpha = input_img.pixelColor(col, row).quantumAlpha();
-			if (quantum_alpha < QuantumRange && quantum_alpha > 0.0f) {
-				partially_transparent_count++;
-			}
-			// Pixels that are not fully opaque are forced to be fully transparent
-			bool is_transparent_input = (quantum_alpha != QuantumRange);
-			bool is_transparent = has_alpha && is_transparent_input;
-#endif
 
 			std::optional<MapColorCode> colorCode;
 			if (is_transparent) {
@@ -104,11 +89,7 @@ namespace Minemap {
 			pixel_array[i * 4] = rgb->r;
 			pixel_array[i * 4 + 1] = rgb->g;
 			pixel_array[i * 4 + 2] = rgb->b;
-#ifdef USE_GM
 			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : MaxRGBDouble;
-#else
-			pixel_array[i * 4 + 3] = colorIndex < 4 ? 0 : 1.0;
-#endif
 		}
 		return pixel_store;
 	}

@@ -132,11 +132,7 @@ inline void initializeLocale() {
 #define VERSION_RANGE _("\t\t\t{:>8} for game version from {} to {}\n")
 #define VERSION_OLDER_UNSUPPORTED _("\t\tOlder versions are not supported.\n\n")
 
-#ifdef USE_GM
 #define MINEMAP_MAGICK_IMPLEMENTATION "GraphicsMagick"
-#else
-#define MINEMAP_MAGICK_IMPLEMENTATION "ImageMagick"
-#endif
 #define VERSION_MESSAGE "Application version " MINEMAP_APP_VER " with " MINEMAP_MAGICK_IMPLEMENTATION
 
 #endif /* MINEMAP_CONSTANTS_H */

@@ -21,7 +21,6 @@ mkdir -p build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -GNinja \
          -DSYSTEM_NBTP=OFF \
          -DCMAKE_INSTALL_PREFIX=/ \
-         -DUSE_GRAPHICSMAGICK=ON \
          -DUSE_CCACHE=ON \
          -DMINEMAP_ENABLE_LTO=ON \
          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}"/scripts/buildsystems/vcpkg.cmake \

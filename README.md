@@ -8,7 +8,7 @@ This repository contains two command line utilities, "minemap" to convert images
 
 Building is handled by CMake. As of version 0.4.0, boost is no longer required neither at compile time nor run time. Please make sure you have the following dependencies:
 
-* GraphicsMagick - preferred over ImageMagick due to a bug in IM's dithering routines
+* GraphicsMagick - ImageMagick support is removed from 0.5.6 and onwards.
 * zlib, used to compress / decompress NBT data stream
 * nbtp, used to manipulate NBT data structure (as a git submodule or use existing library)
 
@@ -65,7 +65,6 @@ index 7e6be2992..9f0edcb00 100644
 ```
 cmake .. -DCMAKE_BUILD_TYPE=Release \
          -DSYSTEM_NBTP=OFF \
-         -DUSE_GRAPHICSMAGICK=ON \
          -DCMAKE_TOOLCHAIN_FILE=/home/user/vcpkg/scripts/buildsystems/vcpkg.cmake
          -DVCPKG_TARGET_TRIPLET=x64-mingw-static
 ```
