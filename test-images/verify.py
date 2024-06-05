@@ -37,7 +37,7 @@ def __main__():
         return
     f = open(test_info["output_nbt"], "rb")
     try:
-        tag, size = pynbtp.parseRoot(f)
+        tag = pynbtp.parseRoot(f)
     except RuntimeError:
         print("Parse Fail: %s" % test_info["output_nbt"])
         return
