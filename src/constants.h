@@ -86,7 +86,7 @@ inline void initializeLocale() {
 #define COLOR_PARTIALLY_TRANSPARENT                                                                                    \
 	_("Warning: Had to render {} partially transparent pixels into fully transparent ones. Your output might look "    \
 	  "incorrect.")
-#define COLOR_OUT_OF_RANGE _("Color code {} at offset {} is out of range!")
+#define COLOR_OUT_OF_RANGE _("Color code {:#x} at offset {} is out of range!")
 
 /* Usage Text */
 

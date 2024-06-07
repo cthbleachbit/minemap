@@ -78,11 +78,11 @@ namespace Minemap {
 		auto pixel_store = std::make_unique<std::array<double, 16384 * 4>>();
 		auto pixel_array = pixel_store->data();
 		for (int i = 0; i < 16384; i++) {
-			MapColorCode colorIndex = ((NBTP::ByteTag *) colors_list[i].get())->getPayload();
+			MapColorCode colorIndex = (dynamic_cast<NBTP::ByteTag*>(colors_list[i].get())->getPayload());
 			auto rgb = palette_lookup_table->lookup(colorIndex);
 
 			if (!rgb.has_value()) {
-				std::string error_string = localizedFormat(COLOR_OUT_OF_RANGE, (uint16_t) colorIndex, i);
+				std::string error_string = localizedFormat(COLOR_OUT_OF_RANGE, colorIndex, i);
 				throw std::runtime_error(error_string);
 			}
 
