@@ -93,7 +93,7 @@ endif ()
 
 # Test time dependencies
 if (BUILD_TESTS)
-    find_package(Python REQUIRED COMPONENTS Interpreter)
+    find_package(Python 3.8 REQUIRED COMPONENTS Interpreter)
 endif ()
 
 # Resources
