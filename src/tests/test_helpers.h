@@ -29,6 +29,7 @@ struct ImageLoadingTestParam {
 	bool left = false;
 	bool up = false;
 };
+std::ostream& operator<<(std::ostream& os, const ImageLoadingTestParam& param);
 
 
 class ImageLoadingTest : public ::testing::TestWithParam<ImageLoadingTestParam> {

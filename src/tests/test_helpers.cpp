@@ -18,3 +18,8 @@ TestSquare select_corner(bool left, bool up, const std::vector<std::shared_ptr<N
 	}
 	return corner;
 }
+
+std::ostream& operator<<(std::ostream& os, const ImageLoadingTestParam& param) {
+	os << fmt::format("{} {}-{}", param.image_name, param.up ? "upper" : "lower", param.left ? "left" : "right");
+	return os;
+}
