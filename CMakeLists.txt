@@ -75,10 +75,6 @@ if (BUILD_GIMP_GPL)
     set(GIMP_PALETTE_DIR ${CMAKE_INSTALL_DATADIR}/gimp/2.0/palettes CACHE STRING "Directory to place GIMP palettes")
 endif()
 
-if (BUILD_TESTS)
-    enable_testing()
-endif()
-
 # External
 option(SYSTEM_NBTP "Use system nbtp" ON)
 if (${SYSTEM_NBTP})
@@ -94,6 +90,7 @@ endif ()
 # Test time dependencies
 if (BUILD_TESTS)
     find_package(Python 3.8 REQUIRED COMPONENTS Interpreter)
+    enable_testing()
 endif ()
 
 # Resources
@@ -101,6 +98,10 @@ add_subdirectory(misc)
 
 # Source files
 add_subdirectory(src)
+
+if (BUILD_TESTS)
+    add_subdirectory(test-images)
+endif ()
 
 # Translations
 if (USE_GETTEXT)
