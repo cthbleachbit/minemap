@@ -55,8 +55,6 @@ inline void initializeLocale() {
 	setlocale(LC_ALL, "");
 	bindtextdomain(_TEXT_DOMAIN, _LOCALE_DIR);
 	textdomain(_TEXT_DOMAIN);
-#else
-	return;
 #endif
 }
 
@@ -138,7 +136,6 @@ inline void initializeLocale() {
 #define VERSION_RANGE _("\t\t\t{:>8} for game version from {} to {}\n")
 #define VERSION_OLDER_UNSUPPORTED _("\t\tOlder versions are not supported.\n\n")
 
-#define MINEMAP_MAGICK_IMPLEMENTATION "GraphicsMagick"
-#define VERSION_MESSAGE "Application version " MINEMAP_APP_VER " with " MINEMAP_MAGICK_IMPLEMENTATION
+#define VERSION_MESSAGE _("{} version {}")
 
 #endif /* MINEMAP_CONSTANTS_H */

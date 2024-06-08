@@ -51,8 +51,9 @@ namespace Minemap {
 
 	/**
 	 * Print version for the program - the version string is specified at compile time.
+	 * @param program_base program base name
 	 */
-	void print_version() noexcept;
+	void print_version(const std::string& program_base = "minemap") noexcept;
 
 	/**
 	 * Insert mapped pixels from palette to colors_tag

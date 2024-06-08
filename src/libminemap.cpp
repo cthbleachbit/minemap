@@ -10,8 +10,8 @@
 #include "ColorMap.h"
 
 namespace Minemap {
-	void print_version() noexcept {
-		std::cout << VERSION_MESSAGE << std::endl;
+	void print_version(const std::string& program_base) noexcept {
+		std::cout << fmt::format(VERSION_MESSAGE, program_base, MINEMAP_APP_VER) << std::endl;
 	}
 
 	MINEMAP_CLONE

@@ -32,7 +32,7 @@ void usage();
 void usage() {
 	std::cout << MINEMAP_USAGE;
 	Minemap::prettyPrintSupportedVersions();
-	Minemap::print_version();
+	Minemap::print_version("minemap");
 }
 
 int main(int argc, char **argv) {

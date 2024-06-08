@@ -25,7 +25,7 @@
 void usage() {
 	std::cout << PAMENIM_USAGE;
 	Minemap::prettyPrintSupportedVersions();
-	Minemap::print_version();
+	Minemap::print_version("pamenim");
 }
 
 int main(int argc, char **argv) {
