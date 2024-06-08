@@ -64,4 +64,7 @@ foreach (PROGRAM IN LISTS PROGRAMS)
     endif ()
 endforeach ()
 
-add_subdirectory(tests)
+if (BUILD_TESTS)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(tests)
+endif ()

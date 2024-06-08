@@ -90,6 +90,7 @@ endif ()
 # Test time dependencies
 if (BUILD_TESTS)
     find_package(Python 3.8 REQUIRED COMPONENTS Interpreter)
+    find_package(GTest REQUIRED)
     enable_testing()
 endif ()
 
