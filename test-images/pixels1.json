@@ -1,5 +1,0 @@
-{
-  "input_image": "pixels1.png",
-  "output_nbt": "pixels1.nbt",
-  "expect_color_codes": [0, 4, 8, 12, 16, 20, 24, 28]
-}
